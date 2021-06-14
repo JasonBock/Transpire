@@ -12,7 +12,7 @@ namespace Transpire
 	public sealed class FindNewGuidViaConstructorAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static readonly DiagnosticDescriptor rule = CallingNewGuidDescriptor.Create();
+		private static readonly DiagnosticDescriptor rule = FindNewGuidViaConstructorDescriptor.Create();
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(FindNewGuidViaConstructorAnalyzer.rule);
 

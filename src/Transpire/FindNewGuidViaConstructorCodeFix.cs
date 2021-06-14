@@ -23,7 +23,7 @@ namespace Transpire
 		public const string AddGuidEmptyDescription = "Add Guid.Empty";
 		public const string AddGuidNewGuidDescription = "Add Guid.NewGuid()";
 
-		public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CallingNewGuidDescriptor.Id);
+		public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FindNewGuidViaConstructorDescriptor.Id);
 
 		public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 

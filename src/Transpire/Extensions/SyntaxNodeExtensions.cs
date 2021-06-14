@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System.Linq;
+using System;
 
 namespace Transpire.Extensions
 {
@@ -9,24 +9,33 @@ namespace Transpire.Extensions
 	{
 		internal static bool HasUsing(this SyntaxNode self, string qualifiedName)
 		{
-			if (self is null)
+			if (self is null) { throw new ArgumentNullException(nameof(self)); }
+
+			var root = self;
+
+			while(true)
 			{
-				return false;
+				if(root.Parent is not null)
+				{
+					root = root.Parent;
+				}
+				else
+				{
+					break;
+				}
 			}
 
-			// TODO: Not sure this is correct. If you have "System.Composition",
-			// I don't think you need to add "System".
-			if (self.Kind() == SyntaxKind.UsingDirective)
-			{
-				var usingNode = (UsingDirectiveSyntax)self;
+			var usingNodes = root.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>();
 
-				if (usingNode.Name.ToFullString() == qualifiedName)
+			foreach(var usingNode in usingNodes)
+			{
+				if(usingNode.Name.ToFullString().Contains(qualifiedName))
 				{
 					return true;
 				}
 			}
 
-			return self.ChildNodes().Where(_ => _.HasUsing(qualifiedName)).Any();
+			return false;
 		}
 	}
 }
