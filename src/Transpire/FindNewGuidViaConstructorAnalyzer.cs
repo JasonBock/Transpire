@@ -20,7 +20,6 @@ namespace Transpire
 		{
 			context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
-			//context.RegisterSymbolAction(FindNewGuidViaConstructorAnalyzer.AnalyzeSymbolInvocation, SymbolKind.Method);
 			context.RegisterOperationAction(FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction, OperationKind.ObjectCreation);
 		}
 
@@ -32,14 +31,9 @@ namespace Transpire
 
 			if(SymbolEqualityComparer.Default.Equals(contextInvocation, guidSymbol))
 			{
-				var diagnostic = Diagnostic.Create(FindNewGuidViaConstructorAnalyzer.rule, context.ContainingSymbol.Locations[0]);
-				context.ReportDiagnostic(diagnostic);
+				context.ReportDiagnostic(Diagnostic.Create(
+					FindNewGuidViaConstructorAnalyzer.rule, context.ContainingSymbol.Locations[0]));
 			}
-		}
-
-		private static void AnalyzeSymbolInvocation(SymbolAnalysisContext context) 
-		{
-			var guidSymbol = context.Compilation.GetTypeByMetadataName(typeof(Guid).FullName);
 		}
 	}
 }
