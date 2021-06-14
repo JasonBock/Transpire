@@ -32,7 +32,7 @@ namespace Transpire
 			if(SymbolEqualityComparer.Default.Equals(contextInvocation, guidSymbol))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
-					FindNewGuidViaConstructorAnalyzer.rule, context.ContainingSymbol.Locations[0]));
+					FindNewGuidViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation()));
 			}
 		}
 	}
