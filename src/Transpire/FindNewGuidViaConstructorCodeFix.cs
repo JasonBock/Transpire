@@ -40,16 +40,11 @@ namespace Transpire
 			FindNewGuidViaConstructorCodeFix.AddDefaultCodeFix(context, root, diagnostic, creationNode);
 		}
 
-		private static void AddGuidNewGuidCodeFix(CodeFixContext context, SyntaxNode root,
-			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode)
+		private static void AddCodeFix(CodeFixContext context, SyntaxNode root,
+			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode, SyntaxNode newNode,
+			string description)
 		{
-			var newInvocationNode = SyntaxFactory.InvocationExpression(
-				SyntaxFactory.MemberAccessExpression(
-						SyntaxKind.SimpleMemberAccessExpression,
-						SyntaxFactory.IdentifierName(nameof(Guid)),
-						SyntaxFactory.IdentifierName(nameof(Guid.NewGuid))))
-				.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
-			var newRoot = root.ReplaceNode(creationNode, newInvocationNode);
+			var newRoot = root.ReplaceNode(creationNode, newNode);
 
 			var guidNamespace = typeof(Guid).Namespace;
 
@@ -60,10 +55,22 @@ namespace Transpire
 			}
 
 			context.RegisterCodeFix(
-			  CodeAction.Create(
-				 FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription,
-				 _ => Task.FromResult(context.Document.WithSyntaxRoot(newRoot)),
-				 FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription), diagnostic);
+				CodeAction.Create(
+					description, _ => Task.FromResult(context.Document.WithSyntaxRoot(newRoot)),
+					description), diagnostic);
+		}
+
+		private static void AddGuidNewGuidCodeFix(CodeFixContext context, SyntaxNode root,
+			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode)
+		{
+			var newInvocationNode = SyntaxFactory.InvocationExpression(
+				SyntaxFactory.MemberAccessExpression(
+						SyntaxKind.SimpleMemberAccessExpression,
+						SyntaxFactory.IdentifierName(nameof(Guid)),
+						SyntaxFactory.IdentifierName(nameof(Guid.NewGuid))))
+				.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
+			FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic, 
+				creationNode, newInvocationNode, FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription);
 		}
 
 		private static void AddGuidEmptyCodeFix(CodeFixContext context, SyntaxNode root,
@@ -74,21 +81,8 @@ namespace Transpire
 				SyntaxFactory.IdentifierName(nameof(Guid)),
 				SyntaxFactory.IdentifierName(nameof(Guid.Empty)))
 				.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
-			var newRoot = root.ReplaceNode(creationNode, newAccessExpressionNode);
-
-			var guidNamespace = typeof(Guid).Namespace;
-
-			if (!root.HasUsing(guidNamespace))
-			{
-				newRoot = ((CompilationUnitSyntax)newRoot).AddUsings(
-				  SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(guidNamespace)));
-			}
-
-			context.RegisterCodeFix(
-			  CodeAction.Create(
-				 FindNewGuidViaConstructorCodeFix.AddGuidEmptyDescription,
-				 _ => Task.FromResult(context.Document.WithSyntaxRoot(newRoot)),
-				 FindNewGuidViaConstructorCodeFix.AddGuidEmptyDescription), diagnostic);
+			FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
+				creationNode, newAccessExpressionNode, FindNewGuidViaConstructorCodeFix.AddGuidEmptyDescription);
 		}
 
 		private static void AddDefaultCodeFix(CodeFixContext context, SyntaxNode root,
@@ -97,21 +91,8 @@ namespace Transpire
 			var defaultExpressionNode = SyntaxFactory.DefaultExpression(
 				SyntaxFactory.IdentifierName(nameof(Guid)))
 				.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
-			var newRoot = root.ReplaceNode(creationNode, defaultExpressionNode);
-			
-			var guidNamespace = typeof(Guid).Namespace;
-
-			if (!root.HasUsing(guidNamespace))
-			{
-				newRoot = ((CompilationUnitSyntax)newRoot).AddUsings(
-				  SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(guidNamespace)));
-			}
-
-			context.RegisterCodeFix(
-			  CodeAction.Create(
-				 FindNewGuidViaConstructorCodeFix.AddDefaultGuidDescription,
-				 _ => Task.FromResult(context.Document.WithSyntaxRoot(newRoot)),
-				 FindNewGuidViaConstructorCodeFix.AddDefaultGuidDescription), diagnostic);
+			FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
+				creationNode, defaultExpressionNode, FindNewGuidViaConstructorCodeFix.AddDefaultGuidDescription);
 		}
 	}
 }
