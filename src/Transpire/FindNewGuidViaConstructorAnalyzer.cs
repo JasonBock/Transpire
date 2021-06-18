@@ -12,15 +12,16 @@ namespace Transpire
 	public sealed class FindNewGuidViaConstructorAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static readonly DiagnosticDescriptor rule = FindNewGuidViaConstructorDescriptor.Create();
-
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(FindNewGuidViaConstructorAnalyzer.rule);
+		private static readonly DiagnosticDescriptor rule = 
+			FindNewGuidViaConstructorDescriptor.Create();
 
 		public override void Initialize(AnalysisContext context)
 		{
-			context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+			context.ConfigureGeneratedCodeAnalysis(
+				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
-			context.RegisterOperationAction(FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction, OperationKind.ObjectCreation);
+			context.RegisterOperationAction(
+				FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction, OperationKind.ObjectCreation);
 		}
 
 		private static void AnalyzeOperationAction(OperationAnalysisContext context)
@@ -35,5 +36,8 @@ namespace Transpire
 					FindNewGuidViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation()));
 			}
 		}
+
+		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+			ImmutableArray.Create(FindNewGuidViaConstructorAnalyzer.rule);
 	}
 }

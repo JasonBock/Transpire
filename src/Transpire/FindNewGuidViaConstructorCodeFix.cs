@@ -23,13 +23,12 @@ namespace Transpire
 		public const string AddGuidEmptyDescription = "Add Guid.Empty";
 		public const string AddGuidNewGuidDescription = "Add Guid.NewGuid()";
 
-		public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(FindNewGuidViaConstructorDescriptor.Id);
-
 		public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
 		public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 		{
-			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
+				.ConfigureAwait(false);
 
 			context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -94,5 +93,8 @@ namespace Transpire
 			FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
 				creationNode, defaultExpressionNode, FindNewGuidViaConstructorCodeFix.AddDefaultGuidDescription);
 		}
+
+		public override ImmutableArray<string> FixableDiagnosticIds =>
+			ImmutableArray.Create(FindNewGuidViaConstructorDescriptor.Id);
 	}
 }
