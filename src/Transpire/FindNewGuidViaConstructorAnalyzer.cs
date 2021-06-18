@@ -1,10 +1,10 @@
-﻿using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis;
-using System.Collections.Immutable;
-using Transpire.Descriptors;
-using System;
-using System.Linq;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
+using Transpire.Descriptors;
 
 namespace Transpire
 {
