@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire", "Transpire\Transpire.csproj", "{C138722B-0D2F-4857-89F9-DE7309E98433}"
 EndProject
@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire.Vsix", "Transpire.Vsix\Transpire.Vsix.csproj", "{0AD06289-7D25-4F9F-9E61-9922D8A532D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transpire.Vsix.Scenarios", "Transpire.Vsix.Scenarios\Transpire.Vsix.Scenarios.csproj", "{40AD04C0-3C0E-402D-9306-E0F60E37678F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire.Vsix.Scenarios", "Transpire.Vsix.Scenarios\Transpire.Vsix.Scenarios.csproj", "{40AD04C0-3C0E-402D-9306-E0F60E37678F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transpire.Tests.Performance", "Transpire.Tests.Performance\Transpire.Tests.Performance.csproj", "{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{40AD04C0-3C0E-402D-9306-E0F60E37678F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40AD04C0-3C0E-402D-9306-E0F60E37678F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40AD04C0-3C0E-402D-9306-E0F60E37678F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
