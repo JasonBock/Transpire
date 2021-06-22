@@ -18,7 +18,7 @@ namespace Transpire.Tests
 				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
 
 				var diagnostic = diagnostics[0];
-				
+
 				Assert.That(diagnostic.Id, Is.EqualTo(FindNewGuidViaConstructorDescriptor.Id), 
 					nameof(DiagnosticDescriptor.Id));
 				Assert.That(diagnostic.Title.ToString(), Is.EqualTo(FindNewGuidViaConstructorDescriptor.Title), 
@@ -29,6 +29,8 @@ namespace Transpire.Tests
 					nameof(DiagnosticDescriptor.Category));
 				Assert.That(diagnostic.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), 
 					nameof(DiagnosticDescriptor.DefaultSeverity));
+				Assert.That(diagnostic.IsEnabledByDefault, Is.True,
+					nameof(DiagnosticDescriptor.IsEnabledByDefault));
 				Assert.That(diagnostic.HelpLinkUri, Is.EqualTo(HelpUrlBuilder.Build(FindNewGuidViaConstructorDescriptor.Id, FindNewGuidViaConstructorDescriptor.Title)), 
 					nameof(DiagnosticDescriptor.HelpLinkUri));
 			});
