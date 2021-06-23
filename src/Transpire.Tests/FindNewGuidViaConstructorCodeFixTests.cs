@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -58,20 +59,22 @@ public static class Test
 					(model, node) =>
 					{
 						Assert.That(node.ToString(), Contains.Substring("default(Guid)"));
+						Assert.That(node.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>().Count(), Is.EqualTo(1));
 					});
 				await TestAssistants.VerifyCodeFixChangesAsync(
 					actions, FindNewGuidViaConstructorCodeFix.AddGuidEmptyDescription, document,
 					(model, node) =>
 					{
 						Assert.That(node.ToString(), Contains.Substring("Guid.Empty"));
+						Assert.That(node.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>().Count(), Is.EqualTo(1));
 					});
 				await TestAssistants.VerifyCodeFixChangesAsync(
 					actions, FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription, document,
 					(model, node) =>
 					{
 						Assert.That(node.ToString(), Contains.Substring("Guid.NewGuid()"));
+						Assert.That(node.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>().Count(), Is.EqualTo(1));
 					});
-				var guidNewGuidAction = actions.Single(_ => _.Title == FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription);
 			});
 		}
 	}
