@@ -40,7 +40,7 @@ namespace Transpire.Tests
 		public static async Task AnalyzeWhenNothingIsMadeAsync()
 		{
 			var code = "var id = 1 + 2;";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync(code);
+			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewGuidViaConstructorAnalyzer>(code);
 
 			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
 		}
@@ -49,7 +49,7 @@ namespace Transpire.Tests
 		public static async Task AnalyzeWhenNoGuidIsMadeAsync()
 		{
 			var code = "var id = new string('a', 1);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync(code);
+			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewGuidViaConstructorAnalyzer>(code);
 
 			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
 		}
@@ -58,7 +58,7 @@ namespace Transpire.Tests
 		public static async Task AnalyzeWhenGuidIsMadeViaGuidNewGuidAsync()
 		{
 			var code = "var id = System.Guid.NewGuid();";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync(code);
+			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewGuidViaConstructorAnalyzer>(code);
 
 			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
 		}
@@ -67,7 +67,7 @@ namespace Transpire.Tests
 		public static async Task AnalyzeWhenGuidIsMadeViaStringAsync()
 		{
 			var code = "var id = new System.Guid(\"83d926c8-9fe6-4cd2-8495-e294e8ade4cb\");";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync(code);
+			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewGuidViaConstructorAnalyzer>(code);
 
 			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
 		}
@@ -76,7 +76,7 @@ namespace Transpire.Tests
 		public static async Task AnalyzeWhenGuidIsMadeViaNoArgumentConstructorAsync()
 		{
 			var code = "var id = new System.Guid();";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync(code);
+			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewGuidViaConstructorAnalyzer>(code);
 
 			Assert.Multiple(() =>
 			{
@@ -93,7 +93,7 @@ namespace Transpire.Tests
 		public static async Task AnalyzeWhenGuidIsMadeViaTargetTypeNewAsync()
 		{
 			var code = "System.Guid id = new();";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync(code);
+			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewGuidViaConstructorAnalyzer>(code);
 
 			Assert.Multiple(() =>
 			{

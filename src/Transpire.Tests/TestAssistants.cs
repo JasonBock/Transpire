@@ -35,7 +35,8 @@ namespace Transpire.Tests
 			return solution.GetProject(projectId)!.Documents.First();
 		}
 
-		internal static async Task<ImmutableArray<Diagnostic>> GetDiagnosticsAsync(string source)
+		internal static async Task<ImmutableArray<Diagnostic>> GetDiagnosticsAsync<T>(string source)
+			where T : DiagnosticAnalyzer, new()
 		{
 			var syntaxTree = CSharpSyntaxTree.ParseText(source);
 			var references = AppDomain.CurrentDomain.GetAssemblies()
@@ -43,7 +44,7 @@ namespace Transpire.Tests
 				.Select(_ => MetadataReference.CreateFromFile(_.Location));
 			var compilation = CSharpCompilation.Create("analyzer", new SyntaxTree[] { syntaxTree },
 				references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-				.WithAnalyzers(ImmutableArray.Create(new FindNewGuidViaConstructorAnalyzer() as DiagnosticAnalyzer));
+				.WithAnalyzers(ImmutableArray.Create((DiagnosticAnalyzer)new T()));
 
 			return await compilation.GetAnalyzerDiagnosticsAsync();
 		}

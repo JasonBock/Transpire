@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31410.414
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire", "Transpire\Transpire.csproj", "{C138722B-0D2F-4857-89F9-DE7309E98433}"
 EndProject
@@ -10,13 +10,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B4E8E4D-3DC8-4AE5-9DFF-76BDD72ACBB2}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire.Vsix", "Transpire.Vsix\Transpire.Vsix.csproj", "{0AD06289-7D25-4F9F-9E61-9922D8A532D9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire.Vsix.Scenarios", "Transpire.Vsix.Scenarios\Transpire.Vsix.Scenarios.csproj", "{40AD04C0-3C0E-402D-9306-E0F60E37678F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transpire.Tests.Performance", "Transpire.Tests.Performance\Transpire.Tests.Performance.csproj", "{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transpire.Tests.Performance", "Transpire.Tests.Performance\Transpire.Tests.Performance.csproj", "{ED4CE60E-7094-4CBB-AF3E-A2534D15BE16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
