@@ -2,13 +2,13 @@
 
 namespace Transpire.Descriptors
 {
-	public static class FindingDateTimeNowDescriptor
+	public static class FindDateTimeNowDescriptor
 	{
 		public static DiagnosticDescriptor Create() =>
-			new(FindingDateTimeNowDescriptor.Id, FindingDateTimeNowDescriptor.Title,
-				FindingDateTimeNowDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
+			new(FindDateTimeNowDescriptor.Id, FindDateTimeNowDescriptor.Title,
+				FindDateTimeNowDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
-					FindingDateTimeNowDescriptor.Id, FindingDateTimeNowDescriptor.Title));
+					FindDateTimeNowDescriptor.Id, FindDateTimeNowDescriptor.Title));
 
 		public const string Id = "TRANS2";
 		public const string Message = "Do not use DateTime.Now.";

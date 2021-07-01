@@ -12,9 +12,9 @@ using System;
 
 namespace Transpire
 {
-	[ExportCodeFixProvider(FindingDateTimeNowDescriptor.Id, LanguageNames.CSharp)]
+	[ExportCodeFixProvider(FindDateTimeNowDescriptor.Id, LanguageNames.CSharp)]
 	[Shared]
-	public sealed class FindingDateTimeNowCodeFix
+	public sealed class FindDateTimeNowCodeFix
 		: CodeFixProvider
 	{
 		public const string ChangeToUtcNowDescription = "Change to UtcNow";
@@ -41,12 +41,12 @@ namespace Transpire
 
 			context.RegisterCodeFix(
 				CodeAction.Create(
-					FindingDateTimeNowCodeFix.ChangeToUtcNowDescription,
+					FindDateTimeNowCodeFix.ChangeToUtcNowDescription,
 					_ => Task.FromResult<Document>(context.Document.WithSyntaxRoot(newRoot)), 
-					FindingDateTimeNowCodeFix.ChangeToUtcNowDescription), diagnostic);
+					FindDateTimeNowCodeFix.ChangeToUtcNowDescription), diagnostic);
 		}
 
 		public override ImmutableArray<string> FixableDiagnosticIds =>
-			ImmutableArray.Create(FindingDateTimeNowDescriptor.Id);
+			ImmutableArray.Create(FindDateTimeNowDescriptor.Id);
 	}
 }

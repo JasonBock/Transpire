@@ -10,13 +10,13 @@ using Microsoft.CodeAnalysis.Operations;
 namespace Transpire
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	public sealed class FindingDateTimeNowAnalyzer
+	public sealed class FindDateTimeNowAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static DiagnosticDescriptor rule = FindingDateTimeNowDescriptor.Create();
+		private static DiagnosticDescriptor rule = FindDateTimeNowDescriptor.Create();
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
-			ImmutableArray.Create(FindingDateTimeNowAnalyzer.rule);
+			ImmutableArray.Create(FindDateTimeNowAnalyzer.rule);
 
 		public override void Initialize(AnalysisContext context)
 		{
@@ -24,7 +24,7 @@ namespace Transpire
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
 			context.RegisterOperationAction(
-				FindingDateTimeNowAnalyzer.AnalyzeOperationAction, OperationKind.PropertyReference);
+				FindDateTimeNowAnalyzer.AnalyzeOperationAction, OperationKind.PropertyReference);
 
 			//context.RegisterSyntaxNodeAction(
 			//	AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
@@ -39,7 +39,7 @@ namespace Transpire
 			if(dateTimeNowSymbol.Length == 1 &&
 				SymbolEqualityComparer.Default.Equals(contextReference, dateTimeNowSymbol[0]))
 			{
-				context.ReportDiagnostic(Diagnostic.Create(FindingDateTimeNowAnalyzer.rule,
+				context.ReportDiagnostic(Diagnostic.Create(FindDateTimeNowAnalyzer.rule,
 					context.Operation.Syntax.GetLocation()));
 			}
 		}

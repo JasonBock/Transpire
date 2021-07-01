@@ -7,6 +7,12 @@ namespace Transpire.Vsix.Scenarios
 		// This should be flagged as an error.
 		public static DateTime GetViaNow() => DateTime.Now;
 
+		// This should be flagged as an error.
+		public static DateTime GetViaNew() => new DateTime();
+
+		// This should be flagged as an error.
+		public static DateTime GetViaNewTargetTypeNew() => new();
+
 		public static DateTime GetViaUtcNow() => DateTime.UtcNow;
 	}
 }

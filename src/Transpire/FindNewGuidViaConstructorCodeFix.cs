@@ -33,14 +33,14 @@ namespace Transpire
 			context.CancellationToken.ThrowIfCancellationRequested();
 
 			var diagnostic = context.Diagnostics.First();
-			var creationNode = (ObjectCreationExpressionSyntax)root!.FindNode(diagnostic.Location.SourceSpan);
+			var creationNode = root!.FindNode(diagnostic.Location.SourceSpan);
 			FindNewGuidViaConstructorCodeFix.AddGuidNewGuidCodeFix(context, root, diagnostic, creationNode);
 			FindNewGuidViaConstructorCodeFix.AddGuidEmptyCodeFix(context, root, diagnostic, creationNode);
 			FindNewGuidViaConstructorCodeFix.AddDefaultCodeFix(context, root, diagnostic, creationNode);
 		}
 
 		private static void AddCodeFix(CodeFixContext context, SyntaxNode root,
-			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode, SyntaxNode newNode,
+			Diagnostic diagnostic, SyntaxNode creationNode, SyntaxNode newNode,
 			string description)
 		{
 			var newRoot = root.ReplaceNode(creationNode, newNode);
@@ -60,7 +60,7 @@ namespace Transpire
 		}
 
 		private static void AddGuidNewGuidCodeFix(CodeFixContext context, SyntaxNode root,
-			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode)
+			Diagnostic diagnostic, SyntaxNode creationNode)
 		{
 			var newInvocationNode = SyntaxFactory.InvocationExpression(
 				SyntaxFactory.MemberAccessExpression(
@@ -73,7 +73,7 @@ namespace Transpire
 		}
 
 		private static void AddGuidEmptyCodeFix(CodeFixContext context, SyntaxNode root,
-			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode)
+			Diagnostic diagnostic, SyntaxNode creationNode)
 		{
 			var newAccessExpressionNode = SyntaxFactory.MemberAccessExpression(
 				SyntaxKind.SimpleMemberAccessExpression,
@@ -85,7 +85,7 @@ namespace Transpire
 		}
 
 		private static void AddDefaultCodeFix(CodeFixContext context, SyntaxNode root,
-			Diagnostic diagnostic, ObjectCreationExpressionSyntax creationNode)
+			Diagnostic diagnostic, SyntaxNode creationNode)
 		{
 			var defaultExpressionNode = SyntaxFactory.DefaultExpression(
 				SyntaxFactory.IdentifierName(nameof(Guid)))
