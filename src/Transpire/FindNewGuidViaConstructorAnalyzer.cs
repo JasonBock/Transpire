@@ -20,17 +20,32 @@ namespace Transpire
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
-			context.RegisterOperationAction(
-				FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction, OperationKind.ObjectCreation);
+
+			context.RegisterCompilationStartAction(compilationContext =>
+			{
+				var guidSymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(Guid).FullName);
+
+				if(guidSymbol is not null)
+				{
+					var guidConstructorSymbol = guidSymbol.InstanceConstructors.SingleOrDefault(_ => _.Parameters.Length == 0);
+
+					if(guidConstructorSymbol is not null)
+					{
+						compilationContext.RegisterOperationAction(operationContext =>
+						{
+							FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction(
+								operationContext, guidConstructorSymbol);
+						}, OperationKind.ObjectCreation);
+					}
+				}
+			});
 		}
 
-		private static void AnalyzeOperationAction(OperationAnalysisContext context)
+		private static void AnalyzeOperationAction(OperationAnalysisContext context, IMethodSymbol guidConstructorSymbol)
 		{
 			var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
-			var guidSymbol = context.Compilation.GetTypeByMetadataName(typeof(Guid).FullName)!
-				.InstanceConstructors.Single(_ => _.Parameters.Length == 0);
 
-			if(SymbolEqualityComparer.Default.Equals(contextInvocation, guidSymbol))
+			if(SymbolEqualityComparer.Default.Equals(contextInvocation, guidConstructorSymbol))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					FindNewGuidViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation()));

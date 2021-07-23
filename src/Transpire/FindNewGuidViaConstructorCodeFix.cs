@@ -29,11 +29,11 @@ namespace Transpire
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 				.ConfigureAwait(false);
+			var diagnostic = context.Diagnostics.First();
+			var creationNode = root!.FindNode(diagnostic.Location.SourceSpan);
 
 			context.CancellationToken.ThrowIfCancellationRequested();
 
-			var diagnostic = context.Diagnostics.First();
-			var creationNode = root!.FindNode(diagnostic.Location.SourceSpan);
 			FindNewGuidViaConstructorCodeFix.AddGuidNewGuidCodeFix(context, root, diagnostic, creationNode);
 			FindNewGuidViaConstructorCodeFix.AddGuidEmptyCodeFix(context, root, diagnostic, creationNode);
 			FindNewGuidViaConstructorCodeFix.AddDefaultCodeFix(context, root, diagnostic, creationNode);

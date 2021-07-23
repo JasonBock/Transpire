@@ -27,11 +27,10 @@ namespace Transpire
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 				.ConfigureAwait(false);
-
-			context.CancellationToken.ThrowIfCancellationRequested();
-
 			var diagnostic = context.Diagnostics.First();
 			var creationNode = root!.FindNode(diagnostic.Location.SourceSpan);
+
+			context.CancellationToken.ThrowIfCancellationRequested();
 
 			FindNewDateTimeViaConstructorCodeFix.AddDateTimeUtcNowCodeFix(context, root, diagnostic, creationNode);
 		}

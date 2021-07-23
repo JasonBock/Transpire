@@ -33,6 +33,8 @@ namespace Transpire
 			var diagnostic = context.Diagnostics.First();
 			var diagnosticSpan = diagnostic.Location.SourceSpan;
 
+			context.CancellationToken.ThrowIfCancellationRequested();
+
 			var nowToken = ((MemberAccessExpressionSyntax)root!.FindNode(diagnostic.Location.SourceSpan)).Name.Identifier;
 			var utcNowToken = SyntaxFactory.Identifier(nowToken.LeadingTrivia,
 				nameof(DateTime.UtcNow), nowToken.TrailingTrivia);

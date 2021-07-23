@@ -6,6 +6,7 @@ using System;
 using System.Collections.Immutable;
 using Transpire.Descriptors;
 using Microsoft.CodeAnalysis.Operations;
+using System.Linq;
 
 namespace Transpire
 {
@@ -23,43 +24,33 @@ namespace Transpire
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
-			context.RegisterOperationAction(
-				FindDateTimeNowAnalyzer.AnalyzeOperationAction, OperationKind.PropertyReference);
 
-			//context.RegisterSyntaxNodeAction(
-			//	AnalyzeSimpleMemberAccessExpression, SyntaxKind.SimpleMemberAccessExpression);
+			context.RegisterCompilationStartAction(compilationContext =>
+			{
+				var dateTimeNowSymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName)!
+					.GetMembers(nameof(DateTime.Now)).OfType<IPropertySymbol>().SingleOrDefault();
+
+				if(dateTimeNowSymbol is not null)
+				{
+					compilationContext.RegisterOperationAction(operationContext =>
+					{
+						FindDateTimeNowAnalyzer.AnalyzeOperationAction(
+							operationContext, dateTimeNowSymbol);
+					}, OperationKind.PropertyReference);
+
+				}
+			});
 		}
 
-		private static void AnalyzeOperationAction(OperationAnalysisContext context)
+		private static void AnalyzeOperationAction(OperationAnalysisContext context, IPropertySymbol dateTimeNowSymbol)
 		{
 			var contextReference = ((IPropertyReferenceOperation)context.Operation).Property;
-			var dateTimeNowSymbol = context.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName)!
-				.GetMembers(nameof(DateTime.Now));
 
-			if(dateTimeNowSymbol.Length == 1 &&
-				SymbolEqualityComparer.Default.Equals(contextReference, dateTimeNowSymbol[0]))
+			if(SymbolEqualityComparer.Default.Equals(contextReference, dateTimeNowSymbol))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(FindDateTimeNowAnalyzer.rule,
 					context.Operation.Syntax.GetLocation()));
 			}
 		}
-
-		//private static void AnalyzeSimpleMemberAccessExpression(SyntaxNodeAnalysisContext context)
-		//{
-		//	var memberNode = (MemberAccessExpressionSyntax)context.Node;
-
-		//	if (memberNode.OperatorToken.IsKind(SyntaxKind.DotToken) &&
-		//		memberNode.Name.Identifier.ValueText == "Now")
-		//	{
-		//		var symbol = context.SemanticModel.GetSymbolInfo(memberNode.Name).Symbol;
-		//		var dateTimeSymbol = context.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName);
-
-		//		if (SymbolEqualityComparer.Default.Equals(symbol, dateTimeSymbol))
-		//		{
-		//			context.ReportDiagnostic(Diagnostic.Create(FindingDateTimeNowAnalyzer.rule,
-		//				memberNode.Name.Identifier.GetLocation()));
-		//		}
-		//	}
-		//}
 	}
 }

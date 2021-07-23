@@ -21,18 +21,32 @@ namespace Transpire
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
-			context.RegisterOperationAction(
-				FindDateTimeKindUsageInConstructorAnalyzer.AnalyzeOperationAction, OperationKind.ObjectCreation);
+
+			context.RegisterCompilationStartAction(compilationContext =>
+			{
+				var dateTimeSymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName);
+				var dateTimeKindSymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(DateTimeKind).FullName);
+
+				if(dateTimeSymbol is null || dateTimeKindSymbol is null)
+				{
+					return;
+				}
+
+				compilationContext.RegisterOperationAction(operationContext =>
+				{
+					FindDateTimeKindUsageInConstructorAnalyzer.AnalyzeOperationAction(
+						operationContext, dateTimeSymbol, dateTimeKindSymbol);
+				}, OperationKind.ObjectCreation);
+			});
 		}
 
-		private static void AnalyzeOperationAction(OperationAnalysisContext context)
+		private static void AnalyzeOperationAction(OperationAnalysisContext context,
+			INamedTypeSymbol dateTimeSymbol, INamedTypeSymbol dateTimeKindSymbol)
 		{
 			var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
-			var dateTimeSymbol = context.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName);
 
 			if (SymbolEqualityComparer.Default.Equals(contextInvocation!.ContainingType, dateTimeSymbol))
 			{
-				var dateTimeKindSymbol = context.Compilation.GetTypeByMetadataName(typeof(DateTimeKind).FullName);
 				var invocationSyntax = (BaseObjectCreationExpressionSyntax)context.Operation.Syntax;
 
 				for (var i = 0; i < contextInvocation!.Parameters.Length; i++)

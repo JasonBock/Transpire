@@ -1,6 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 using System;
@@ -22,17 +20,34 @@ namespace Transpire
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
-			context.RegisterOperationAction(
-				FindNewDateTimeViaConstructorAnalyzer.AnalyzeOperationAction, OperationKind.ObjectCreation);
+
+			context.RegisterCompilationStartAction(compilationContext =>
+			{
+				var dateTimeSymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName);
+
+				if(dateTimeSymbol is not null)
+				{
+					var dateTimeNoArgumentConstructorSymbol = dateTimeSymbol.InstanceConstructors
+						.SingleOrDefault(_ => _.Parameters.Length == 0);
+
+					if(dateTimeNoArgumentConstructorSymbol is not null)
+					{
+						compilationContext.RegisterOperationAction(operationContext =>
+						{
+							FindNewDateTimeViaConstructorAnalyzer.AnalyzeOperationAction(
+								operationContext, dateTimeNoArgumentConstructorSymbol);
+						}, OperationKind.ObjectCreation);
+					}
+				}
+			});
 		}
 
-		private static void AnalyzeOperationAction(OperationAnalysisContext context)
+		private static void AnalyzeOperationAction(
+			OperationAnalysisContext context, IMethodSymbol dateTimeNoArgumentConstructorSymbol)
 		{
 			var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
-			var dateTimeNoArgumentConstructor = context.Compilation.GetTypeByMetadataName(typeof(DateTime).FullName)!
-				.InstanceConstructors.Single(_ => _.Parameters.Length == 0);
 
-			if (SymbolEqualityComparer.Default.Equals(contextInvocation, dateTimeNoArgumentConstructor))
+			if (SymbolEqualityComparer.Default.Equals(contextInvocation, dateTimeNoArgumentConstructorSymbol))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					FindNewDateTimeViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation()));

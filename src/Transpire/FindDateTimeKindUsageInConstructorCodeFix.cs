@@ -25,11 +25,11 @@ namespace Transpire
 		{
 			var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
 				.ConfigureAwait(false);
+			var diagnostic = context.Diagnostics.First();
+			var argumentNode = (ArgumentSyntax)root!.FindNode(diagnostic.Location.SourceSpan);
 
 			context.CancellationToken.ThrowIfCancellationRequested();
 
-			var diagnostic = context.Diagnostics.First();
-			var argumentNode = (ArgumentSyntax)root!.FindNode(diagnostic.Location.SourceSpan);
 			var accessExpression = (MemberAccessExpressionSyntax)argumentNode.Expression;
 			var identifierToken = accessExpression.DescendantNodes(_ => true).OfType<IdentifierNameSyntax>().Last().Identifier;
 			var newIdentifierToken = SyntaxFactory.Identifier(nameof(DateTimeKind.Utc));
