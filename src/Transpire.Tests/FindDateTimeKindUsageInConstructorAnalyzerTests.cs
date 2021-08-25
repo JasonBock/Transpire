@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
+using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.AnalyzerVerifier<Transpire.FindDateTimeKindUsageInConstructorAnalyzer>;
 
 namespace Transpire.Tests
 {
@@ -39,10 +40,14 @@ namespace Transpire.Tests
 		[Test]
 		public static async Task AnalyzeWhenNothingIsMadeAsync()
 		{
-			var code = "var id = 1 + 2;";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code);
+			var code =
+@"public sealed class Usage { }
 
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+public static class Test
+{
+	public static Usage Make() => new Usage();
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
@@ -58,63 +63,62 @@ public class Usage
 
 public static class Test
 {
-	public static Usage Make() => new(DateTimeKind.Local);
+	public static Usage Make() => new Usage(DateTimeKind.Local);
 }";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code);
-
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeConstructorDoesNotHaveDateTimeKindAsync()
 		{
-			var code = "var time = new System.DateTime(100);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+public static class Test
+{
+	public static DateTime Make() => new DateTime(100);
+}";
+
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeConstructorUsesDateTimeKindUtcAsync()
 		{
-			var code = "var time = new System.DateTime(100, System.DateTimeKind.Utc);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+public static class Test
+{
+	public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeConstructorDoesNotUseDateTimeKindUtcAsync()
 		{
-			var code = "var time = new System.DateTime(100, System.DateTimeKind.Local);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
-				var descriptor = diagnostics[0].Descriptor;
-				Assert.That(descriptor.Id, Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Id), nameof(descriptor.Id));
-				Assert.That(descriptor.Title.ToString(), Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Title), nameof(descriptor.Title));
-				Assert.That(descriptor.Category, Is.EqualTo(DescriptorConstants.Usage), nameof(descriptor.Category));
-				Assert.That(descriptor.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), nameof(descriptor.DefaultSeverity));
-			});
+public static class Test
+{
+	public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeConstructorDoesNotUseDateTimeKindUtcViaTargetTypeNewAsync()
 		{
-			var code = "System.DateTime time = new(100, System.DateTimeKind.Local);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
-				var descriptor = diagnostics[0].Descriptor;
-				Assert.That(descriptor.Id, Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Id), nameof(descriptor.Id));
-				Assert.That(descriptor.Title.ToString(), Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Title), nameof(descriptor.Title));
-				Assert.That(descriptor.Category, Is.EqualTo(DescriptorConstants.Usage), nameof(descriptor.Category));
-				Assert.That(descriptor.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), nameof(descriptor.DefaultSeverity));
-			});
+public static class Test
+{
+	public static DateTime Make() => new(100, [|DateTimeKind.Local|]);
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 	}
 }
