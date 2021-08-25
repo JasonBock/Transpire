@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
+using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.AnalyzerVerifier<Transpire.FindNewDateTimeViaConstructorAnalyzer>;
 
 namespace Transpire.Tests
 {
@@ -39,62 +40,62 @@ namespace Transpire.Tests
 		[Test]
 		public static async Task AnalyzeWhenNothingIsMadeAsync()
 		{
-			var code = "var id = 1 + 2;";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewDateTimeViaConstructorAnalyzer>(code);
-
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+			var code =
+@"public static class Test
+{
+	public static int Make() => 1 + 2;
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenNoDateIsMadeAsync()
 		{
-			var code = "var id = new string('a', 1);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewDateTimeViaConstructorAnalyzer>(code);
-
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+			var code =
+@"public static class Test
+{
+	public static string Make() => new string('a', 1);
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeIsMadeViaParameters()
 		{
-			var code = "var id = new System.DateTime(100, System.DateTimeKind.Local);";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewDateTimeViaConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+public static class Test
+{
+	public static DateTime Make() => new DateTime(100, DateTimeKind.Local);
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeIsMadeViaNoArgumentConstructorAsync()
 		{
-			var code = "var id = new System.DateTime();";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewDateTimeViaConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
-				var descriptor = diagnostics[0].Descriptor;
-				Assert.That(descriptor.Id, Is.EqualTo(FindNewDateTimeViaConstructorDescriptor.Id), nameof(descriptor.Id));
-				Assert.That(descriptor.Title.ToString(), Is.EqualTo(FindNewDateTimeViaConstructorDescriptor.Title), nameof(descriptor.Title));
-				Assert.That(descriptor.Category, Is.EqualTo(DescriptorConstants.Usage), nameof(descriptor.Category));
-				Assert.That(descriptor.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), nameof(descriptor.DefaultSeverity));
-			});
+public static class Test
+{
+	public static DateTime Make() => [|new DateTime()|];
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
 		public static async Task AnalyzeWhenDateTimeIsMadeViaTargetTypeNewAsync()
 		{
-			var code = "System.DateTime id = new();";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindNewDateTimeViaConstructorAnalyzer>(code);
+			var code =
+@"using System;
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
-				var descriptor = diagnostics[0].Descriptor;
-				Assert.That(descriptor.Id, Is.EqualTo(FindNewDateTimeViaConstructorDescriptor.Id), nameof(descriptor.Id));
-				Assert.That(descriptor.Title.ToString(), Is.EqualTo(FindNewDateTimeViaConstructorDescriptor.Title), nameof(descriptor.Title));
-				Assert.That(descriptor.Category, Is.EqualTo(DescriptorConstants.Usage), nameof(descriptor.Category));
-				Assert.That(descriptor.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), nameof(descriptor.DefaultSeverity));
-			});
+public static class Test
+{
+	public static DateTime Make() => [|new()|];
+}";
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 	}
 }

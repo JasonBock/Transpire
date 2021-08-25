@@ -1,15 +1,9 @@
-﻿using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
+﻿using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
-
+using Test = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixTest<
+	Transpire.FindNewGuidViaConstructorAnalyzer, Transpire.FindNewGuidViaConstructorCodeFix, Microsoft.CodeAnalysis.Testing.Verifiers.NUnitVerifier>;
 namespace Transpire.Tests
 {
 	public static class FindNewGuidViaConstructorCodeFixTests
@@ -28,54 +22,87 @@ namespace Transpire.Tests
 		}
 
 		[Test]
-		public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
+		public static async Task VerifyDefaultGuidCodeFixAsync()
 		{
-			var code =
+			var originalCode =
 @"using System;
 
 public static class Test
 {
-  public static Guid Make() => new Guid();
+  public static Guid Make() => [|new Guid()|];
 }";
-			var document = TestAssistants.CreateDocument(code);
-			var tree = await document.GetSyntaxTreeAsync();
-			var compilation = (await document.Project.GetCompilationAsync())!
-				.WithAnalyzers(ImmutableArray.Create((DiagnosticAnalyzer)new FindNewGuidViaConstructorAnalyzer()));
-			var diagnostics = await compilation!.GetAnalyzerDiagnosticsAsync();
-			var sourceSpan = diagnostics[0].Location.SourceSpan;
+			var fixedCode =
+@"using System;
 
-			var actions = new List<CodeAction>();
-
-			var fix = new FindNewGuidViaConstructorCodeFix();
-			var codeFixContext = new CodeFixContext(document, diagnostics[0],
-			  (a, _) => { actions.Add(a); }, new CancellationToken(false));
-			await fix.RegisterCodeFixesAsync(codeFixContext);
-
-			Assert.Multiple(async () =>
+public static class Test
+{
+  public static Guid Make() => default(Guid);
+}";
+			var test = new Test
 			{
-				Assert.That(actions.Count, Is.EqualTo(3), nameof(actions.Count));
-				await TestAssistants.VerifyCodeFixChangesAsync(
-					actions, FindNewGuidViaConstructorCodeFix.AddDefaultGuidDescription, document,
-					(model, node) =>
-					{
-						Assert.That(node.ToString(), Contains.Substring("default(Guid)"));
-						Assert.That(node.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>().Count(), Is.EqualTo(1));
-					});
-				await TestAssistants.VerifyCodeFixChangesAsync(
-					actions, FindNewGuidViaConstructorCodeFix.AddGuidEmptyDescription, document,
-					(model, node) =>
-					{
-						Assert.That(node.ToString(), Contains.Substring("Guid.Empty"));
-						Assert.That(node.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>().Count(), Is.EqualTo(1));
-					});
-				await TestAssistants.VerifyCodeFixChangesAsync(
-					actions, FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription, document,
-					(model, node) =>
-					{
-						Assert.That(node.ToString(), Contains.Substring("Guid.NewGuid()"));
-						Assert.That(node.DescendantNodes(_ => true).OfType<UsingDirectiveSyntax>().Count(), Is.EqualTo(1));
-					});
-			});
+				TestCode = originalCode
+			};
+			test.ExpectedDiagnostics.AddRange(DiagnosticResult.EmptyDiagnosticResults);
+			test.FixedCode = fixedCode;
+			test.CodeActionIndex = 2;
+
+			await test.RunAsync();
+		}
+
+		[Test]
+		public static async Task VerifyGuidEmptyCodeFixAsync()
+		{
+			var originalCode =
+@"using System;
+
+public static class Test
+{
+  public static Guid Make() => [|new Guid()|];
+}";
+			var fixedCode =
+@"using System;
+
+public static class Test
+{
+  public static Guid Make() => Guid.Empty;
+}";
+			var test = new Test
+			{
+				TestCode = originalCode
+			};
+			test.ExpectedDiagnostics.AddRange(DiagnosticResult.EmptyDiagnosticResults);
+			test.FixedCode = fixedCode;
+			test.CodeActionIndex = 1;
+
+			await test.RunAsync();
+		}
+
+		[Test]
+		public static async Task VerifyGuidNewGuidCodeFixAsync()
+		{
+			var originalCode =
+@"using System;
+
+public static class Test
+{
+  public static Guid Make() => [|new Guid()|];
+}";
+			var fixedCode =
+@"using System;
+
+public static class Test
+{
+  public static Guid Make() => Guid.NewGuid();
+}";
+			var test = new Test
+			{
+				TestCode = originalCode
+			};
+			test.ExpectedDiagnostics.AddRange(DiagnosticResult.EmptyDiagnosticResults);
+			test.FixedCode = fixedCode;
+			test.CodeActionIndex = 0;
+
+			await test.RunAsync();
 		}
 	}
 }
