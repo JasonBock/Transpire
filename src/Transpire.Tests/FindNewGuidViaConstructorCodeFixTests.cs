@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
 using Test = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixTest<
@@ -38,15 +37,7 @@ public static class Test
 {
   public static Guid Make() => default(Guid);
 }";
-			var test = new Test
-			{
-				TestCode = originalCode
-			};
-			test.ExpectedDiagnostics.AddRange(DiagnosticResult.EmptyDiagnosticResults);
-			test.FixedCode = fixedCode;
-			test.CodeActionIndex = 2;
-
-			await test.RunAsync();
+			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 2);
 		}
 
 		[Test]
@@ -66,15 +57,7 @@ public static class Test
 {
   public static Guid Make() => Guid.Empty;
 }";
-			var test = new Test
-			{
-				TestCode = originalCode
-			};
-			test.ExpectedDiagnostics.AddRange(DiagnosticResult.EmptyDiagnosticResults);
-			test.FixedCode = fixedCode;
-			test.CodeActionIndex = 1;
-
-			await test.RunAsync();
+			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 1);
 		}
 
 		[Test]
@@ -94,13 +77,17 @@ public static class Test
 {
   public static Guid Make() => Guid.NewGuid();
 }";
+			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 0);
+		}
+
+		private static async Task Verify(string originalCode, string fixedCode, int codeActionIndex)
+		{
 			var test = new Test
 			{
 				TestCode = originalCode
 			};
-			test.ExpectedDiagnostics.AddRange(DiagnosticResult.EmptyDiagnosticResults);
 			test.FixedCode = fixedCode;
-			test.CodeActionIndex = 0;
+			test.CodeActionIndex = codeActionIndex;
 
 			await test.RunAsync();
 		}
