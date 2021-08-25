@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
+using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.AnalyzerVerifier<Transpire.FindDateTimeNowAnalyzer>;
 
 namespace Transpire.Tests
 {
@@ -46,20 +47,10 @@ public sealed class DateTimeTest
 {
 	public void MyMethod()
 	{
-		var x = DateTime.Now;
+		var x = [|DateTime.Now|];
 	}
 }";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeNowAnalyzer>(code);
-
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
-				var descriptor = diagnostics[0].Descriptor;
-				Assert.That(descriptor.Id, Is.EqualTo(FindDateTimeNowDescriptor.Id), nameof(descriptor.Id));
-				Assert.That(descriptor.Title.ToString(), Is.EqualTo(FindDateTimeNowDescriptor.Title), nameof(descriptor.Title));
-				Assert.That(descriptor.Category, Is.EqualTo(DescriptorConstants.Usage), nameof(descriptor.Category));
-				Assert.That(descriptor.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), nameof(descriptor.DefaultSeverity));
-			});
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
@@ -72,20 +63,10 @@ public sealed class DateTimeTest
 {
 	public void MyMethod()
 	{
-		var x = DT.Now;
+		var x = [|DT.Now|];
 	}
 }";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeNowAnalyzer>(code);
-
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
-				var descriptor = diagnostics[0].Descriptor;
-				Assert.That(descriptor.Id, Is.EqualTo(FindDateTimeNowDescriptor.Id), nameof(descriptor.Id));
-				Assert.That(descriptor.Title.ToString(), Is.EqualTo(FindDateTimeNowDescriptor.Title), nameof(descriptor.Title));
-				Assert.That(descriptor.Category, Is.EqualTo(DescriptorConstants.Usage), nameof(descriptor.Category));
-				Assert.That(descriptor.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error), nameof(descriptor.DefaultSeverity));
-			});
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
@@ -101,8 +82,7 @@ public sealed class DateTimeTest
 		var x = DateTime.UtcNow;
 	}
 }";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeNowAnalyzer>(code);
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
@@ -118,8 +98,7 @@ public sealed class DateTimeTest
 		var x = DT.UtcNow;
 	}
 }";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeNowAnalyzer>(code);
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 
 		[Test]
@@ -137,8 +116,7 @@ public sealed class DateTimeTest
 
 	public string Now { get; set; }
 }";
-			var diagnostics = await TestAssistants.GetDiagnosticsAsync<FindDateTimeNowAnalyzer>(code);
-			Assert.That(diagnostics.Length, Is.EqualTo(0), nameof(diagnostics.Length));
+			await Verify.VerifyAnalyzerAsync(code);
 		}
 	}
 }

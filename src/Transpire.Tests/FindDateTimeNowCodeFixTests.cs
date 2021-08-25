@@ -1,12 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.Diagnostics;
-using NUnit.Framework;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Threading;
+﻿using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
+using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.CodeFixVerifier<
+	Transpire.FindDateTimeNowAnalyzer, Transpire.FindDateTimeNowCodeFix>;
 
 namespace Transpire.Tests
 {
@@ -28,40 +24,27 @@ namespace Transpire.Tests
 		[Test]
 		public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
 		{
-			var code =
+			var originalCode =
 @"using System;
 
 public sealed class DateTimeTest
 {
 	public void MyMethod()
 	{
-		var x = DateTime.Now;
+		var x = [|DateTime.Now|];
 	}
 }";
-			var document = TestAssistants.CreateDocument(code);
-			var tree = await document.GetSyntaxTreeAsync();
-			var compilation = (await document.Project.GetCompilationAsync())!
-				.WithAnalyzers(ImmutableArray.Create((DiagnosticAnalyzer)new FindDateTimeNowAnalyzer()));
-			var diagnostics = await compilation!.GetAnalyzerDiagnosticsAsync();
-			var sourceSpan = diagnostics[0].Location.SourceSpan;
+			var fixedCode =
+@"using System;
 
-			var actions = new List<CodeAction>();
-
-			var fix = new FindDateTimeNowCodeFix();
-			var codeFixContext = new CodeFixContext(document, diagnostics[0],
-			  (a, _) => { actions.Add(a); }, new CancellationToken(false));
-			await fix.RegisterCodeFixesAsync(codeFixContext);
-
-			Assert.Multiple(async () =>
-			{
-				Assert.That(actions.Count, Is.EqualTo(1), nameof(actions.Count));
-				await TestAssistants.VerifyCodeFixChangesAsync(
-					actions, FindDateTimeNowCodeFix.ChangeToUtcNowDescription, document,
-					(model, node) =>
-					{
-						Assert.That(node.ToString(), Contains.Substring("DateTime.UtcNow"));
-					});
-			});
+public sealed class DateTimeTest
+{
+	public void MyMethod()
+	{
+		var x = DateTime.UtcNow;
+	}
+}";
+			await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 		}
 	}
 }
