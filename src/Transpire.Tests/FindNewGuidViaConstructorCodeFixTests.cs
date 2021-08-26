@@ -21,7 +21,7 @@ namespace Transpire.Tests
 		}
 
 		[Test]
-		public static async Task VerifyDefaultGuidCodeFixAsync()
+		public static async Task VerifyGuidNewGuidCodeFixAsync()
 		{
 			var originalCode =
 @"using System;
@@ -35,9 +35,9 @@ public static class Test
 
 public static class Test
 {
-  public static Guid Make() => default(Guid);
+  public static Guid Make() => Guid.NewGuid();
 }";
-			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 2);
+			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 0);
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ public static class Test
 		}
 
 		[Test]
-		public static async Task VerifyGuidNewGuidCodeFixAsync()
+		public static async Task VerifyDefaultGuidCodeFixAsync()
 		{
 			var originalCode =
 @"using System;
@@ -75,9 +75,9 @@ public static class Test
 
 public static class Test
 {
-  public static Guid Make() => Guid.NewGuid();
+  public static Guid Make() => default(Guid);
 }";
-			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 0);
+			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 2);
 		}
 
 		private static async Task Verify(string originalCode, string fixedCode, int codeActionIndex)
