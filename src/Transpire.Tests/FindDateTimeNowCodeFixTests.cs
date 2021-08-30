@@ -1,11 +1,12 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
+using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
-using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.CodeFixVerifier<
-	Transpire.FindDateTimeNowAnalyzer, Transpire.FindDateTimeNowCodeFix>;
 
 namespace Transpire.Tests
 {
+	using Verify = CodeFixVerifier<FindDateTimeNowAnalyzer, FindDateTimeNowCodeFix>;
+
 	public static class FindDateTimeNowCodeFixTests
 	{
 		[Test]

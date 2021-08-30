@@ -1,11 +1,13 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
-using Verify = Microsoft.CodeAnalysis.CSharp.Testing.NUnit.AnalyzerVerifier<Transpire.FindDateTimeNowAnalyzer>;
 
 namespace Transpire.Tests
 {
+	using Verify = AnalyzerVerifier<FindDateTimeNowAnalyzer>;
+
 	public static class FindDateTimeNowAnalyzerTests
 	{
 		[Test]
