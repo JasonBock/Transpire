@@ -56,6 +56,167 @@ public sealed class IntParseTest
 		}
 
 		[Test]
+		public static async Task AnalyzeWhenCallingParseWithNoCorrespondingTryParse()
+		{
+			var code =
+@"using System;
+
+public class MyParser
+{
+	public static MyParser Parse(string value) => new();
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(""3"");
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenCallingParseWithTryParseAndIncorrectParameterCount()
+		{
+			var code =
+@"using System;
+
+public class MyParser
+{
+	public static MyParser Parse(string value) => new();
+	public static bool TryParse(string value) => true;
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(""3"");
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenCallingParseWithTryParseAsInstance()
+		{
+			var code =
+@"using System;
+
+public class MyParser
+{
+	public static MyParser Parse(string value) => new();
+	
+	public bool TryParse(string value, out MyParser result) 
+	{
+		result = new();
+		return true;
+	}
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(""3"");
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenCallingParseWithTryParseThatHasNoOutParameter()
+		{
+			var code =
+@"using System;
+
+public class MyParser
+{
+	public static MyParser Parse(string value) => new();
+	public static bool TryParse(string value, MyParser result) => true;
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(""3"");
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenCallingParseWithTryParseThatHasIncorrectReturnType()
+		{
+			var code =
+@"using System;
+
+public class MyParser
+{
+	public static MyParser Parse(string value) => new();
+	
+	public static int TryParse(string value, out MyParser result)
+	{
+		result = new();
+		return 0;
+	}
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(""3"");
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenCallingParseWithIncorrectNumberOfParameters()
+		{
+			var code =
+@"using System;
+
+public static class MyParser
+{
+	public static int Parse(string value, bool isSomething) => 0;
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(""3"", true);
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenCallingParseWithIncorrectParameterType()
+		{
+			var code =
+@"using System;
+
+public static class MyParser
+{
+	public static int Parse(bool isSomething) => 0;
+}
+
+public sealed class IntParseTest
+{
+	public void MyMethod()
+	{
+		var x = MyParser.Parse(true);
+	}
+}";
+			await Verify.VerifyAnalyzerAsync(code);
+		}
+
+		[Test]
 		public static async Task AnalyzeWhenCallingParseWithReturnTypeAndContainingTypeDoNotMatch()
 		{
 			var code =
