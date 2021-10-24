@@ -37,7 +37,6 @@ namespace Transpire
 						FindDateTimeNowAnalyzer.AnalyzeOperationAction(
 							operationContext, dateTimeNowSymbol);
 					}, OperationKind.PropertyReference);
-
 				}
 			});
 		}
