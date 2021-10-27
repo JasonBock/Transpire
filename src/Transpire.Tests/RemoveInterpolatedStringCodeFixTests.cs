@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using Transpire.Descriptors;
 
 namespace Transpire.Tests
 {
@@ -8,6 +9,19 @@ namespace Transpire.Tests
 
 	public static class RemoveInterpolatedStringCodeFixTests
 	{
+		[Test]
+		public static void VerifyGetFixableDiagnosticIds()
+		{
+			var fix = new RemoveInterpolatedStringCodeFix();
+			var ids = fix.FixableDiagnosticIds;
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
+				Assert.That(ids[0], Is.EqualTo(RemoveInterpolatedStringDescriptor.Id), nameof(RemoveInterpolatedStringDescriptor.Id));
+			});
+		}
+
 		[Test]
 		public static async Task VerifyGetFixesWhenInterpolatedStringHasNoInterpolation()
 		{

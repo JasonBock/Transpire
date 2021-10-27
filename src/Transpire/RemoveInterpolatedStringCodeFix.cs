@@ -38,11 +38,7 @@ namespace Transpire
 
 			var interpolatedStringNodeContent = interpolatedStringNode.Contents[0];
 			var text = interpolatedStringNodeContent.GetText().ToString();
-
 			var isVerbatim = interpolatedStringNode.DescendantTokens(_ => true).Any(_ => _.Kind() == SyntaxKind.InterpolatedVerbatimStringStartToken);
-
-			// this works: @"@""This is a verbatim string""", "This is a verbatim string"
-			//var thing = $@"@{text}";
 
 			var stringNode = isVerbatim ?
 				SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression,

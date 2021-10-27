@@ -1,10 +1,13 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing.Verifiers;
+using NUnit.Framework;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
-using Test = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixTest<
-	Transpire.FindNewGuidViaConstructorAnalyzer, Transpire.FindNewGuidViaConstructorCodeFix, Microsoft.CodeAnalysis.Testing.Verifiers.NUnitVerifier>;
+
 namespace Transpire.Tests
 {
+	using Test = CSharpCodeFixTest<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix, NUnitVerifier>;
+
 	public static class FindNewGuidViaConstructorCodeFixTests
 	{
 		[Test]
