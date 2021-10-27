@@ -7,6 +7,19 @@ namespace Transpire.Extensions
 {
 	internal static class SyntaxNodeExtensions
 	{
+		internal static T? FindParent<T>(this SyntaxNode @this)
+			where T : SyntaxNode
+		{
+			var parent = @this.Parent;
+
+			while (parent is not T && parent is not null)
+			{
+				parent = parent.Parent;
+			}
+
+			return parent as T;
+		}
+
 		internal static bool HasUsing(this SyntaxNode self, string qualifiedName)
 		{
 			if (self is null) { throw new ArgumentNullException(nameof(self)); }
