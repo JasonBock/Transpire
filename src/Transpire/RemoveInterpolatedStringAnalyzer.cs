@@ -32,12 +32,12 @@ namespace Transpire
 
 		private static void AnalyzeInterpolatedStringSyntax(SyntaxNodeAnalysisContext context)
 		{
-			var stringNode = (InterpolatedStringExpressionSyntax)context.Node;
+			var interpolatedStringNode = (InterpolatedStringExpressionSyntax)context.Node;
 			
-			if(!stringNode.Contents.Any(_ => _.Kind() == SyntaxKind.Interpolation))
+			if(!interpolatedStringNode.Contents.Any(_ => _.Kind() == SyntaxKind.Interpolation))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(RemoveInterpolatedStringAnalyzer.rule,
-					stringNode.GetLocation()));
+					interpolatedStringNode.GetLocation()));
 			}
 		}
 	}

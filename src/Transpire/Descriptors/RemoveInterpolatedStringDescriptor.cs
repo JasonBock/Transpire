@@ -6,7 +6,7 @@ namespace Transpire.Descriptors
 	{
 		public static DiagnosticDescriptor Create() =>
 			new(RemoveInterpolatedStringDescriptor.Id, RemoveInterpolatedStringDescriptor.Title,
-				RemoveInterpolatedStringDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
+				RemoveInterpolatedStringDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 				helpLinkUri: HelpUrlBuilder.Build(
 					RemoveInterpolatedStringDescriptor.Id, RemoveInterpolatedStringDescriptor.Title));
 
