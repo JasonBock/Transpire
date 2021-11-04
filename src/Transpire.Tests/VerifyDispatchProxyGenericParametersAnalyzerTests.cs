@@ -37,6 +37,86 @@ public class TargetProxy
 		}
 
 		[Test]
+		public static async Task AnalyzeWhenPassingProxyTypeIsAbstractAsync()
+		{
+			var code =
+@"using System;
+using System.Reflection;
+
+public sealed class DispatchProxyTest
+{
+	public void MyMethod()
+	{
+		[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+	}
+}
+
+public interface ITarget { }
+
+public abstract class TargetProxy
+	: DispatchProxy
+{
+	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
+}";
+			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
+				code, VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create()).RunAsync();
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenPassingProxyTypeIsSealedAsync()
+		{
+			var code =
+@"using System;
+using System.Reflection;
+
+public sealed class DispatchProxyTest
+{
+	public void MyMethod()
+	{
+		[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+	}
+}
+
+public interface ITarget { }
+
+public sealed class TargetProxy
+	: DispatchProxy
+{
+	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
+}";
+			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
+				code, VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create()).RunAsync();
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenPassingProxyTypeDoesNotHaveAPublicParameterlessConstructorAsync()
+		{
+			var code =
+@"using System;
+using System.Reflection;
+
+public sealed class DispatchProxyTest
+{
+	public void MyMethod()
+	{
+		[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+	}
+}
+
+public interface ITarget { }
+
+public class TargetProxy
+	: DispatchProxy
+{
+	private TargetProxy() { }
+
+	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
+}";
+			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
+				code, VerifyDispatchProxyTProxyHasParameterlessConstructorDescriptor.Create()).RunAsync();
+		}
+
+		[Test]
 		public static async Task AnalyzeWhenUsingCreateCorrectlyAsync()
 		{
 			var code =

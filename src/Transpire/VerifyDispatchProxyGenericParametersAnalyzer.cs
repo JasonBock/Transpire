@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
+using System.Linq;
 using System.Collections.Immutable;
 using System.Reflection;
 using Transpire.Descriptors;
@@ -13,6 +14,8 @@ namespace Transpire
 	{
 		private static readonly DiagnosticDescriptor tIsInterfaceRule =
 			VerifyDispatchProxyTIsInterfaceDescriptor.Create();
+		private static readonly DiagnosticDescriptor tProxyIsNotAbstractRule =
+			VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create();
 		private static readonly DiagnosticDescriptor tProxyIsNotSealedRule =
 			VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create();
 		private static readonly DiagnosticDescriptor tProxyHasCtorRule =
@@ -57,12 +60,34 @@ namespace Transpire
 					context.ReportDiagnostic(Diagnostic.Create(VerifyDispatchProxyGenericParametersAnalyzer.tIsInterfaceRule,
 						context.Operation.Syntax.GetLocation()));
 				}
+
+				var tProxyType = targetMethod.TypeArguments[1];
+
+				if (tProxyType.IsAbstract)
+				{
+					context.ReportDiagnostic(Diagnostic.Create(VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotAbstractRule,
+						context.Operation.Syntax.GetLocation()));
+				}
+				else if (tProxyType.IsSealed)
+				{
+					context.ReportDiagnostic(Diagnostic.Create(VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotSealedRule,
+						context.Operation.Syntax.GetLocation()));
+				}
+
+				if (!tProxyType.GetMembers()
+					.Any(_ => _.Kind == SymbolKind.Method && _.DeclaredAccessibility == Accessibility.Public &&
+						!_.IsStatic && _.Name == ".ctor"))
+				{
+					context.ReportDiagnostic(Diagnostic.Create(VerifyDispatchProxyGenericParametersAnalyzer.tProxyHasCtorRule,
+						context.Operation.Syntax.GetLocation()));
+				}
 			}
 		}
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
 			ImmutableArray.Create(
 				VerifyDispatchProxyGenericParametersAnalyzer.tIsInterfaceRule,
+				VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotAbstractRule,
 				VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotSealedRule,
 				VerifyDispatchProxyGenericParametersAnalyzer.tProxyHasCtorRule);
 	}
