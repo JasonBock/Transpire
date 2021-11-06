@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
+using System.Globalization;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
 
@@ -24,9 +25,9 @@ namespace Transpire.Tests
 
 				Assert.That(diagnostic.Id, Is.EqualTo(FindNewGuidViaConstructorDescriptor.Id), 
 					nameof(DiagnosticDescriptor.Id));
-				Assert.That(diagnostic.Title.ToString(), Is.EqualTo(FindNewGuidViaConstructorDescriptor.Title), 
+				Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindNewGuidViaConstructorDescriptor.Title), 
 					nameof(DiagnosticDescriptor.Title));
-				Assert.That(diagnostic.MessageFormat.ToString(), Is.EqualTo(FindNewGuidViaConstructorDescriptor.Message), 
+				Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindNewGuidViaConstructorDescriptor.Message), 
 					nameof(DiagnosticDescriptor.MessageFormat));
 				Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage), 
 					nameof(DiagnosticDescriptor.Category));
@@ -47,7 +48,7 @@ namespace Transpire.Tests
 {
 	public static int Make() => 1 + 2;
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -58,7 +59,7 @@ namespace Transpire.Tests
 {
 	public static string Make() => new string('a', 1);
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -71,7 +72,7 @@ public static class Test
 {
 	public static Guid Make() => Guid.NewGuid();
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -84,7 +85,7 @@ public static class Test
 {
 	public static Guid Make() => new Guid(""83d926c8-9fe6-4cd2-8495-e294e8ade4cb"");
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -97,7 +98,7 @@ public static class Test
 {
 	public static Guid Make() => [|new Guid()|];
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -110,7 +111,7 @@ public static class Test
 {
 	public static Guid Make() => [|new()|];
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 	}
 }

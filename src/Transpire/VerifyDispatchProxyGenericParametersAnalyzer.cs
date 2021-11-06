@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Immutable;
 using System.Reflection;
 using Transpire.Descriptors;
+using System;
 
 namespace Transpire
 {
@@ -23,6 +24,11 @@ namespace Transpire
 
 		public override void Initialize(AnalysisContext context)
 		{
+			if (context is null)
+			{
+				throw new ArgumentNullException(nameof(context));
+			}
+
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
@@ -74,6 +80,7 @@ namespace Transpire
 						context.Operation.Syntax.GetLocation()));
 				}
 
+				// TODO: parameter count!
 				if (!tProxyType.GetMembers()
 					.Any(_ => _.Kind == SymbolKind.Method && _.DeclaredAccessibility == Accessibility.Public &&
 						!_.IsStatic && _.Name == ".ctor"))

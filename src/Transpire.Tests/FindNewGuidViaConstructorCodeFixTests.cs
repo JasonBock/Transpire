@@ -40,7 +40,7 @@ public static class Test
 {
   public static Guid Make() => Guid.NewGuid();
 }";
-			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 0);
+			await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 0).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ public static class Test
 {
   public static Guid Make() => Guid.Empty;
 }";
-			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 1);
+			await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 1).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -80,10 +80,10 @@ public static class Test
 {
   public static Guid Make() => default(Guid);
 }";
-			await FindNewGuidViaConstructorCodeFixTests.Verify(originalCode, fixedCode, 2);
+			await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 2).ConfigureAwait(false);
 		}
 
-		private static async Task Verify(string originalCode, string fixedCode, int codeActionIndex)
+		private static async Task VerifyAsync(string originalCode, string fixedCode, int codeActionIndex)
 		{
 			var test = new Test
 			{
@@ -92,7 +92,7 @@ public static class Test
 			test.FixedCode = fixedCode;
 			test.CodeActionIndex = codeActionIndex;
 
-			await test.RunAsync();
+			await test.RunAsync().ConfigureAwait(false);
 		}
 	}
 }

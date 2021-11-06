@@ -23,7 +23,7 @@ namespace Transpire.Tests
 		}
 
 		[Test]
-		public static async Task VerifyGetFixesWhenInterpolatedStringHasNoInterpolation()
+		public static async Task VerifyGetFixesWhenInterpolatedStringHasNoInterpolationAsync()
 		{
 			var originalCode =
 @"using System;
@@ -45,11 +45,11 @@ public sealed class StringTest
 		var x = ""This has no interpolations."";
 	}
 }";
-			await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+			await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
 		}
 
 		[Test]
-		public static async Task VerifyGetFixesWhenLiteralInterpolatedStringHasNoInterpolation()
+		public static async Task VerifyGetFixesWhenLiteralInterpolatedStringHasNoInterpolationAsync()
 		{
 			var originalCode =
 @"using System;
@@ -75,7 +75,7 @@ public sealed class StringTest
 a verbatim string."";
 	}
 }";
-			await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+			await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
 		}
 	}
 }

@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using Transpire.Descriptors;
 using System.Linq;
+using System;
 
 namespace Transpire
 {
@@ -12,13 +13,18 @@ namespace Transpire
 	public sealed class RemoveInterpolatedStringAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static DiagnosticDescriptor rule = RemoveInterpolatedStringDescriptor.Create();
+		private static readonly DiagnosticDescriptor rule = RemoveInterpolatedStringDescriptor.Create();
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
 			ImmutableArray.Create(RemoveInterpolatedStringAnalyzer.rule);
 
 		public override void Initialize(AnalysisContext context)
 		{
+			if (context is null)
+			{
+				throw new ArgumentNullException(nameof(context));
+			}
+
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();

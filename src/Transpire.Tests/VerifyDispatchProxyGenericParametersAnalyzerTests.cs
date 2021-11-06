@@ -33,7 +33,7 @@ public class TargetProxy
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-				code, VerifyDispatchProxyTIsInterfaceDescriptor.Create()).RunAsync();
+				code, VerifyDispatchProxyTIsInterfaceDescriptor.Create()).RunAsync().ConfigureAwait(false);
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ public abstract class TargetProxy
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-				code, VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create()).RunAsync();
+				code, VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create()).RunAsync().ConfigureAwait(false);
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ public sealed class TargetProxy
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-				code, VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create()).RunAsync();
+				code, VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create()).RunAsync().ConfigureAwait(false);
 		}
 
 		[Test]
@@ -113,7 +113,7 @@ public class TargetProxy
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-				code, VerifyDispatchProxyTProxyHasParameterlessConstructorDescriptor.Create()).RunAsync();
+				code, VerifyDispatchProxyTProxyHasParameterlessConstructorDescriptor.Create()).RunAsync().ConfigureAwait(false);
 		}
 
 		[Test]
@@ -139,7 +139,7 @@ public class TargetProxy
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-				code, null).RunAsync();
+				code, null).RunAsync().ConfigureAwait(false);
 		}
 
 		private sealed class VerifyDispatchProxyGenericParametersAnalyzerTest

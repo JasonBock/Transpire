@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using Transpire.Descriptors;
 using System.Linq;
+using System;
 
 namespace Transpire
 {
@@ -11,13 +12,18 @@ namespace Transpire
 	public sealed class RecommendTryParseOverParseAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static DiagnosticDescriptor rule = RecommendTryParseOverParseDescriptor.Create();
+		private static readonly DiagnosticDescriptor rule = RecommendTryParseOverParseDescriptor.Create();
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
 			ImmutableArray.Create(RecommendTryParseOverParseAnalyzer.rule);
 
 		public override void Initialize(AnalysisContext context)
 		{
+			if (context is null)
+			{
+				throw new ArgumentNullException(nameof(context));
+			}
+			
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();

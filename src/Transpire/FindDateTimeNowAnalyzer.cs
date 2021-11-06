@@ -14,13 +14,18 @@ namespace Transpire
 	public sealed class FindDateTimeNowAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static DiagnosticDescriptor rule = FindDateTimeNowDescriptor.Create();
+		private static readonly DiagnosticDescriptor rule = FindDateTimeNowDescriptor.Create();
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => 
 			ImmutableArray.Create(FindDateTimeNowAnalyzer.rule);
 
 		public override void Initialize(AnalysisContext context)
 		{
+			if (context is null)
+			{
+				throw new ArgumentNullException(nameof(context));
+			}
+
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();

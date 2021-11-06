@@ -46,7 +46,7 @@ public static class ParseTest
 	}
 }";
 
-			await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+			await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
 		}
 	}
 }

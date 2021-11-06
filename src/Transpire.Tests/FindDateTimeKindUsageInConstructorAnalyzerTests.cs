@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
+using System.Globalization;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
 
@@ -24,9 +25,9 @@ namespace Transpire.Tests
 
 				Assert.That(diagnostic.Id, Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Id),
 					nameof(DiagnosticDescriptor.Id));
-				Assert.That(diagnostic.Title.ToString(), Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Title),
+				Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Title),
 					nameof(DiagnosticDescriptor.Title));
-				Assert.That(diagnostic.MessageFormat.ToString(), Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Message),
+				Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Message),
 					nameof(DiagnosticDescriptor.MessageFormat));
 				Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage),
 					nameof(DiagnosticDescriptor.Category));
@@ -49,7 +50,7 @@ public static class Test
 {
 	public static Usage Make() => new Usage();
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -67,7 +68,7 @@ public static class Test
 {
 	public static Usage Make() => new Usage(DateTimeKind.Local);
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -81,7 +82,7 @@ public static class Test
 	public static DateTime Make() => new DateTime(100);
 }";
 
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -94,7 +95,7 @@ public static class Test
 {
 	public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -107,7 +108,7 @@ public static class Test
 {
 	public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
@@ -120,7 +121,7 @@ public static class Test
 {
 	public static DateTime Make() => new(100, [|DateTimeKind.Local|]);
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 	}
 }

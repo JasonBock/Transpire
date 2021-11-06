@@ -1,9 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AssemblyName>Transpire</AssemblyName>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <Description>A library containing various analyzers, code fixes, refactorings, etc.</Description>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <PackageId>Transpire</PackageId>

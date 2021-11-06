@@ -45,7 +45,7 @@ public sealed class DateTimeTest
 		var x = DateTime.UtcNow;
 	}
 }";
-			await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+			await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
 		}
 	}
 }

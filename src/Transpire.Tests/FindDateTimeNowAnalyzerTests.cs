@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
+using System.Globalization;
 using System.Threading.Tasks;
 using Transpire.Descriptors;
 
@@ -24,9 +25,9 @@ namespace Transpire.Tests
 
 				Assert.That(diagnostic.Id, Is.EqualTo(FindDateTimeNowDescriptor.Id),
 					nameof(DiagnosticDescriptor.Id));
-				Assert.That(diagnostic.Title.ToString(), Is.EqualTo(FindDateTimeNowDescriptor.Title),
+				Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindDateTimeNowDescriptor.Title),
 					nameof(DiagnosticDescriptor.Title));
-				Assert.That(diagnostic.MessageFormat.ToString(), Is.EqualTo(FindDateTimeNowDescriptor.Message),
+				Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindDateTimeNowDescriptor.Message),
 					nameof(DiagnosticDescriptor.MessageFormat));
 				Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage),
 					nameof(DiagnosticDescriptor.Category));
@@ -40,7 +41,7 @@ namespace Transpire.Tests
 		}
 
 		[Test]
-		public static async Task AnalyzeWhenCallingDateTimeNow()
+		public static async Task AnalyzeWhenCallingDateTimeNowAsync()
 		{
 			var code =
 @"using System;
@@ -52,11 +53,11 @@ public sealed class DateTimeTest
 		var x = [|DateTime.Now|];
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
-		public static async Task AnalyzeWhenCallingDateTimeNowWithAlias()
+		public static async Task AnalyzeWhenCallingDateTimeNowWithAliasAsync()
 		{
 			var code =
 @"using DT = System.DateTime;
@@ -68,11 +69,11 @@ public sealed class DateTimeTest
 		var x = [|DT.Now|];
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
-		public static async Task AnalyzeWhenCallingDateTimeUtcNow()
+		public static async Task AnalyzeWhenCallingDateTimeUtcNowAsync()
 		{
 			var code =
 @"using System;
@@ -84,11 +85,11 @@ public sealed class DateTimeTest
 		var x = DateTime.UtcNow;
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
-		public static async Task AnalyzeWhenCallingDateTimeUtcNowWithAlias()
+		public static async Task AnalyzeWhenCallingDateTimeUtcNowWithAliasAsync()
 		{
 			var code =
 @"using DT = System.DateTime;
@@ -100,11 +101,11 @@ public sealed class DateTimeTest
 		var x = DT.UtcNow;
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 
 		[Test]
-		public static async Task AnalyzeWhenCallingNowAsAProperty()
+		public static async Task AnalyzeWhenCallingNowAsAPropertyAsync()
 		{
 			var code =
 @"using System;
@@ -118,7 +119,7 @@ public sealed class DateTimeTest
 
 	public string Now { get; set; }
 }";
-			await Verify.VerifyAnalyzerAsync(code);
+			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 		}
 	}
 }

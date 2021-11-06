@@ -39,7 +39,7 @@ public static class Test
 {
   public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
 }";
-			await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+			await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
 		}
 	}
 }

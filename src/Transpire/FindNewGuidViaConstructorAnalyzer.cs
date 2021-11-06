@@ -12,11 +12,16 @@ namespace Transpire
 	public sealed class FindNewGuidViaConstructorAnalyzer
 		: DiagnosticAnalyzer
 	{
-		private static readonly DiagnosticDescriptor rule = 
+		private static readonly DiagnosticDescriptor rule =
 			FindNewGuidViaConstructorDescriptor.Create();
 
 		public override void Initialize(AnalysisContext context)
 		{
+			if (context is null)
+			{
+				throw new ArgumentNullException(nameof(context));
+			}
+
 			context.ConfigureGeneratedCodeAnalysis(
 				GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
 			context.EnableConcurrentExecution();
@@ -25,11 +30,11 @@ namespace Transpire
 			{
 				var guidSymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(Guid).FullName);
 
-				if(guidSymbol is not null)
+				if (guidSymbol is not null)
 				{
 					var guidConstructorSymbol = guidSymbol.InstanceConstructors.SingleOrDefault(_ => _.Parameters.Length == 0);
 
-					if(guidConstructorSymbol is not null)
+					if (guidConstructorSymbol is not null)
 					{
 						compilationContext.RegisterOperationAction(operationContext =>
 						{
@@ -45,7 +50,7 @@ namespace Transpire
 		{
 			var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
 
-			if(SymbolEqualityComparer.Default.Equals(contextInvocation, guidConstructorSymbol))
+			if (SymbolEqualityComparer.Default.Equals(contextInvocation, guidConstructorSymbol))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					FindNewGuidViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation()));
