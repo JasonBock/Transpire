@@ -20,7 +20,7 @@ namespace Transpire
 		private static readonly DiagnosticDescriptor tProxyIsNotSealedRule =
 			VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create();
 		private static readonly DiagnosticDescriptor tProxyHasCtorRule =
-			VerifyDispatchProxyTProxyHasParameterlessConstructorDescriptor.Create();
+			VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create();
 
 		public override void Initialize(AnalysisContext context)
 		{
@@ -80,10 +80,10 @@ namespace Transpire
 						context.Operation.Syntax.GetLocation()));
 				}
 
-				// TODO: parameter count!
 				if (!tProxyType.GetMembers()
 					.Any(_ => _.Kind == SymbolKind.Method && _.DeclaredAccessibility == Accessibility.Public &&
-						!_.IsStatic && _.Name == ".ctor"))
+						!_.IsStatic && _.Name == ".ctor" &&
+						((IMethodSymbol)_).Parameters.Length == 0))
 				{
 					context.ReportDiagnostic(Diagnostic.Create(VerifyDispatchProxyGenericParametersAnalyzer.tProxyHasCtorRule,
 						context.Operation.Syntax.GetLocation()));

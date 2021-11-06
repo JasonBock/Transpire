@@ -6,7 +6,7 @@ namespace Transpire.Descriptors
 	{
 		public static DiagnosticDescriptor Create() =>
 			new(VerifyDispatchProxyTIsInterfaceDescriptor.Id, VerifyDispatchProxyTIsInterfaceDescriptor.Title,
-				VerifyDispatchProxyTIsInterfaceDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
+				VerifyDispatchProxyTIsInterfaceDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
 					VerifyDispatchProxyTIsInterfaceDescriptor.Id, VerifyDispatchProxyTIsInterfaceDescriptor.Title));
 

@@ -56,6 +56,8 @@ public interface ITarget { }
 public abstract class TargetProxy
 	: DispatchProxy
 {
+	public TargetProxy() { }
+
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
@@ -89,7 +91,7 @@ public sealed class TargetProxy
 		}
 
 		[Test]
-		public static async Task AnalyzeWhenPassingProxyTypeDoesNotHaveAPublicParameterlessConstructorAsync()
+		public static async Task AnalyzeWhenPassingProxyTypeWhenParameterlessConstructorIsPrivateAsync()
 		{
 			var code =
 @"using System;
@@ -113,7 +115,35 @@ public class TargetProxy
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
 			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-				code, VerifyDispatchProxyTProxyHasParameterlessConstructorDescriptor.Create()).RunAsync().ConfigureAwait(false);
+				code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create()).RunAsync().ConfigureAwait(false);
+		}
+
+		[Test]
+		public static async Task AnalyzeWhenPassingProxyTypeWhenPublicConstructorHasParametersAsync()
+		{
+			var code =
+@"using System;
+using System.Reflection;
+
+public sealed class DispatchProxyTest
+{
+	public void MyMethod()
+	{
+		[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+	}
+}
+
+public interface ITarget { }
+
+public class TargetProxy
+	: DispatchProxy
+{
+	public TargetProxy(int a) { }
+
+	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
+}";
+			await new VerifyDispatchProxyGenericParametersAnalyzerTest(
+				code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create()).RunAsync().ConfigureAwait(false);
 		}
 
 		[Test]
