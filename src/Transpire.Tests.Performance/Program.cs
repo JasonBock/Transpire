@@ -1,3 +1,1 @@
-﻿using System;
-
-Console.Out.WriteLine("Perf tests go here...");
+﻿Console.Out.WriteLine("Perf tests go here...");

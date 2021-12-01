@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AnalysisMode>AllDisabledByDefault</AnalysisMode>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AnalysisMode>AllDisabledByDefault</AnalysisMode>
+	</PropertyGroup>
 </Project>

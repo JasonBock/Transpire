@@ -1,7 +1,6 @@
-﻿namespace Transpire.Descriptors
+﻿namespace Transpire.Descriptors;
+
+public static class DescriptorConstants
 {
-	public static class DescriptorConstants
-	{
-		public const string Usage = nameof(DescriptorConstants.Usage);
-	}
+	public const string Usage = nameof(DescriptorConstants.Usage);
 }

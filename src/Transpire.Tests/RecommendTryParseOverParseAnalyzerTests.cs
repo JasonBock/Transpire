@@ -2,49 +2,48 @@
 using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
 using System.Globalization;
-using System.Threading.Tasks;
 using Transpire.Descriptors;
 
-namespace Transpire.Tests
+namespace Transpire.Tests;
+
+using Verify = AnalyzerVerifier<RecommendTryParseOverParseAnalyzer>;
+
+public static class RecommendTryParseOverParseAnalyzerTests
 {
-	using Verify = AnalyzerVerifier<RecommendTryParseOverParseAnalyzer>;
-
-	public static class RecommendTryParseOverParseAnalyzerTests
+	[Test]
+	public static void VerifySupportedDiagnostics()
 	{
-		[Test]
-		public static void VerifySupportedDiagnostics()
+		var analyzer = new RecommendTryParseOverParseAnalyzer();
+		var diagnostics = analyzer.SupportedDiagnostics;
+
+		Assert.Multiple(() =>
 		{
-			var analyzer = new RecommendTryParseOverParseAnalyzer();
-			var diagnostics = analyzer.SupportedDiagnostics;
+			Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
+			var diagnostic = diagnostics[0];
 
-				var diagnostic = diagnostics[0];
+			Assert.That(diagnostic.Id, Is.EqualTo(RecommendTryParseOverParseDescriptor.Id),
+					 nameof(DiagnosticDescriptor.Id));
+			Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendTryParseOverParseDescriptor.Title),
+					 nameof(DiagnosticDescriptor.Title));
+			Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendTryParseOverParseDescriptor.Message),
+					 nameof(DiagnosticDescriptor.MessageFormat));
+			Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage),
+					 nameof(DiagnosticDescriptor.Category));
+			Assert.That(diagnostic.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error),
+					 nameof(DiagnosticDescriptor.DefaultSeverity));
+			Assert.That(diagnostic.IsEnabledByDefault, Is.True,
+					 nameof(DiagnosticDescriptor.IsEnabledByDefault));
+			Assert.That(diagnostic.HelpLinkUri, Is.EqualTo(HelpUrlBuilder.Build(RecommendTryParseOverParseDescriptor.Id, RecommendTryParseOverParseDescriptor.Title)),
+					 nameof(DiagnosticDescriptor.HelpLinkUri));
+		});
+	}
 
-				Assert.That(diagnostic.Id, Is.EqualTo(RecommendTryParseOverParseDescriptor.Id),
-					nameof(DiagnosticDescriptor.Id));
-				Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendTryParseOverParseDescriptor.Title),
-					nameof(DiagnosticDescriptor.Title));
-				Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendTryParseOverParseDescriptor.Message),
-					nameof(DiagnosticDescriptor.MessageFormat));
-				Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage),
-					nameof(DiagnosticDescriptor.Category));
-				Assert.That(diagnostic.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error),
-					nameof(DiagnosticDescriptor.DefaultSeverity));
-				Assert.That(diagnostic.IsEnabledByDefault, Is.True,
-					nameof(DiagnosticDescriptor.IsEnabledByDefault));
-				Assert.That(diagnostic.HelpLinkUri, Is.EqualTo(HelpUrlBuilder.Build(RecommendTryParseOverParseDescriptor.Id, RecommendTryParseOverParseDescriptor.Title)),
-					nameof(DiagnosticDescriptor.HelpLinkUri));
-			});
-		}
-
-		[Test]
-		public static async Task AnalyzeWhenCallingParseAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseAsync()
+	{
+		var code =
+ @"using System;
 
 public sealed class IntParseTest
 {
@@ -53,14 +52,14 @@ public sealed class IntParseTest
 		var x = [|int.Parse(""3"")|];
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithNoCorrespondingTryParseAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithNoCorrespondingTryParseAsync()
+	{
+		var code =
+ @"using System;
 
 public class MyParser
 {
@@ -74,14 +73,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithTryParseAndIncorrectParameterCountAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithTryParseAndIncorrectParameterCountAsync()
+	{
+		var code =
+ @"using System;
 
 public class MyParser
 {
@@ -96,14 +95,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithTryParseAsInstanceAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithTryParseAsInstanceAsync()
+	{
+		var code =
+ @"using System;
 
 public class MyParser
 {
@@ -123,14 +122,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithTryParseThatHasNoOutParameterAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithTryParseThatHasNoOutParameterAsync()
+	{
+		var code =
+ @"using System;
 
 public class MyParser
 {
@@ -145,14 +144,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithTryParseThatHasIncorrectReturnTypeAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithTryParseThatHasIncorrectReturnTypeAsync()
+	{
+		var code =
+ @"using System;
 
 public class MyParser
 {
@@ -172,14 +171,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithIncorrectNumberOfParametersAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithIncorrectNumberOfParametersAsync()
+	{
+		var code =
+ @"using System;
 
 public static class MyParser
 {
@@ -193,14 +192,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"", true);
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithIncorrectParameterTypeAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithIncorrectParameterTypeAsync()
+	{
+		var code =
+ @"using System;
 
 public static class MyParser
 {
@@ -214,14 +213,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(true);
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseWithReturnTypeAndContainingTypeDoNotMatchAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseWithReturnTypeAndContainingTypeDoNotMatchAsync()
+	{
+		var code =
+ @"using System;
 
 public static class MyParser
 {
@@ -235,14 +234,14 @@ public sealed class IntParseTest
 		var x = MyParser.Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenCallingParseAsInstanceMethodAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenCallingParseAsInstanceMethodAsync()
+	{
+		var code =
+ @"using System;
 
 public class MyParser
 {
@@ -256,14 +255,14 @@ public sealed class IntParseTest
 		var x = new MyParser().Parse(""3"");
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+	}
 
-		[Test]
-		public static async Task AnalyzeWhenNotCallingParseAsync()
-		{
-			var code =
-@"using System;
+	[Test]
+	public static async Task AnalyzeWhenNotCallingParseAsync()
+	{
+		var code =
+ @"using System;
 
 public sealed class IntParseTest
 {
@@ -272,7 +271,6 @@ public sealed class IntParseTest
 		int.TryParse(""3"", out var x);
 	}
 }";
-			await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
-		}
+		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
 	}
 }

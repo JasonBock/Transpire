@@ -1,32 +1,31 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
 using NUnit.Framework;
-using System.Threading.Tasks;
 using Transpire.Descriptors;
 
-namespace Transpire.Tests
+namespace Transpire.Tests;
+
+using Verify = CodeFixVerifier<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix>;
+
+public static class RecommendTryParseOverParseCodeFixTests
 {
-	using Verify = CodeFixVerifier<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix>;
-
-	public static class RecommendTryParseOverParseCodeFixTests
+	[Test]
+	public static void VerifyGetFixableDiagnosticIds()
 	{
-		[Test]
-		public static void VerifyGetFixableDiagnosticIds()
-		{
-			var fix = new RecommendTryParseOverParseCodeFix();
-			var ids = fix.FixableDiagnosticIds;
+		var fix = new RecommendTryParseOverParseCodeFix();
+		var ids = fix.FixableDiagnosticIds;
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
-				Assert.That(ids[0], Is.EqualTo(RecommendTryParseOverParseDescriptor.Id), nameof(RecommendTryParseOverParseDescriptor.Id));
-			});
-		}
-
-		[Test]
-		public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
+		Assert.Multiple(() =>
 		{
-			var originalCode =
-@"using System;
+			Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
+			Assert.That(ids[0], Is.EqualTo(RecommendTryParseOverParseDescriptor.Id), nameof(RecommendTryParseOverParseDescriptor.Id));
+		});
+	}
+
+	[Test]
+	public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
+	{
+		var originalCode =
+ @"using System;
 
 public static class ParseTest
 {
@@ -35,8 +34,8 @@ public static class ParseTest
 		var result = [|int.Parse(""3"")|];
 	}
 }";
-			var fixedCode =
-@"using System;
+		var fixedCode =
+ @"using System;
 
 public static class ParseTest
 {
@@ -46,7 +45,6 @@ public static class ParseTest
 	}
 }";
 
-			await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
-		}
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
 	}
 }
