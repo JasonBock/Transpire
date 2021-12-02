@@ -14,7 +14,7 @@ namespace Transpire;
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FindNewDateTimeViaConstructorCodeFix))]
 [Shared]
 public sealed class FindNewDateTimeViaConstructorCodeFix
-	 : CodeFixProvider
+	: CodeFixProvider
 {
 	public const string AddDateTimeUtcNowDescription = "Add DateTime.UtcNow";
 

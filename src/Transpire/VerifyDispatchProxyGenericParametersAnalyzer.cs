@@ -9,7 +9,7 @@ namespace Transpire;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class VerifyDispatchProxyGenericParametersAnalyzer
-	 : DiagnosticAnalyzer
+	: DiagnosticAnalyzer
 {
 	private static readonly DiagnosticDescriptor tIsInterfaceRule =
 		VerifyDispatchProxyTIsInterfaceDescriptor.Create();

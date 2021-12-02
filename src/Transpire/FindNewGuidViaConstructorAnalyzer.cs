@@ -8,7 +8,7 @@ namespace Transpire;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class FindNewGuidViaConstructorAnalyzer
-	 : DiagnosticAnalyzer
+	: DiagnosticAnalyzer
 {
 	private static readonly DiagnosticDescriptor rule =
 		FindNewGuidViaConstructorDescriptor.Create();

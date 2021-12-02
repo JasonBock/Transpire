@@ -8,7 +8,7 @@ namespace Transpire;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class RecommendTryParseOverParseAnalyzer
-	 : DiagnosticAnalyzer
+	: DiagnosticAnalyzer
 {
 	private static readonly DiagnosticDescriptor rule = RecommendTryParseOverParseDescriptor.Create();
 

@@ -12,7 +12,7 @@ namespace Transpire;
 [ExportCodeFixProvider(FindDateTimeNowDescriptor.Id, LanguageNames.CSharp)]
 [Shared]
 public sealed class FindDateTimeNowCodeFix
-	 : CodeFixProvider
+	: CodeFixProvider
 {
 	public const string ChangeToUtcNowDescription = "Change to UtcNow";
 

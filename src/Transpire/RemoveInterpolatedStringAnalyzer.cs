@@ -9,7 +9,7 @@ namespace Transpire;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class RemoveInterpolatedStringAnalyzer
-	 : DiagnosticAnalyzer
+	: DiagnosticAnalyzer
 {
 	private static readonly DiagnosticDescriptor rule = RemoveInterpolatedStringDescriptor.Create();
 

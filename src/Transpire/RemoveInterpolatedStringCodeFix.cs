@@ -12,7 +12,7 @@ namespace Transpire;
 [ExportCodeFixProvider(RemoveInterpolatedStringDescriptor.Id, LanguageNames.CSharp)]
 [Shared]
 public sealed class RemoveInterpolatedStringCodeFix
-	 : CodeFixProvider
+	: CodeFixProvider
 {
 	public const string ChangeToLiteralStringDescription = "Change to a literal string";
 

@@ -8,7 +8,7 @@ namespace Transpire;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class FindDateTimeNowAnalyzer
-	 : DiagnosticAnalyzer
+	: DiagnosticAnalyzer
 {
 	private static readonly DiagnosticDescriptor rule = FindDateTimeNowDescriptor.Create();
 

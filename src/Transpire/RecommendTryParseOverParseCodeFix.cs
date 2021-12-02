@@ -13,7 +13,7 @@ namespace Transpire;
 [ExportCodeFixProvider(RecommendTryParseOverParseDescriptor.Id, LanguageNames.CSharp)]
 [Shared]
 public sealed class RecommendTryParseOverParseCodeFix
-	 : CodeFixProvider
+	: CodeFixProvider
 {
 	public const string ChangeToTryParseDescription = "Change to TryParse";
 

@@ -12,7 +12,7 @@ namespace Transpire;
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FindDateTimeKindUsageInConstructorCodeFix))]
 [Shared]
 public sealed class FindDateTimeKindUsageInConstructorCodeFix
-	 : CodeFixProvider
+	: CodeFixProvider
 {
 	public const string UseUtcDescription = "Use Utc";
 

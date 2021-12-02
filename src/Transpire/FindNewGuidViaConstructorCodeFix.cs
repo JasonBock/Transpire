@@ -14,7 +14,7 @@ namespace Transpire;
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(FindNewGuidViaConstructorCodeFix))]
 [Shared]
 public sealed class FindNewGuidViaConstructorCodeFix
-	 : CodeFixProvider
+	: CodeFixProvider
 {
 	public const string AddDefaultGuidDescription = "Add default(Guid)";
 	public const string AddGuidEmptyDescription = "Add Guid.Empty";
