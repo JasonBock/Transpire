@@ -31,15 +31,15 @@ public sealed class FindNewDateTimeViaConstructorAnalyzer
 			if (dateTimeSymbol is not null)
 			{
 				var dateTimeNoArgumentConstructorSymbol = dateTimeSymbol.InstanceConstructors
-						 .SingleOrDefault(_ => _.Parameters.Length == 0);
+					.SingleOrDefault(_ => _.Parameters.Length == 0);
 
 				if (dateTimeNoArgumentConstructorSymbol is not null)
 				{
 					compilationContext.RegisterOperationAction(operationContext =>
-						{
-						  FindNewDateTimeViaConstructorAnalyzer.AnalyzeOperationAction(
-									operationContext, dateTimeNoArgumentConstructorSymbol);
-					  }, OperationKind.ObjectCreation);
+					{
+						FindNewDateTimeViaConstructorAnalyzer.AnalyzeOperationAction(
+							operationContext, dateTimeNoArgumentConstructorSymbol);
+					}, OperationKind.ObjectCreation);
 				}
 			}
 		});

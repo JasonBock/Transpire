@@ -47,7 +47,7 @@ public sealed class FindNewGuidViaConstructorCodeFix
 		if (!root.HasUsing(guidNamespace))
 		{
 			newRoot = ((CompilationUnitSyntax)newRoot).AddUsings(
-			  SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(guidNamespace)));
+				SyntaxFactory.UsingDirective(SyntaxFactory.ParseName(guidNamespace)));
 		}
 
 		context.RegisterCodeFix(
@@ -61,9 +61,9 @@ public sealed class FindNewGuidViaConstructorCodeFix
 	{
 		var newInvocationNode = SyntaxFactory.InvocationExpression(
 			SyntaxFactory.MemberAccessExpression(
-					SyntaxKind.SimpleMemberAccessExpression,
-					SyntaxFactory.IdentifierName(nameof(Guid)),
-					SyntaxFactory.IdentifierName(nameof(Guid.NewGuid))))
+				SyntaxKind.SimpleMemberAccessExpression,
+				SyntaxFactory.IdentifierName(nameof(Guid)),
+				SyntaxFactory.IdentifierName(nameof(Guid.NewGuid))))
 			.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
 		FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
 			creationNode, newInvocationNode, FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription);

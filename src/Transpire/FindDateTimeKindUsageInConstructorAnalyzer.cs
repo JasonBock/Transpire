@@ -37,10 +37,10 @@ public sealed class FindDateTimeKindUsageInConstructorAnalyzer
 			}
 
 			compilationContext.RegisterOperationAction(operationContext =>
-				 {
-					 FindDateTimeKindUsageInConstructorAnalyzer.AnalyzeOperationAction(
-							  operationContext, dateTimeSymbol, dateTimeKindSymbol);
-				 }, OperationKind.ObjectCreation);
+			{
+				FindDateTimeKindUsageInConstructorAnalyzer.AnalyzeOperationAction(
+					operationContext, dateTimeSymbol, dateTimeKindSymbol);
+			}, OperationKind.ObjectCreation);
 		});
 	}
 

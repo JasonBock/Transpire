@@ -34,10 +34,10 @@ public sealed class FindDateTimeNowAnalyzer
 			if (dateTimeNowSymbol is not null)
 			{
 				compilationContext.RegisterOperationAction(operationContext =>
-					 {
-						FindDateTimeNowAnalyzer.AnalyzeOperationAction(
-								 operationContext, dateTimeNowSymbol);
-					}, OperationKind.PropertyReference);
+				{
+					FindDateTimeNowAnalyzer.AnalyzeOperationAction(
+						operationContext, dateTimeNowSymbol);
+				}, OperationKind.PropertyReference);
 			}
 		});
 	}

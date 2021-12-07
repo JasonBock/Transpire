@@ -41,12 +41,12 @@ public sealed class VerifyDispatchProxyGenericParametersAnalyzer
 			}
 
 			compilationContext.RegisterOperationAction(operationContext =>
-				 {
-					 var createSymbol = (IMethodSymbol)dispatchProxySymbol.GetMembers(nameof(DispatchProxy.Create))[0];
+			{
+				var createSymbol = (IMethodSymbol)dispatchProxySymbol.GetMembers(nameof(DispatchProxy.Create))[0];
 
-					 VerifyDispatchProxyGenericParametersAnalyzer.AnalyzeOperationAction(
-							  operationContext, createSymbol);
-				 }, OperationKind.Invocation);
+				VerifyDispatchProxyGenericParametersAnalyzer.AnalyzeOperationAction(
+						operationContext, createSymbol);
+			}, OperationKind.Invocation);
 		});
 	}
 

@@ -29,9 +29,9 @@ public sealed class RecommendTryParseOverParseAnalyzer
 		context.RegisterCompilationStartAction(compilationContext =>
 		{
 			compilationContext.RegisterOperationAction(operationContext =>
-				 {
-					 RecommendTryParseOverParseAnalyzer.AnalyzeOperationAction(operationContext);
-				 }, OperationKind.Invocation);
+			{
+				RecommendTryParseOverParseAnalyzer.AnalyzeOperationAction(operationContext);
+			}, OperationKind.Invocation);
 		});
 	}
 
@@ -49,17 +49,17 @@ public sealed class RecommendTryParseOverParseAnalyzer
 			var invocationContainingType = invocationReference.ContainingType;
 
 			var hasTryParse = (from member in invocationContainingType.GetMembers("TryParse")
-									 where member.Kind == SymbolKind.Method
-									 let method = member as IMethodSymbol
-									 where method.IsStatic &&
-									 method.Parameters.Length == 2 &&
-									 method.Parameters[0].Type.SpecialType == SpecialType.System_String &&
-									 method.Parameters[1].RefKind == RefKind.Out &&
-									 SymbolEqualityComparer.Default.Equals(
-										 method.Parameters[1].Type, invocationReference.ContainingType) &&
-									 !method.ReturnsVoid &&
-									 method.ReturnType.SpecialType == SpecialType.System_Boolean
-									 select method).Any();
+								where member.Kind == SymbolKind.Method
+								let method = member as IMethodSymbol
+								where method.IsStatic &&
+								method.Parameters.Length == 2 &&
+								method.Parameters[0].Type.SpecialType == SpecialType.System_String &&
+								method.Parameters[1].RefKind == RefKind.Out &&
+								SymbolEqualityComparer.Default.Equals(
+									method.Parameters[1].Type, invocationReference.ContainingType) &&
+								!method.ReturnsVoid &&
+								method.ReturnType.SpecialType == SpecialType.System_Boolean
+								select method).Any();
 
 			if (hasTryParse)
 			{

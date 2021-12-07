@@ -30,7 +30,7 @@ public sealed class RemoveInterpolatedStringAnalyzer
 		context.RegisterCompilationStartAction(compilationContext =>
 		{
 			compilationContext.RegisterSyntaxNodeAction(
-					 RemoveInterpolatedStringAnalyzer.AnalyzeInterpolatedStringSyntax, SyntaxKind.InterpolatedStringExpression);
+				RemoveInterpolatedStringAnalyzer.AnalyzeInterpolatedStringSyntax, SyntaxKind.InterpolatedStringExpression);
 		});
 	}
 

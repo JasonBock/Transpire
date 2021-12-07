@@ -35,10 +35,10 @@ public sealed class FindNewGuidViaConstructorAnalyzer
 				if (guidConstructorSymbol is not null)
 				{
 					compilationContext.RegisterOperationAction(operationContext =>
-						{
-						  FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction(
-									operationContext, guidConstructorSymbol);
-					  }, OperationKind.ObjectCreation);
+					{
+						FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction(
+							operationContext, guidConstructorSymbol);
+					}, OperationKind.ObjectCreation);
 				}
 			}
 		});
