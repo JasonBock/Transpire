@@ -26,14 +26,14 @@ public static class FindNewGuidViaConstructorCodeFixTests
 	public static async Task VerifyGuidNewGuidCodeFixAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public static class Test
 {
   public static Guid Make() => [|new Guid()|];
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -46,14 +46,14 @@ public static class Test
 	public static async Task VerifyGuidEmptyCodeFixAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public static class Test
 {
   public static Guid Make() => [|new Guid()|];
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -66,14 +66,14 @@ public static class Test
 	public static async Task VerifyDefaultGuidCodeFixAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public static class Test
 {
   public static Guid Make() => [|new Guid()|];
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public static class Test
 {

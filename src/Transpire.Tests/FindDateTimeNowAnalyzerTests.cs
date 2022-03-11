@@ -43,7 +43,7 @@ public static class FindDateTimeNowAnalyzerTests
 	public static async Task AnalyzeWhenCallingDateTimeNowAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class DateTimeTest
 {
@@ -59,7 +59,7 @@ public sealed class DateTimeTest
 	public static async Task AnalyzeWhenCallingDateTimeNowWithAliasAsync()
 	{
 		var code =
- @"using DT = System.DateTime;
+@"using DT = System.DateTime;
 
 public sealed class DateTimeTest
 {
@@ -75,7 +75,7 @@ public sealed class DateTimeTest
 	public static async Task AnalyzeWhenCallingDateTimeUtcNowAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class DateTimeTest
 {
@@ -91,7 +91,7 @@ public sealed class DateTimeTest
 	public static async Task AnalyzeWhenCallingDateTimeUtcNowWithAliasAsync()
 	{
 		var code =
- @"using DT = System.DateTime;
+@"using DT = System.DateTime;
 
 public sealed class DateTimeTest
 {
@@ -107,7 +107,7 @@ public sealed class DateTimeTest
 	public static async Task AnalyzeWhenCallingNowAsAPropertyAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class DateTimeTest
 {

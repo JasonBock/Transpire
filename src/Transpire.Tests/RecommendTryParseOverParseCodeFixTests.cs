@@ -25,7 +25,7 @@ public static class RecommendTryParseOverParseCodeFixTests
 	public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public static class ParseTest
 {
@@ -35,7 +35,7 @@ public static class ParseTest
 	}
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public static class ParseTest
 {

@@ -25,7 +25,7 @@ public static class FindDateTimeNowCodeFixTests
 	public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public sealed class DateTimeTest
 {
@@ -35,7 +35,7 @@ public sealed class DateTimeTest
 	}
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public sealed class DateTimeTest
 {

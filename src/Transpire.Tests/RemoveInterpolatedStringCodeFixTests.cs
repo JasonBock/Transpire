@@ -25,7 +25,7 @@ public static class RemoveInterpolatedStringCodeFixTests
 	public static async Task VerifyGetFixesWhenInterpolatedStringHasNoInterpolationAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {
@@ -35,7 +35,7 @@ public sealed class StringTest
 	}
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {
@@ -51,7 +51,7 @@ public sealed class StringTest
 	public static async Task VerifyGetFixesWhenLiteralInterpolatedStringHasNoInterpolationAsync()
 	{
 		var originalCode =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {
@@ -63,7 +63,7 @@ a verbatim string.""|];
 	}
 }";
 		var fixedCode =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {

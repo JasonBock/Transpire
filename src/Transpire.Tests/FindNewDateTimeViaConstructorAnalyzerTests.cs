@@ -43,7 +43,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 	public static async Task AnalyzeWhenNothingIsMadeAsync()
 	{
 		var code =
- @"public static class Test
+@"public static class Test
 {
 	public static int Make() => 1 + 2;
 }";
@@ -54,7 +54,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 	public static async Task AnalyzeWhenNoDateIsMadeAsync()
 	{
 		var code =
- @"public static class Test
+@"public static class Test
 {
 	public static string Make() => new string('a', 1);
 }";
@@ -65,7 +65,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 	public static async Task AnalyzeWhenDateTimeIsMadeViaParametersAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -78,7 +78,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeIsMadeViaNoArgumentConstructorAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -91,7 +91,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeIsMadeViaTargetTypeNewAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {

@@ -28,10 +28,8 @@ public sealed class RemoveInterpolatedStringAnalyzer
 		context.EnableConcurrentExecution();
 
 		context.RegisterCompilationStartAction(compilationContext =>
-		{
 			compilationContext.RegisterSyntaxNodeAction(
-				RemoveInterpolatedStringAnalyzer.AnalyzeInterpolatedStringSyntax, SyntaxKind.InterpolatedStringExpression);
-		});
+				RemoveInterpolatedStringAnalyzer.AnalyzeInterpolatedStringSyntax, SyntaxKind.InterpolatedStringExpression));
 	}
 
 	private static void AnalyzeInterpolatedStringSyntax(SyntaxNodeAnalysisContext context)

@@ -43,7 +43,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 	public static async Task AnalyzeWhenNothingIsMadeAsync()
 	{
 		var code =
- @"public sealed class Usage { }
+@"public sealed class Usage { }
 
 public static class Test
 {
@@ -56,7 +56,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeKindIsUsedNotInDateTimeConstructorAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class Usage
 {
@@ -74,7 +74,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeConstructorDoesNotHaveDateTimeKindAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -88,7 +88,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeConstructorUsesDateTimeKindUtcAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -101,7 +101,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeConstructorDoesNotUseDateTimeKindUtcAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {
@@ -114,7 +114,7 @@ public static class Test
 	public static async Task AnalyzeWhenDateTimeConstructorDoesNotUseDateTimeKindUtcViaTargetTypeNewAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class Test
 {

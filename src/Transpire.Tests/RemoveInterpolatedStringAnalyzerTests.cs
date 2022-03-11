@@ -43,7 +43,7 @@ public static class RemoveInterpolatedStringAnalyzerTests
 	public static async Task AnalyzeWhenInterpolatedStringHasNoInterpolationsAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {
@@ -59,7 +59,7 @@ public sealed class StringTest
 	public static async Task AnalyzeWhenInterpolatedStringHasInterpolationsAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {
@@ -75,7 +75,7 @@ public sealed class StringTest
 	public static async Task AnalyzeWhenStringIsLiteralAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class StringTest
 {

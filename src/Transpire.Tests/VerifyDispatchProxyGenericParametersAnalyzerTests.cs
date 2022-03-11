@@ -1,11 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Descriptors;
 
 namespace Transpire.Tests;
+
+using Verify = VerifyAnalyzerWithMultipleDescriptorsTest<VerifyDispatchProxyGenericParametersAnalyzer>;
 
 internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 {
@@ -13,7 +11,7 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 	public static async Task AnalyzeWhenPassingClassToCreateAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 using System.Reflection;
 
 public sealed class DispatchProxyTest
@@ -31,15 +29,15 @@ public class TargetProxy
 {
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
-		await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-			code, VerifyDispatchProxyTIsInterfaceDescriptor.Create()).RunAsync().ConfigureAwait(false);
+		await new Verify(code, VerifyDispatchProxyTIsInterfaceDescriptor.Create())
+			.RunAsync().ConfigureAwait(false);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenPassingProxyTypeIsAbstractAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 using System.Reflection;
 
 public sealed class DispatchProxyTest
@@ -59,15 +57,15 @@ public abstract class TargetProxy
 
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
-		await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-			code, VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create()).RunAsync().ConfigureAwait(false);
+		await new Verify(code, VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create())
+			.RunAsync().ConfigureAwait(false);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenPassingProxyTypeIsSealedAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 using System.Reflection;
 
 public sealed class DispatchProxyTest
@@ -85,15 +83,15 @@ public sealed class TargetProxy
 {
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
-		await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-			code, VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create()).RunAsync().ConfigureAwait(false);
+		await new Verify(code, VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create())
+			.RunAsync().ConfigureAwait(false);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenPassingProxyTypeWhenParameterlessConstructorIsPrivateAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 using System.Reflection;
 
 public sealed class DispatchProxyTest
@@ -113,15 +111,15 @@ public class TargetProxy
 
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
-		await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-			code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create()).RunAsync().ConfigureAwait(false);
+		await new Verify(code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create())
+			.RunAsync().ConfigureAwait(false);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenPassingProxyTypeWhenPublicConstructorHasParametersAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 using System.Reflection;
 
 public sealed class DispatchProxyTest
@@ -141,15 +139,15 @@ public class TargetProxy
 
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
-		await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-			code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create()).RunAsync().ConfigureAwait(false);
+		await new Verify(code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create())
+			.RunAsync().ConfigureAwait(false);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenUsingCreateCorrectlyAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 using System.Reflection;
 
 public sealed class DispatchProxyTest
@@ -167,24 +165,7 @@ public class TargetProxy
 {
 	protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 }";
-		await new VerifyDispatchProxyGenericParametersAnalyzerTest(
-			code, null).RunAsync().ConfigureAwait(false);
-	}
-
-	private sealed class VerifyDispatchProxyGenericParametersAnalyzerTest
-		: CSharpAnalyzerTest<VerifyDispatchProxyGenericParametersAnalyzer, NUnitVerifier>
-	{
-		private readonly DiagnosticDescriptor? descriptor;
-
-		public VerifyDispatchProxyGenericParametersAnalyzerTest(
-			string code, DiagnosticDescriptor? descriptor)
-			: base()
-		{
-			this.descriptor = descriptor;
-			this.TestState.Sources.Add(code);
-		}
-
-		protected override DiagnosticDescriptor? GetDefaultDiagnostic(DiagnosticAnalyzer[] analyzers) =>
-			this.descriptor;
+		await new Verify(code, null)
+			.RunAsync().ConfigureAwait(false);
 	}
 }

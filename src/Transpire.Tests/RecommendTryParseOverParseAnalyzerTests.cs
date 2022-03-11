@@ -43,7 +43,7 @@ public static class RecommendTryParseOverParseAnalyzerTests
 	public static async Task AnalyzeWhenCallingParseAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class IntParseTest
 {
@@ -59,7 +59,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithNoCorrespondingTryParseAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class MyParser
 {
@@ -80,7 +80,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithTryParseAndIncorrectParameterCountAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class MyParser
 {
@@ -102,7 +102,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithTryParseAsInstanceAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class MyParser
 {
@@ -129,7 +129,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithTryParseThatHasNoOutParameterAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class MyParser
 {
@@ -151,7 +151,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithTryParseThatHasIncorrectReturnTypeAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class MyParser
 {
@@ -178,7 +178,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithIncorrectNumberOfParametersAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class MyParser
 {
@@ -199,7 +199,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithIncorrectParameterTypeAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class MyParser
 {
@@ -220,7 +220,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseWithReturnTypeAndContainingTypeDoNotMatchAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public static class MyParser
 {
@@ -241,7 +241,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenCallingParseAsInstanceMethodAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public class MyParser
 {
@@ -262,7 +262,7 @@ public sealed class IntParseTest
 	public static async Task AnalyzeWhenNotCallingParseAsync()
 	{
 		var code =
- @"using System;
+@"using System;
 
 public sealed class IntParseTest
 {
