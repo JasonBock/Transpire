@@ -11,13 +11,12 @@ namespace Transpire;
 public sealed class MethodParameterCountAnalyzer
 	: DiagnosticAnalyzer
 {
-	private static readonly DiagnosticDescriptor infoRule = MethodParameterCountInfoDescriptor.Create();
-	private static readonly DiagnosticDescriptor warningRule = MethodParameterCountWarningDescriptor.Create();
-	private static readonly DiagnosticDescriptor errorRule = MethodParameterCountErrorDescriptor.Create();
-
+	// TODO: Just provide the default values
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(MethodParameterCountAnalyzer.infoRule,
-			MethodParameterCountAnalyzer.warningRule, MethodParameterCountAnalyzer.errorRule);
+		ImmutableArray.Create(
+			MethodParameterCountInfoDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultInfoLimit),
+			MethodParameterCountWarningDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultWarningLimit),
+			MethodParameterCountErrorDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultErrorLimit));
 
 	public override void Initialize(AnalysisContext context)
 	{
@@ -37,21 +36,23 @@ public sealed class MethodParameterCountAnalyzer
 
 	private static void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
 	{
+		var options = context.Options.AnalyzerConfigOptionsProvider.GetOptions(context.Node.SyntaxTree);
+		var configuration = new MethodParameterCountAnalyzerConfiguration(options);
 		var method = (MethodDeclarationSyntax)context.Node;
 
-		if (method.ParameterList.Parameters.Count > 8192)
+		if (method.ParameterList.Parameters.Count > configuration.ErrorLimit)
 		{
-			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountAnalyzer.errorRule,
+			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountErrorDescriptor.Create(configuration.ErrorLimit.Value),
 				method.Identifier.GetLocation()));
 		}
-		else if (method.ParameterList.Parameters.Count > 16)
+		else if (method.ParameterList.Parameters.Count > configuration.WarningLimit)
 		{
-			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountAnalyzer.warningRule,
+			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountWarningDescriptor.Create(configuration.WarningLimit.Value),
 				method.Identifier.GetLocation()));
 		}
-		else if (method.ParameterList.Parameters.Count > 4)
+		else if (method.ParameterList.Parameters.Count > configuration.InfoLimit)
 		{
-			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountAnalyzer.infoRule,
+			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountInfoDescriptor.Create(configuration.InfoLimit.Value),
 				method.Identifier.GetLocation()));
 		}
 	}

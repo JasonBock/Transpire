@@ -14,15 +14,18 @@ public static class MethodParameterCountAnalyzerTests
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanInfoLevelParameterCountAsync() =>
-		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(6, MethodParameterCountInfoDescriptor.Create()).ConfigureAwait(false);
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
+			6, MethodParameterCountInfoDescriptor.Create(0)).ConfigureAwait(false);
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanWarningLevelParameterCountAsync() =>
-		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(18, MethodParameterCountWarningDescriptor.Create()).ConfigureAwait(false);
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
+			18, MethodParameterCountWarningDescriptor.Create(0)).ConfigureAwait(false);
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanErrorLevelParameterCountAsync() =>
-		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(10_000, MethodParameterCountErrorDescriptor.Create()).ConfigureAwait(false);
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
+			10_000, MethodParameterCountErrorDescriptor.Create(0)).ConfigureAwait(false);
 
 	private static async Task AnalyzeWithSpecifiedParameterCountAsync(int parameterCount, DiagnosticDescriptor? descriptor)
 	{

@@ -1,16 +1,18 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Globalization;
 
 namespace Transpire.Descriptors;
 
-public static class MethodParameterCountWarningDescriptor
+public static class MethodParameterCountInfoDescriptor
 {
-	public static DiagnosticDescriptor Create() =>
-		new(MethodParameterCountWarningDescriptor.Id, MethodParameterCountWarningDescriptor.Title,
-			MethodParameterCountWarningDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Warning, true,
+	public static DiagnosticDescriptor Create(uint parameterCount) =>
+		new(MethodParameterCountInfoDescriptor.Id, MethodParameterCountInfoDescriptor.Title,
+			string.Format(CultureInfo.InvariantCulture, MethodParameterCountInfoDescriptor.Message, parameterCount),
+			DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				MethodParameterCountWarningDescriptor.Id, MethodParameterCountWarningDescriptor.Title));
+				MethodParameterCountInfoDescriptor.Id, MethodParameterCountInfoDescriptor.Title));
 
-	public const string Id = "TRANS12";
-	public const string Message = "Method parameter count should be equal to or less than 16.";
+	public const string Id = "TRANS11";
+	public readonly static string Message = "Consider defining this method with {0} or less parameters.";
 	public const string Title = "Method Parameter Count";
 }
