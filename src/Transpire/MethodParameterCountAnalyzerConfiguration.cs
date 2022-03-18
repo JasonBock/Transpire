@@ -5,10 +5,10 @@ namespace Transpire;
 
 internal sealed class MethodParameterCountAnalyzerConfiguration
 {
-	internal const uint DefaultErrorLimit = 8912;
+	internal const uint DefaultErrorLimit = 32;
 	internal const uint DefaultWarningLimit = 16;
 	internal const uint DefaultInfoLimit = 4;
-	internal const string DiagnosticId = "TRANS14";
+	internal const uint Maximum = 8912;
 
 	internal MethodParameterCountAnalyzerConfiguration(AnalyzerConfigOptions options)
 	{
@@ -24,7 +24,7 @@ internal sealed class MethodParameterCountAnalyzerConfiguration
 		var infoLimit = GetValue(options, MethodParameterCountInfoDescriptor.Id,
 			MethodParameterCountAnalyzerConfiguration.DefaultInfoLimit);
 
-		if (errorLimit > MethodParameterCountAnalyzerConfiguration.DefaultErrorLimit ||
+		if (errorLimit > MethodParameterCountAnalyzerConfiguration.Maximum ||
 			warningLimit >= errorLimit ||
 			infoLimit >= warningLimit ||
 			errorLimit == 0 ||

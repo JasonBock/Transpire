@@ -13,6 +13,6 @@ public static class MethodParameterCountWarningDescriptor
 				MethodParameterCountWarningDescriptor.Id, MethodParameterCountWarningDescriptor.Title));
 
 	public const string Id = "TRANS12";
-	public readonly static string Message = "Method parameter count should be equal to or less than {0}.";
+	public readonly static string Message = "Methods should not have more than {0} parameters.";
 	public const string Title = "Method Parameter Count";
 }

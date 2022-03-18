@@ -25,7 +25,7 @@ public static class MethodParameterCountAnalyzerTests
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanErrorLevelParameterCountAsync() =>
 		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			10_000, MethodParameterCountErrorDescriptor.Create(0)).ConfigureAwait(false);
+			100, MethodParameterCountErrorDescriptor.Create(0)).ConfigureAwait(false);
 
 	private static async Task AnalyzeWithSpecifiedParameterCountAsync(int parameterCount, DiagnosticDescriptor? descriptor)
 	{
