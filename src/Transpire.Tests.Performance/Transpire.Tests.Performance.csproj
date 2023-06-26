@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<NoWarn>CA1852</NoWarn>
 		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 	<ItemGroup>

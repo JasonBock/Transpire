@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 using System.Collections.Immutable;
-using System.Reflection;
 using Transpire.Descriptors;
 
 namespace Transpire;
@@ -11,6 +10,9 @@ namespace Transpire;
 public sealed class VerifyDispatchProxyGenericParametersAnalyzer
 	: DiagnosticAnalyzer
 {
+	private const string DispatchProxyTypeFullName = "System.Reflection.DispatchProxy";
+	private const string DispatchProxyCreateName = "Create";
+
 	private static readonly DiagnosticDescriptor tIsInterfaceRule =
 		VerifyDispatchProxyTIsInterfaceDescriptor.Create();
 	private static readonly DiagnosticDescriptor tProxyIsNotAbstractRule =
@@ -33,7 +35,8 @@ public sealed class VerifyDispatchProxyGenericParametersAnalyzer
 
 		context.RegisterCompilationStartAction(compilationContext =>
 		{
-			var dispatchProxySymbol = compilationContext.Compilation.GetTypeByMetadataName(typeof(DispatchProxy).FullName);
+			var dispatchProxySymbol = compilationContext.Compilation.GetTypeByMetadataName(
+				VerifyDispatchProxyGenericParametersAnalyzer.DispatchProxyTypeFullName);
 
 			if (dispatchProxySymbol is null)
 			{
@@ -42,10 +45,11 @@ public sealed class VerifyDispatchProxyGenericParametersAnalyzer
 
 			compilationContext.RegisterOperationAction(operationContext =>
 			{
-				var createSymbol = (IMethodSymbol)dispatchProxySymbol.GetMembers(nameof(DispatchProxy.Create))[0];
+				var createSymbol = (IMethodSymbol)dispatchProxySymbol.GetMembers(
+					VerifyDispatchProxyGenericParametersAnalyzer.DispatchProxyCreateName)[0];
 
 				VerifyDispatchProxyGenericParametersAnalyzer.AnalyzeOperationAction(
-						operationContext, createSymbol);
+					operationContext, createSymbol);
 			}, OperationKind.Invocation);
 		});
 	}

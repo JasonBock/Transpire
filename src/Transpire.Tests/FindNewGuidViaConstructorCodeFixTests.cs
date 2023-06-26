@@ -86,10 +86,10 @@ public static class Test
 	{
 		var test = new Test
 		{
-			TestCode = originalCode
+			TestCode = originalCode,
+			FixedCode = fixedCode,
+			CodeActionIndex = codeActionIndex
 		};
-		test.FixedCode = fixedCode;
-		test.CodeActionIndex = codeActionIndex;
 
 		await test.RunAsync().ConfigureAwait(false);
 	}

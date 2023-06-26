@@ -1,1 +1,1 @@
-﻿Console.Out.WriteLine("Perf tests go here...");
+﻿Console.WriteLine("Perf tests go here...");

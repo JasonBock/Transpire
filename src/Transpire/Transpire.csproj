@@ -1,12 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>Transpire</AssemblyName>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<Description>A library containing various analyzers, code fixes, refactorings, etc.</Description>
+		<DevelopmentDependency>true</DevelopmentDependency>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<IncludeSymbols>true</IncludeSymbols>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
 		<PackageId>Transpire</PackageId>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jasonbock/transpire</PackageProjectUrl>
@@ -26,7 +29,6 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.2.0" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-		<PackageReference Include="System.Reflection.DispatchProxy" Version="4.7.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
