@@ -25,19 +25,23 @@ public static class FindNewDateTimeViaConstructorCodeFixTests
 	public static async Task VerifyGetFixesWhenUsingNewDateTimeAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static DateTime Make() => [|new DateTime()|];
-}";
+			public static class Test
+			{
+				public static DateTime Make() => [|new DateTime()|];
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static DateTime Make() => DateTime.UtcNow;
-}";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
+			public static class Test
+			{
+				public static DateTime Make() => DateTime.UtcNow;
+			}
+			""";
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 }

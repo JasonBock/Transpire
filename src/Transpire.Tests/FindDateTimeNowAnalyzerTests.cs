@@ -23,19 +23,19 @@ public static class FindDateTimeNowAnalyzerTests
 			var diagnostic = diagnostics[0];
 
 			Assert.That(diagnostic.Id, Is.EqualTo(FindDateTimeNowDescriptor.Id),
-					 nameof(DiagnosticDescriptor.Id));
+				nameof(DiagnosticDescriptor.Id));
 			Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindDateTimeNowDescriptor.Title),
-					 nameof(DiagnosticDescriptor.Title));
+				nameof(DiagnosticDescriptor.Title));
 			Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(FindDateTimeNowDescriptor.Message),
-					 nameof(DiagnosticDescriptor.MessageFormat));
+				nameof(DiagnosticDescriptor.MessageFormat));
 			Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage),
-					 nameof(DiagnosticDescriptor.Category));
+				nameof(DiagnosticDescriptor.Category));
 			Assert.That(diagnostic.DefaultSeverity, Is.EqualTo(DiagnosticSeverity.Error),
-					 nameof(DiagnosticDescriptor.DefaultSeverity));
+				nameof(DiagnosticDescriptor.DefaultSeverity));
 			Assert.That(diagnostic.IsEnabledByDefault, Is.True,
-					 nameof(DiagnosticDescriptor.IsEnabledByDefault));
+				nameof(DiagnosticDescriptor.IsEnabledByDefault));
 			Assert.That(diagnostic.HelpLinkUri, Is.EqualTo(HelpUrlBuilder.Build(FindDateTimeNowDescriptor.Id, FindDateTimeNowDescriptor.Title)),
-					 nameof(DiagnosticDescriptor.HelpLinkUri));
+				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}
 
@@ -43,81 +43,91 @@ public static class FindDateTimeNowAnalyzerTests
 	public static async Task AnalyzeWhenCallingDateTimeNowAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = [|DateTime.Now|];
-	}
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = [|DateTime.Now|];
+				}
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenCallingDateTimeNowWithAliasAsync()
 	{
 		var code =
-@"using DT = System.DateTime;
+			"""
+			using DT = System.DateTime;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = [|DT.Now|];
-	}
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = [|DT.Now|];
+				}
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenCallingDateTimeUtcNowAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = DateTime.UtcNow;
-	}
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = DateTime.UtcNow;
+				}
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenCallingDateTimeUtcNowWithAliasAsync()
 	{
 		var code =
-@"using DT = System.DateTime;
+			"""
+			using DT = System.DateTime;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = DT.UtcNow;
-	}
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = DT.UtcNow;
+				}
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenCallingNowAsAPropertyAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = this.Now;
-	}
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = this.Now;
+				}
 
-	public string Now { get; set; }
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+				public string Now { get; set; }
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 }

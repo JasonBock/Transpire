@@ -25,55 +25,63 @@ public static class RemoveInterpolatedStringCodeFixTests
 	public static async Task VerifyGetFixesWhenInterpolatedStringHasNoInterpolationAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public sealed class StringTest
-{
-	public void MyMethod()
-	{
-		var x = [|$""This has no interpolations.""|];
-	}
-}";
+			public sealed class StringTest
+			{
+				public void MyMethod()
+				{
+					var x = [|$"This has no interpolations."|];
+				}
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public sealed class StringTest
-{
-	public void MyMethod()
-	{
-		var x = ""This has no interpolations."";
-	}
-}";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
+			public sealed class StringTest
+			{
+				public void MyMethod()
+				{
+					var x = "This has no interpolations.";
+				}
+			}
+			""";
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 
 	[Test]
 	public static async Task VerifyGetFixesWhenLiteralInterpolatedStringHasNoInterpolationAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public sealed class StringTest
-{
-	public void MyMethod()
-	{
-		var x = 
-[|$@""this is
-a verbatim string.""|];
-	}
-}";
+			public sealed class StringTest
+			{
+				public void MyMethod()
+				{
+					var x = 
+			[|$@"this is
+			a verbatim string."|];
+				}
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public sealed class StringTest
-{
-	public void MyMethod()
-	{
-		var x = 
-@""this is
-a verbatim string."";
-	}
-}";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
+			public sealed class StringTest
+			{
+				public void MyMethod()
+				{
+					var x = 
+			@"this is
+			a verbatim string.";
+				}
+			}
+			""";
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 }

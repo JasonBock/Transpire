@@ -14,7 +14,7 @@ public sealed class FindDateTimeKindUsageInConstructorAnalyzer
 {
 	private static readonly DiagnosticDescriptor rule =
 		FindDateTimeKindUsageInConstructorDescriptor.Create();
-
+	
 	public override void Initialize(AnalysisContext context)
 	{
 		if (context is null)

@@ -43,83 +43,95 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 	public static async Task AnalyzeWhenNothingIsMadeAsync()
 	{
 		var code =
-@"public sealed class Usage { }
+			"""
+			public sealed class Usage { }
 
-public static class Test
-{
-	public static Usage Make() => new Usage();
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public static class Test
+			{
+				public static Usage Make() => new Usage();
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenDateTimeKindIsUsedNotInDateTimeConstructorAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public class Usage
-{
-	public Usage(DateTimeKind kind) { }
-}
+			public class Usage
+			{
+				public Usage(DateTimeKind kind) { }
+			}
 
-public static class Test
-{
-	public static Usage Make() => new Usage(DateTimeKind.Local);
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public static class Test
+			{
+				public static Usage Make() => new Usage(DateTimeKind.Local);
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenDateTimeConstructorDoesNotHaveDateTimeKindAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-	public static DateTime Make() => new DateTime(100);
-}";
+			public static class Test
+			{
+				public static DateTime Make() => new DateTime(100);
+			}
+			""";
 
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenDateTimeConstructorUsesDateTimeKindUtcAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-	public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public static class Test
+			{
+				public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenDateTimeConstructorDoesNotUseDateTimeKindUtcAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-	public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public static class Test
+			{
+				public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 
 	[Test]
 	public static async Task AnalyzeWhenDateTimeConstructorDoesNotUseDateTimeKindUtcViaTargetTypeNewAsync()
 	{
 		var code =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-	public static DateTime Make() => new(100, [|DateTimeKind.Local|]);
-}";
-		await Verify.VerifyAnalyzerAsync(code).ConfigureAwait(false);
+			public static class Test
+			{
+				public static DateTime Make() => new(100, [|DateTimeKind.Local|]);
+			}
+			""";
+		await Verify.VerifyAnalyzerAsync(code);
 	}
 }

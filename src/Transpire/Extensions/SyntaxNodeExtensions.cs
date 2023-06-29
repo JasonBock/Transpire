@@ -40,7 +40,7 @@ internal static class SyntaxNodeExtensions
 
 		foreach (var usingNode in usingNodes)
 		{
-			if (usingNode.Name.ToFullString().Contains(qualifiedName))
+			if (usingNode.Name!.ToFullString().Contains(qualifiedName))
 			{
 				return true;
 			}

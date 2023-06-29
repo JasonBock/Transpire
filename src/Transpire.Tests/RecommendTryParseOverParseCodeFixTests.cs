@@ -25,26 +25,30 @@ public static class RecommendTryParseOverParseCodeFixTests
 	public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public static class ParseTest
-{
-	public static void MyMethod()
-	{
-		var result = [|int.Parse(""3"")|];
-	}
-}";
+			public static class ParseTest
+			{
+				public static void MyMethod()
+				{
+					var result = [|int.Parse("3")|];
+				}
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public static class ParseTest
-{
-	public static void MyMethod()
-	{
-		int.TryParse(""3"", out var result);
-	}
-}";
+			public static class ParseTest
+			{
+				public static void MyMethod()
+				{
+					int.TryParse("3", out var result);
+				}
+			}
+			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 }

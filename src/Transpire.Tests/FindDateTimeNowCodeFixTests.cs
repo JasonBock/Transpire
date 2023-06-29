@@ -25,25 +25,29 @@ public static class FindDateTimeNowCodeFixTests
 	public static async Task VerifyGetFixesWhenUsingNewGuidAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = [|DateTime.Now|];
-	}
-}";
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = [|DateTime.Now|];
+				}
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public sealed class DateTimeTest
-{
-	public void MyMethod()
-	{
-		var x = DateTime.UtcNow;
-	}
-}";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
+			public sealed class DateTimeTest
+			{
+				public void MyMethod()
+				{
+					var x = DateTime.UtcNow;
+				}
+			}
+			""";
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 }

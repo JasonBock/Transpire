@@ -10,22 +10,22 @@ public static class MethodGenericParameterCountAnalyzerTests
 {
 	[Test]
 	public static async Task AnalyzeWhenMethodHasAcceptableParameterCountAsync() =>
-		await MethodGenericParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(1, null).ConfigureAwait(false);
+		await MethodGenericParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(1, null);
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanInfoLevelParameterCountAsync() =>
 		await MethodGenericParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			6, MethodGenericParameterCountInfoDescriptor.Create(0)).ConfigureAwait(false);
+			6, MethodGenericParameterCountInfoDescriptor.Create(0));
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanWarningLevelParameterCountAsync() =>
 		await MethodGenericParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			18, MethodGenericParameterCountWarningDescriptor.Create(0)).ConfigureAwait(false);
+			18, MethodGenericParameterCountWarningDescriptor.Create(0));
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanErrorLevelParameterCountAsync() =>
 		await MethodGenericParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			100, MethodGenericParameterCountErrorDescriptor.Create(0)).ConfigureAwait(false);
+			100, MethodGenericParameterCountErrorDescriptor.Create(0));
 
 	private static async Task AnalyzeWithSpecifiedParameterCountAsync(int parameterCount, DiagnosticDescriptor? descriptor)
 	{
@@ -33,13 +33,15 @@ public static class MethodGenericParameterCountAnalyzerTests
 		var methodName = parameterCount <= 4 ? "MyMethod" : "[|MyMethod|]";
 
 		var code =
-$@"using System;
+			$$"""
+			using System;
 
-public sealed class StringTest
-{{
-	public void {methodName}<{parameters}>() {{ }}
-}}";
+			public sealed class StringTest
+			{
+				public void {{methodName}}<{{parameters}}>() { }
+			}
+			""";
 		await new Verify(
-			code, descriptor).RunAsync().ConfigureAwait(false);
+			code, descriptor).RunAsync();
 	}
 }

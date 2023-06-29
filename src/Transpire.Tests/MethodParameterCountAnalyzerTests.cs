@@ -10,22 +10,22 @@ public static class MethodParameterCountAnalyzerTests
 {
 	[Test]
 	public static async Task AnalyzeWhenMethodHasAcceptableParameterCountAsync() => 
-		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(0, null).ConfigureAwait(false);
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(0, null);
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanInfoLevelParameterCountAsync() =>
 		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			6, MethodParameterCountInfoDescriptor.Create(0)).ConfigureAwait(false);
+			6, MethodParameterCountInfoDescriptor.Create(0));
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanWarningLevelParameterCountAsync() =>
 		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			18, MethodParameterCountWarningDescriptor.Create(0)).ConfigureAwait(false);
+			18, MethodParameterCountWarningDescriptor.Create(0));
 
 	[Test]
 	public static async Task AnalyzeWhenMethodHasMoreThanErrorLevelParameterCountAsync() =>
 		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
-			100, MethodParameterCountErrorDescriptor.Create(0)).ConfigureAwait(false);
+			100, MethodParameterCountErrorDescriptor.Create(0));
 
 	private static async Task AnalyzeWithSpecifiedParameterCountAsync(int parameterCount, DiagnosticDescriptor? descriptor)
 	{
@@ -33,13 +33,15 @@ public static class MethodParameterCountAnalyzerTests
 		var methodName = parameterCount <= 4 ? "MyMethod" : "[|MyMethod|]";
 
 		var code =
-$@"using System;
+			$$"""
+			using System;
 
-public sealed class StringTest
-{{
-	public void {methodName}({parameters}) {{ }}
-}}";
+			public sealed class StringTest
+			{
+				public void {{methodName}}({{parameters}}) { }
+			}
+			""";
 		await new Verify(
-			code, descriptor).RunAsync().ConfigureAwait(false);
+			code, descriptor).RunAsync();
 	}
 }

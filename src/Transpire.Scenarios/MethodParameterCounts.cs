@@ -1,4 +1,4 @@
-﻿namespace Transpire.Vsix.Scenarios;
+﻿namespace Transpire.Scenarios;
 
 public static class MethodParameterCounts
 {

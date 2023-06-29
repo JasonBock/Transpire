@@ -25,19 +25,23 @@ public static class FindDateTimeKindUsageInConstructorCodeFixTests
 	public static async Task VerifyGetFixesWhenNotUsingDateTimeKindUtcAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
-}";
+			public static class Test
+			{
+				public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
-}";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode).ConfigureAwait(false);
+			public static class Test
+			{
+				public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
+			}
+			""";
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 }

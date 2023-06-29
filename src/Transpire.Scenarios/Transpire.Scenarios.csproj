@@ -1,0 +1,8 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AnalysisMode>AllDisabledByDefault</AnalysisMode>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Transpire\Transpire.csproj" OutputItemType="Analyzer" />
+	</ItemGroup>
+</Project>

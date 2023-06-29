@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Transpire.Vsix.Scenarios;
+namespace Transpire.Scenarios;
 
 public static class UsingDispatchProxyCreate
 {

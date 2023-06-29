@@ -26,60 +26,72 @@ public static class FindNewGuidViaConstructorCodeFixTests
 	public static async Task VerifyGuidNewGuidCodeFixAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static Guid Make() => [|new Guid()|];
-}";
+			public static class Test
+			{
+				public static Guid Make() => [|new Guid()|];
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static Guid Make() => Guid.NewGuid();
-}";
-		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 0).ConfigureAwait(false);
+			public static class Test
+			{
+				public static Guid Make() => Guid.NewGuid();
+			}
+			""";
+		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 0);
 	}
 
 	[Test]
 	public static async Task VerifyGuidEmptyCodeFixAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static Guid Make() => [|new Guid()|];
-}";
+			public static class Test
+			{
+				public static Guid Make() => [|new Guid()|];
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static Guid Make() => Guid.Empty;
-}";
-		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 1).ConfigureAwait(false);
+			public static class Test
+			{
+				public static Guid Make() => Guid.Empty;
+			}
+			""";
+		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 1);
 	}
 
 	[Test]
 	public static async Task VerifyDefaultGuidCodeFixAsync()
 	{
 		var originalCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static Guid Make() => [|new Guid()|];
-}";
+			public static class Test
+			{
+				public static Guid Make() => [|new Guid()|];
+			}
+			""";
 		var fixedCode =
-@"using System;
+			"""
+			using System;
 
-public static class Test
-{
-  public static Guid Make() => default(Guid);
-}";
-		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 2).ConfigureAwait(false);
+			public static class Test
+			{
+				public static Guid Make() => default(Guid);
+			}
+			""";
+		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 2);
 	}
 
 	private static async Task VerifyAsync(string originalCode, string fixedCode, int codeActionIndex)
@@ -91,6 +103,6 @@ public static class Test
 			CodeActionIndex = codeActionIndex
 		};
 
-		await test.RunAsync().ConfigureAwait(false);
+		await test.RunAsync();
 	}
 }
