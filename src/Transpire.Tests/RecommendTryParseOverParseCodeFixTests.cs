@@ -1,10 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
+﻿using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using Transpire.Descriptors;
 
 namespace Transpire.Tests;
 
-using Verify = CodeFixVerifier<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix>;
+using Verify = CSharpCodeFixVerifier<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix, DefaultVerifier>;
 
 public static class RecommendTryParseOverParseCodeFixTests
 {
@@ -16,7 +17,7 @@ public static class RecommendTryParseOverParseCodeFixTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
+			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(RecommendTryParseOverParseDescriptor.Id), nameof(RecommendTryParseOverParseDescriptor.Id));
 		});
 	}

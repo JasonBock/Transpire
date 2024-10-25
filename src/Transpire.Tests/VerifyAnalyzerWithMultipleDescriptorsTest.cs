@@ -1,12 +1,12 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
+using Microsoft.CodeAnalysis.Testing;
 
 namespace Transpire.Tests;
 
 internal sealed class VerifyAnalyzerWithMultipleDescriptorsTest<TAnalyzer>
-	: CSharpAnalyzerTest<TAnalyzer, NUnitVerifier>
+	: CSharpAnalyzerTest<TAnalyzer, DefaultVerifier>
 	where TAnalyzer : DiagnosticAnalyzer, new()
 {
 	private readonly DiagnosticDescriptor? descriptor;

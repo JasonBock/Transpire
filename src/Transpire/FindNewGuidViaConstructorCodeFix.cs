@@ -92,5 +92,5 @@ public sealed class FindNewGuidViaConstructorCodeFix
 	}
 
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(FindNewGuidViaConstructorDescriptor.Id);
+		[FindNewGuidViaConstructorDescriptor.Id];
 }

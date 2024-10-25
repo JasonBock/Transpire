@@ -59,5 +59,5 @@ public sealed class FindNewDateTimeViaConstructorCodeFix
 	}
 
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(FindNewDateTimeViaConstructorDescriptor.Id);
+		[FindNewDateTimeViaConstructorDescriptor.Id];
 }

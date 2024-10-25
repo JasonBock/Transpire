@@ -1,12 +1,13 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Descriptors;
 
 namespace Transpire.Tests;
 
-using Verify = AnalyzerVerifier<FindDateTimeKindUsageInConstructorAnalyzer>;
+using Verify = CSharpAnalyzerVerifier<FindDateTimeKindUsageInConstructorAnalyzer, DefaultVerifier>;
 
 public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 {
@@ -18,7 +19,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostics.Length, Is.EqualTo(1), nameof(diagnostics.Length));
+			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
 			var diagnostic = diagnostics[0];
 

@@ -58,5 +58,5 @@ public sealed class FindNewDateTimeViaConstructorAnalyzer
 	}
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(FindNewDateTimeViaConstructorAnalyzer.rule);
+		[FindNewDateTimeViaConstructorAnalyzer.rule];
 }

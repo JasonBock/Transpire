@@ -56,5 +56,5 @@ public sealed class FindNewGuidViaConstructorAnalyzer
 	}
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(FindNewGuidViaConstructorAnalyzer.rule);
+		[FindNewGuidViaConstructorAnalyzer.rule];
 }

@@ -1,10 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
+﻿using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using Transpire.Descriptors;
 
 namespace Transpire.Tests;
 
-using Verify = CodeFixVerifier<RemoveInterpolatedStringAnalyzer, RemoveInterpolatedStringCodeFix>;
+using Verify = CSharpCodeFixVerifier<RemoveInterpolatedStringAnalyzer, RemoveInterpolatedStringCodeFix, DefaultVerifier>;
 
 public static class RemoveInterpolatedStringCodeFixTests
 {
@@ -16,7 +17,7 @@ public static class RemoveInterpolatedStringCodeFixTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
+			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(RemoveInterpolatedStringDescriptor.Id), nameof(RemoveInterpolatedStringDescriptor.Id));
 		});
 	}

@@ -14,7 +14,7 @@ public sealed class RemoveInterpolatedStringAnalyzer
 	private static readonly DiagnosticDescriptor rule = RemoveInterpolatedStringDescriptor.Create();
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(RemoveInterpolatedStringAnalyzer.rule);
+		[RemoveInterpolatedStringAnalyzer.rule];
 
 	public override void Initialize(AnalysisContext context)
 	{

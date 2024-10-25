@@ -78,5 +78,5 @@ public sealed class FindDateTimeKindUsageInConstructorAnalyzer
 	}
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(FindDateTimeKindUsageInConstructorAnalyzer.rule);
+		[FindDateTimeKindUsageInConstructorAnalyzer.rule];
 }

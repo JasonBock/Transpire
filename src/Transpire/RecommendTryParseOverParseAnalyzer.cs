@@ -13,7 +13,7 @@ public sealed class RecommendTryParseOverParseAnalyzer
 	private static readonly DiagnosticDescriptor rule = RecommendTryParseOverParseDescriptor.Create();
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(RecommendTryParseOverParseAnalyzer.rule);
+		[RecommendTryParseOverParseAnalyzer.rule];
 
 	public override void Initialize(AnalysisContext context)
 	{

@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
+using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using Transpire.Descriptors;
 
 namespace Transpire.Tests;
 
-using Test = CSharpCodeFixTest<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix, NUnitVerifier>;
+using Test = CSharpCodeFixTest<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix, DefaultVerifier>;
 
 public static class FindNewGuidViaConstructorCodeFixTests
 {
@@ -17,7 +17,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
+			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(FindNewGuidViaConstructorDescriptor.Id), nameof(FindNewGuidViaConstructorDescriptor.Id));
 		});
 	}

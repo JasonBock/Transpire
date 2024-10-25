@@ -67,5 +67,5 @@ public sealed class RecommendTryParseOverParseCodeFix
 	}
 
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(RecommendTryParseOverParseDescriptor.Id);
+		[RecommendTryParseOverParseDescriptor.Id];
 }

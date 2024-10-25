@@ -94,9 +94,10 @@ public sealed class VerifyDispatchProxyGenericParametersAnalyzer
 	}
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(
-			VerifyDispatchProxyGenericParametersAnalyzer.tIsInterfaceRule,
-			VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotAbstractRule,
-			VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotSealedRule,
-			VerifyDispatchProxyGenericParametersAnalyzer.tProxyHasCtorRule);
+		[
+		   VerifyDispatchProxyGenericParametersAnalyzer.tIsInterfaceRule,
+		   VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotAbstractRule,
+		   VerifyDispatchProxyGenericParametersAnalyzer.tProxyIsNotSealedRule,
+		   VerifyDispatchProxyGenericParametersAnalyzer.tProxyHasCtorRule,
+		];
 }

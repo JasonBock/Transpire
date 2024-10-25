@@ -40,6 +40,12 @@ dotnet_diagnostic.CA1303.severity = none
 # CA1014: Mark assemblies with CLSCompliant
 dotnet_diagnostic.CA1014.severity = none
 
+# RS1036: <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+dotnet_diagnostic.RS1036.severity = none
+
+# RS1038: This compiler extension should not be implemented in an assembly containing a reference to Microsoft.CodeAnalysis.Workspaces
+dotnet_diagnostic.RS1038.severity = none
+
 dotnet_diagnostics.NU1603.severity = none
 
 # NUnit analyzers

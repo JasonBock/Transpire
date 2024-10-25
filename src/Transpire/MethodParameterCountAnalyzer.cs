@@ -13,10 +13,11 @@ public sealed class MethodParameterCountAnalyzer
 {
 	// TODO: Just provide the default values
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(
-			MethodParameterCountInfoDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultInfoLimit),
-			MethodParameterCountWarningDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultWarningLimit),
-			MethodParameterCountErrorDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultErrorLimit));
+		[
+		   MethodParameterCountInfoDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultInfoLimit),
+		   MethodParameterCountWarningDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultWarningLimit),
+		   MethodParameterCountErrorDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultErrorLimit),
+		];
 
 	public override void Initialize(AnalysisContext context)
 	{

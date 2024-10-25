@@ -1,10 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing.NUnit;
+﻿using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using Transpire.Descriptors;
 
 namespace Transpire.Tests;
 
-using Verify = CodeFixVerifier<FindDateTimeKindUsageInConstructorAnalyzer, FindDateTimeKindUsageInConstructorCodeFix>;
+using Verify = CSharpCodeFixVerifier<FindDateTimeKindUsageInConstructorAnalyzer, FindDateTimeKindUsageInConstructorCodeFix, DefaultVerifier>;
 
 public static class FindDateTimeKindUsageInConstructorCodeFixTests
 {
@@ -16,7 +17,7 @@ public static class FindDateTimeKindUsageInConstructorCodeFixTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(ids.Length, Is.EqualTo(1), nameof(ids.Length));
+			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(FindDateTimeKindUsageInConstructorDescriptor.Id), nameof(FindDateTimeKindUsageInConstructorDescriptor.Id));
 		});
 	}

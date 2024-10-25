@@ -40,5 +40,5 @@ public sealed class FindDateTimeNowCodeFix
 	}
 
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(FindDateTimeNowDescriptor.Id);
+		[FindDateTimeNowDescriptor.Id];
 }

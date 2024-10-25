@@ -51,5 +51,5 @@ public sealed class RemoveInterpolatedStringCodeFix
 	}
 
 	public override ImmutableArray<string> FixableDiagnosticIds =>
-		ImmutableArray.Create(RemoveInterpolatedStringDescriptor.Id);
+		[RemoveInterpolatedStringDescriptor.Id];
 }

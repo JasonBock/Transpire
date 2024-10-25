@@ -13,7 +13,7 @@ public sealed class FindDateTimeNowAnalyzer
 	private static readonly DiagnosticDescriptor rule = FindDateTimeNowDescriptor.Create();
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		ImmutableArray.Create(FindDateTimeNowAnalyzer.rule);
+		[FindDateTimeNowAnalyzer.rule];
 
 	public override void Initialize(AnalysisContext context)
 	{
