@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<RemoveInterpolatedStringAnalyzer, DefaultVerifier>;
 
-public static class RemoveInterpolatedStringAnalyzerTests
+internal static class RemoveInterpolatedStringAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()

@@ -5,7 +5,7 @@ using Transpire.Extensions;
 
 namespace Transpire.Tests.Extensions;
 
-public static class SyntaxNodeExtensionsTests
+internal static class SyntaxNodeExtensionsTests
 {
 	[TestCase("using System.Composition; public static class Test { }", "System", true)]
 	[TestCase("using System; public static class Test { }", "System", true)]

@@ -2,7 +2,7 @@
 
 namespace Transpire.Tests;
 
-public static class HelpUrlBuilderTests
+internal static class HelpUrlBuilderTests
 {
 	[Test]
 	public static void Build() =>

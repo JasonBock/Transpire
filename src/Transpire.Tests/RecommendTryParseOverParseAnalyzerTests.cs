@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<RecommendTryParseOverParseAnalyzer, DefaultVerifier>;
 
-public static class RecommendTryParseOverParseAnalyzerTests
+internal static class RecommendTryParseOverParseAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()

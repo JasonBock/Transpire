@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<FindDateTimeKindUsageInConstructorAnalyzer, DefaultVerifier>;
 
-public static class FindDateTimeKindUsageInConstructorAnalyzerTests
+internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()

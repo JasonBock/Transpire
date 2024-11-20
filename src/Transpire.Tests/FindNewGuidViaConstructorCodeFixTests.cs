@@ -7,7 +7,7 @@ namespace Transpire.Tests;
 
 using Test = CSharpCodeFixTest<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix, DefaultVerifier>;
 
-public static class FindNewGuidViaConstructorCodeFixTests
+internal static class FindNewGuidViaConstructorCodeFixTests
 {
 	[Test]
 	public static void VerifyGetFixableDiagnosticIds()

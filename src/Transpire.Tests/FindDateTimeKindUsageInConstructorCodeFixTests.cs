@@ -7,7 +7,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpCodeFixVerifier<FindDateTimeKindUsageInConstructorAnalyzer, FindDateTimeKindUsageInConstructorCodeFix, DefaultVerifier>;
 
-public static class FindDateTimeKindUsageInConstructorCodeFixTests
+internal static class FindDateTimeKindUsageInConstructorCodeFixTests
 {
 	[Test]
 	public static void VerifyGetFixableDiagnosticIds()

@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<FindNewGuidViaConstructorAnalyzer, DefaultVerifier>;
 
-public static class FindNewGuidViaConstructorAnalyzerTests
+internal static class FindNewGuidViaConstructorAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()
