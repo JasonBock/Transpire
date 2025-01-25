@@ -7,7 +7,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpCodeFixVerifier<FindNewDateTimeViaConstructorAnalyzer, FindNewDateTimeViaConstructorCodeFix, DefaultVerifier>;
 
-public static class FindNewDateTimeViaConstructorCodeFixTests
+internal static class FindNewDateTimeViaConstructorCodeFixTests
 {
 	[Test]
 	public static void VerifyGetFixableDiagnosticIds()
@@ -29,7 +29,7 @@ public static class FindNewDateTimeViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => [|new DateTime()|];
 			}
@@ -38,7 +38,7 @@ public static class FindNewDateTimeViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => DateTime.UtcNow;
 			}

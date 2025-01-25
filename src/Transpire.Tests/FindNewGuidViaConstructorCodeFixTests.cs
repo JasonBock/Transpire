@@ -7,7 +7,7 @@ namespace Transpire.Tests;
 
 using Test = CSharpCodeFixTest<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix, DefaultVerifier>;
 
-public static class FindNewGuidViaConstructorCodeFixTests
+internal static class FindNewGuidViaConstructorCodeFixTests
 {
 	[Test]
 	public static void VerifyGetFixableDiagnosticIds()
@@ -29,7 +29,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => [|new Guid()|];
 			}
@@ -38,7 +38,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => Guid.NewGuid();
 			}
@@ -53,7 +53,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => [|new Guid()|];
 			}
@@ -62,7 +62,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => Guid.Empty;
 			}
@@ -77,7 +77,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => [|new Guid()|];
 			}
@@ -86,7 +86,7 @@ public static class FindNewGuidViaConstructorCodeFixTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => default(Guid);
 			}

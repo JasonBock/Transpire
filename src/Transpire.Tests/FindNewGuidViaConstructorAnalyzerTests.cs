@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<FindNewGuidViaConstructorAnalyzer, DefaultVerifier>;
 
-public static class FindNewGuidViaConstructorAnalyzerTests
+internal static class FindNewGuidViaConstructorAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()
@@ -45,7 +45,7 @@ public static class FindNewGuidViaConstructorAnalyzerTests
 	{
 		var code =
 			"""
-			public static class Test
+			internal static class Test
 			{
 				public static int Make() => 1 + 2;
 			}
@@ -58,7 +58,7 @@ public static class FindNewGuidViaConstructorAnalyzerTests
 	{
 		var code =
 			"""
-			public static class Test
+			internal static class Test
 			{
 				public static string Make() => new string('a', 1);
 			}
@@ -73,7 +73,7 @@ public static class FindNewGuidViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => Guid.NewGuid();
 			}
@@ -88,7 +88,7 @@ public static class FindNewGuidViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => new Guid("83d926c8-9fe6-4cd2-8495-e294e8ade4cb");
 			}
@@ -103,7 +103,7 @@ public static class FindNewGuidViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => [|new Guid()|];
 			}
@@ -118,7 +118,7 @@ public static class FindNewGuidViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static Guid Make() => [|new()|];
 			}

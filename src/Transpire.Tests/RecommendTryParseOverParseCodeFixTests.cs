@@ -7,7 +7,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpCodeFixVerifier<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix, DefaultVerifier>;
 
-public static class RecommendTryParseOverParseCodeFixTests
+internal static class RecommendTryParseOverParseCodeFixTests
 {
 	[Test]
 	public static void VerifyGetFixableDiagnosticIds()
@@ -29,7 +29,7 @@ public static class RecommendTryParseOverParseCodeFixTests
 			"""
 			using System;
 
-			public static class ParseTest
+			internal static class ParseTest
 			{
 				public static void MyMethod()
 				{
@@ -41,7 +41,7 @@ public static class RecommendTryParseOverParseCodeFixTests
 			"""
 			using System;
 
-			public static class ParseTest
+			internal static class ParseTest
 			{
 				public static void MyMethod()
 				{

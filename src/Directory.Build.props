@@ -2,13 +2,13 @@
 	<PropertyGroup>
 		<AnalysisMode>All</AnalysisMode>
 		<Authors>Jason Bock</Authors>
-		<Copyright>Copyright © 2024</Copyright>
+		<Copyright>Copyright © 2025</Copyright>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 		<NoWarn>CA2007</NoWarn>
 		<Nullable>enable</Nullable>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<Version>1.0.0</Version>
 	</PropertyGroup>

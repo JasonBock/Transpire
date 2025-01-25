@@ -7,7 +7,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpCodeFixVerifier<RemoveInterpolatedStringAnalyzer, RemoveInterpolatedStringCodeFix, DefaultVerifier>;
 
-public static class RemoveInterpolatedStringCodeFixTests
+internal static class RemoveInterpolatedStringCodeFixTests
 {
 	[Test]
 	public static void VerifyGetFixableDiagnosticIds()

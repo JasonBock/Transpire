@@ -19,6 +19,7 @@ public sealed class FindNewGuidViaConstructorCodeFix
 	public const string AddDefaultGuidDescription = "Add default(Guid)";
 	public const string AddGuidEmptyDescription = "Add Guid.Empty";
 	public const string AddGuidNewGuidDescription = "Add Guid.NewGuid()";
+	public const string AddGuidCreateVersion7Description = "Add Guid.CreateVersion7()";
 
 	public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -34,6 +35,11 @@ public sealed class FindNewGuidViaConstructorCodeFix
 		FindNewGuidViaConstructorCodeFix.AddGuidNewGuidCodeFix(context, root, diagnostic, creationNode);
 		FindNewGuidViaConstructorCodeFix.AddGuidEmptyCodeFix(context, root, diagnostic, creationNode);
 		FindNewGuidViaConstructorCodeFix.AddDefaultCodeFix(context, root, diagnostic, creationNode);
+
+		if (bool.Parse(diagnostic.Properties[FindNewGuidViaConstructorAnalyzer.DoesCreateVersion7Exist]))
+		{
+			FindNewGuidViaConstructorCodeFix.AddGuidCreateVersion7CodeFix(context, root, diagnostic, creationNode);
+		}
 	}
 
 	private static void AddCodeFix(CodeFixContext context, SyntaxNode root,
@@ -67,6 +73,19 @@ public sealed class FindNewGuidViaConstructorCodeFix
 			.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
 		FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
 			creationNode, newInvocationNode, FindNewGuidViaConstructorCodeFix.AddGuidNewGuidDescription);
+	}
+
+	private static void AddGuidCreateVersion7CodeFix(CodeFixContext context, SyntaxNode root,
+		Diagnostic diagnostic, SyntaxNode creationNode)
+	{
+		var newInvocationNode = SyntaxFactory.InvocationExpression(
+			SyntaxFactory.MemberAccessExpression(
+				SyntaxKind.SimpleMemberAccessExpression,
+				SyntaxFactory.IdentifierName(nameof(Guid)),
+				SyntaxFactory.IdentifierName(FindNewGuidViaConstructorAnalyzer.CreateVersion7MemberName)))
+			.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
+		FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
+			creationNode, newInvocationNode, FindNewGuidViaConstructorCodeFix.AddGuidCreateVersion7Description);
 	}
 
 	private static void AddGuidEmptyCodeFix(CodeFixContext context, SyntaxNode root,

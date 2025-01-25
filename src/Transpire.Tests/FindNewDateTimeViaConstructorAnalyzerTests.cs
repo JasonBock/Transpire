@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<FindNewDateTimeViaConstructorAnalyzer, DefaultVerifier>;
 
-public static class FindNewDateTimeViaConstructorAnalyzerTests
+internal static class FindNewDateTimeViaConstructorAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()
@@ -45,7 +45,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 	{
 		var code =
 			"""
-			public static class Test
+			internal static class Test
 			{
 				public static int Make() => 1 + 2;
 			}
@@ -58,7 +58,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 	{
 		var code =
 			"""
-			public static class Test
+			internal static class Test
 			{
 				public static string Make() => new string('a', 1);
 			}
@@ -73,7 +73,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => new DateTime(100, DateTimeKind.Local);
 			}
@@ -88,7 +88,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => [|new DateTime()|];
 			}
@@ -103,7 +103,7 @@ public static class FindNewDateTimeViaConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => [|new()|];
 			}

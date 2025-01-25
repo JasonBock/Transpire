@@ -10,6 +10,9 @@ namespace Transpire;
 public sealed class FindNewGuidViaConstructorAnalyzer
 	: DiagnosticAnalyzer
 {
+	public const string CreateVersion7MemberName = "CreateVersion7";
+	public const string DoesCreateVersion7Exist = nameof(DoesCreateVersion7Exist);
+
 	private static readonly DiagnosticDescriptor rule =
 		FindNewGuidViaConstructorDescriptor.Create();
 
@@ -34,24 +37,34 @@ public sealed class FindNewGuidViaConstructorAnalyzer
 
 				if (guidConstructorSymbol is not null)
 				{
+					var doesCreateVersion7Exist = guidSymbol.GetMembers(FindNewGuidViaConstructorAnalyzer.CreateVersion7MemberName)
+						.Any(_ => _.Name == FindNewGuidViaConstructorAnalyzer.CreateVersion7MemberName && 
+							_ is IMethodSymbol);
+
 					compilationContext.RegisterOperationAction(operationContext =>
 					{
 						FindNewGuidViaConstructorAnalyzer.AnalyzeOperationAction(
-							operationContext, guidConstructorSymbol);
+							operationContext, guidConstructorSymbol, doesCreateVersion7Exist);
 					}, OperationKind.ObjectCreation);
 				}
 			}
 		});
 	}
 
-	private static void AnalyzeOperationAction(OperationAnalysisContext context, IMethodSymbol guidConstructorSymbol)
+	private static void AnalyzeOperationAction(OperationAnalysisContext context, IMethodSymbol guidConstructorSymbol,
+		bool doesCreateVersion7Exist)
 	{
 		var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
 
 		if (SymbolEqualityComparer.Default.Equals(contextInvocation, guidConstructorSymbol))
 		{
+			var properties = new Dictionary<string, string?>()
+			{
+				{ FindNewGuidViaConstructorAnalyzer.DoesCreateVersion7Exist, doesCreateVersion7Exist.ToString() }
+			};
 			context.ReportDiagnostic(Diagnostic.Create(
-				FindNewGuidViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation()));
+				FindNewGuidViaConstructorAnalyzer.rule, context.Operation.Syntax.GetLocation(),
+				properties: properties.ToImmutableDictionary()));
 		}
 	}
 

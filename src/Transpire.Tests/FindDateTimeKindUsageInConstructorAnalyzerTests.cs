@@ -9,7 +9,7 @@ namespace Transpire.Tests;
 
 using Verify = CSharpAnalyzerVerifier<FindDateTimeKindUsageInConstructorAnalyzer, DefaultVerifier>;
 
-public static class FindDateTimeKindUsageInConstructorAnalyzerTests
+internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()
@@ -47,7 +47,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			"""
 			public sealed class Usage { }
 
-			public static class Test
+			internal static class Test
 			{
 				public static Usage Make() => new Usage();
 			}
@@ -67,7 +67,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 				public Usage(DateTimeKind kind) { }
 			}
 
-			public static class Test
+			internal static class Test
 			{
 				public static Usage Make() => new Usage(DateTimeKind.Local);
 			}
@@ -82,7 +82,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => new DateTime(100);
 			}
@@ -98,7 +98,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
 			}
@@ -113,7 +113,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
 			}
@@ -128,7 +128,7 @@ public static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			"""
 			using System;
 
-			public static class Test
+			internal static class Test
 			{
 				public static DateTime Make() => new(100, [|DateTimeKind.Local|]);
 			}

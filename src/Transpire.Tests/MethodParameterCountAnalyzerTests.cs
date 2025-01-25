@@ -6,7 +6,7 @@ namespace Transpire.Tests;
 
 using Verify = VerifyAnalyzerWithMultipleDescriptorsTest<MethodParameterCountAnalyzer>;
 
-public static class MethodParameterCountAnalyzerTests
+internal static class MethodParameterCountAnalyzerTests
 {
 	[Test]
 	public static async Task AnalyzeWhenMethodHasAcceptableParameterCountAsync() => 
