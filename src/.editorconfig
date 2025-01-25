@@ -10,10 +10,12 @@ csharp_style_conditional_delegate_call = true:error
 csharp_style_expression_bodied_accessors = true:error
 csharp_style_expression_bodied_constructors = true:error
 csharp_style_expression_bodied_indexers = true:error
+csharp_style_expression_bodied_local_functions = true:error
 csharp_style_expression_bodied_methods = true:error
 csharp_style_expression_bodied_operators = true:error
 csharp_style_expression_bodied_properties = true:error
 csharp_style_inlined_variable_declaration = true:error
+csharp_style_namespace_declarations = file_scoped:error
 csharp_style_pattern_matching_over_as_with_null_check = true:error
 csharp_style_pattern_matching_over_is_with_cast_check = true:error
 csharp_style_throw_expression = true:error
@@ -46,7 +48,10 @@ dotnet_diagnostic.RS1036.severity = none
 # RS1038: This compiler extension should not be implemented in an assembly containing a reference to Microsoft.CodeAnalysis.Workspaces
 dotnet_diagnostic.RS1038.severity = none
 
-dotnet_diagnostics.NU1603.severity = none
+dotnet_diagnostic.NU1603.severity = none
+dotnet_diagnostic.IDE0055.severity = none
+dotnet_diagnostic.IDE0065.severity = none
+dotnet_diagnostic.CA2007.severity = none
 
 # NUnit analyzers
 dotnet_diagnostic.NUnit2029.severity=error
