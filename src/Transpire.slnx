@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../changelog.md" />
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="Transpire.Tests.Performance/Transpire.Tests.Performance.csproj" />
+  <Project Path="Transpire.Tests/Transpire.Tests.csproj" />
+  <Project Path="Transpire/Transpire.csproj" />
+</Solution>

@@ -1,10 +1,54 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Transpire.Extensions;
 
 internal static class SyntaxNodeExtensions
 {
+	internal static SyntaxNode? Deregionize(this SyntaxNode self)
+	{
+		var nodesWithRegionDirectives =
+			from node in self.DescendantNodesAndTokens()
+			where node.HasLeadingTrivia
+			from leadingTrivia in node.GetLeadingTrivia()
+			where (leadingTrivia.RawKind == (int)SyntaxKind.RegionDirectiveTrivia ||
+				leadingTrivia.RawKind == (int)SyntaxKind.EndRegionDirectiveTrivia)
+			select node;
+
+		var triviaToRemove = new List<SyntaxTrivia>();
+
+		foreach (var nodeWithRegionDirective in nodesWithRegionDirectives)
+		{
+			var triviaList = nodeWithRegionDirective.GetLeadingTrivia();
+
+			for (var i = 0; i < triviaList.Count; i++)
+			{
+				var currentTrivia = triviaList[i];
+
+				if (currentTrivia.RawKind == (int)SyntaxKind.RegionDirectiveTrivia ||
+					currentTrivia.RawKind == (int)SyntaxKind.EndRegionDirectiveTrivia)
+				{
+					triviaToRemove.Add(currentTrivia);
+
+					if (i > 0)
+					{
+						var previousTrivia = triviaList[i - 1];
+
+						if (previousTrivia.RawKind == (int)SyntaxKind.WhitespaceTrivia)
+						{
+							triviaToRemove.Add(previousTrivia);
+						}
+					}
+				}
+			}
+		}
+
+		return triviaToRemove.Count > 0 ?
+			self.ReplaceTrivia(triviaToRemove,(_, _) => new SyntaxTrivia()) : 
+			null;
+	}
+
 	internal static T? FindParent<T>(this SyntaxNode @this)
 		where T : SyntaxNode
 	{
