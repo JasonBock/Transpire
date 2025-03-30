@@ -6,7 +6,7 @@ namespace Transpire.Extensions;
 
 internal static class SyntaxNodeExtensions
 {
-	internal static SyntaxNode? Deregionize(this SyntaxNode self)
+	internal static SyntaxNode Deregionize(this SyntaxNode self)
 	{
 		var nodesWithRegionDirectives =
 			from node in self.DescendantNodesAndTokens()
@@ -44,9 +44,7 @@ internal static class SyntaxNodeExtensions
 			}
 		}
 
-		return triviaToRemove.Count > 0 ?
-			self.ReplaceTrivia(triviaToRemove,(_, _) => new SyntaxTrivia()) : 
-			null;
+		return self.ReplaceTrivia(triviaToRemove, (_, _) => new SyntaxTrivia());
 	}
 
 	internal static T? FindParent<T>(this SyntaxNode @this)

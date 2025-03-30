@@ -23,7 +23,7 @@ public sealed class FindNewDateTimeViaConstructorCodeFix
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
-			.ConfigureAwait(false);
+			;
 		var diagnostic = context.Diagnostics.First();
 		var creationNode = root!.FindNode(diagnostic.Location.SourceSpan);
 

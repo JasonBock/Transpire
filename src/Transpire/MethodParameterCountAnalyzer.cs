@@ -11,7 +11,8 @@ namespace Transpire;
 public sealed class MethodParameterCountAnalyzer
 	: DiagnosticAnalyzer
 {
-	// TODO: Just provide the default values
+	// TODO: Create a MethodParameterCountAnalyzerConfiguration instance
+	// during construction, and use those for the limit values.
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
 		[
 		   MethodParameterCountInfoDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultInfoLimit),

@@ -21,7 +21,7 @@ public sealed class FindDateTimeKindUsageInConstructorCodeFix
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
-			.ConfigureAwait(false);
+			;
 		var diagnostic = context.Diagnostics.First();
 		var argumentNode = (ArgumentSyntax)root!.FindNode(diagnostic.Location.SourceSpan);
 

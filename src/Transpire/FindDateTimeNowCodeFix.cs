@@ -20,7 +20,7 @@ public sealed class FindDateTimeNowCodeFix
 
 	public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
-		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken);
 		var diagnostic = context.Diagnostics.First();
 		var diagnosticSpan = diagnostic.Location.SourceSpan;
 
