@@ -49,6 +49,7 @@ internal static class DeregionizerCodeFixTests
 				void DoWork();
 			}
 			""";
+
 		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
 }
