@@ -11,7 +11,7 @@
   <Project Path="Transpire.Analysis/Transpire.Analysis.csproj" Id="db18e64f-ef0d-4361-b02a-03d231c34b16" />
   <Project Path="Transpire.Completions.Tests/Transpire.Completions.Tests.csproj" Id="d33015fd-d57d-4b0c-84e4-782f2767bb6c" />
   <Project Path="Transpire.Completions/Transpire.Completions.csproj" Id="8df4d805-a722-4d86-a69e-1bf15e3b36f8" />
+  <Project Path="Transpire.Package/Transpire.Package.csproj" Id="6cc3ce3a-1244-4a1c-8b38-d3723fae61b9" />
   <Project Path="Transpire.Shared/Transpire.Shared.shproj" Id="c4b46dbd-a9ed-4e3e-91d3-1595fb414dc3" />
   <Project Path="Transpire.Tests.Performance/Transpire.Tests.Performance.csproj" />
-  <Project Path="Transpire/Transpire.csproj" />
 </Solution>

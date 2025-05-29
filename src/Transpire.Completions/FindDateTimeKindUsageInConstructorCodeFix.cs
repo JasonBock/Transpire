@@ -31,7 +31,7 @@ public sealed class FindDateTimeKindUsageInConstructorCodeFix
 	/// Registers necessary code fixes.
 	/// </summary>
 	/// <param name="context">A <see cref="CodeFixContext"/> instance.</param>
-	/// <returns></returns>
+	/// <returns>A <see cref="Task"/> instance.</returns>
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
 		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken);
