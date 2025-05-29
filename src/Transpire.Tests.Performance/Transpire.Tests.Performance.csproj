@@ -7,6 +7,6 @@
 		<PackageReference Include="BenchmarkDotNet" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Transpire\Transpire.csproj" />
+		<ProjectReference Include="..\Transpire.Analysis\Transpire.Analysis.csproj" />
 	</ItemGroup>
 </Project>
