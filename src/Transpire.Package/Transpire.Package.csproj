@@ -38,8 +38,12 @@
 		<ProjectReference Include="../Transpire.Completions/Transpire.Completions.csproj" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Update="_._">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<!--
+		If you're wondering why there's a blank file being copied, it's to solve this issue:
+		https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5128
+		-->
+		<None Update="_._">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 </Project>
