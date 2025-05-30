@@ -26,8 +26,7 @@ public sealed class MethodParameterCountAnalyzer
 			throw new ArgumentNullException(nameof(context));
 		}
 
-		context.ConfigureGeneratedCodeAnalysis(
-			GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+		context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 		context.EnableConcurrentExecution();
 
 		context.RegisterCompilationStartAction(compilationContext =>

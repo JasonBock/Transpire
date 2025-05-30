@@ -3,6 +3,7 @@
 		<AnalysisMode>AllDisabledByDefault</AnalysisMode>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Transpire\Transpire.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\Transpire.Analysis\Transpire.Analysis.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\Transpire.Completions\Transpire.Completions.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 </Project>

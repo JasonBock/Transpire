@@ -1,0 +1,5 @@
+* Once everything is working again, delete the Transpire project and folder, and commit the work
+
+I'm running into a very strange issue with a NuGet package I'm creating that contains analyzers and code fixers. I just broke up the project structure to have code fixers in a separate project. When I created a new project that would bundle everything together (Transpire.Package), the resulting package "looks fine" in NuGet Package Explorer, but when I try to reference it locally, I'm getting NuGet NU1202 "Package does not support any target frameworks". Looking up that error, one suggestion was to run `dotnet nuget locals all -c`, but that didn't seem to help.
+
+I'm not sure what to do here. If you want to look at my code, here's the branch: https://github.com/JasonBock/Transpire/tree/26-Create-Separate-Projects-for-Analyzers-and-Code-Fixes-and-Restructure-Package. 
