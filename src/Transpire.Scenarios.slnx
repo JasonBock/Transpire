@@ -3,6 +3,7 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="Transpire.Analysis/Transpire.Analysis.csproj" />
+  <Project Path="Transpire.Completions/Transpire.Completions.csproj" />
   <Project Path="Transpire.Scenarios/Transpire.Scenarios.csproj" />
-  <Project Path="Transpire/Transpire.csproj" />
 </Solution>
