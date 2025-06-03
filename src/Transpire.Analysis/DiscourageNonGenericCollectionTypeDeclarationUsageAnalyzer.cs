@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Microsoft.CodeAnalysis.Operations;
 using System.Collections;
 using System.Collections.Immutable;
 using Transpire.Analysis.Descriptors;
@@ -8,15 +9,16 @@ using Transpire.Analysis.Descriptors;
 namespace Transpire.Analysis;
 
 /// <summary>
-/// An analyzer that finds object creation using non-generic types from
-/// <see cref="System.Collections"/>, such as <see cref="ArrayList"/>.
+/// An analyzer that finds type definitions that use non-generic types from
+/// <see cref="System.Collections"/>, such as <see cref="ArrayList"/>
+/// in its inheritance hierarchy.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public sealed class DiscourageNonGenericCollectionCreationAnalyzer
+public sealed class DiscourageNonGenericCollectionTypeDeclarationUsageAnalyzer
 	: DiagnosticAnalyzer
 {
 	private static readonly DiagnosticDescriptor rule =
-		DiscourageNonGenericCollectionCreationDescriptor.Create();
+		DiscourageNonGenericCollectionTypeDeclarationUsageDescriptor.Create();
 
 	/// <summary>
 	/// Initializes the analyzer.
@@ -44,23 +46,37 @@ public sealed class DiscourageNonGenericCollectionCreationAnalyzer
 				compilationContext.Compilation.GetTypeByMetadataName(typeof(Stack).FullName)!,
 			};
 
-			compilationContext.RegisterOperationAction(operationContext =>
-				DiscourageNonGenericCollectionCreationAnalyzer.AnalyzeOperationAction(
-					operationContext, collectionTypes), 
-				OperationKind.ObjectCreation);
+			compilationContext.RegisterSyntaxNodeAction(syntaxNodeContext =>
+				DiscourageNonGenericCollectionTypeDeclarationUsageAnalyzer.AnalyzeTypeDeclaration(syntaxNodeContext, collectionTypes),
+				SyntaxKind.ClassDeclaration);
 		});
 	}
 
-	private static void AnalyzeOperationAction(
-		OperationAnalysisContext context, HashSet<INamedTypeSymbol> collectionTypes)
+	private static void AnalyzeTypeDeclaration(SyntaxNodeAnalysisContext context,
+		HashSet<INamedTypeSymbol> collectionTypes)
 	{
-		var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
+		var type = (TypeDeclarationSyntax)context.Node;
+		var model = context.SemanticModel;
+		var typeSymbol = model.GetDeclaredSymbol(type);
 
-		if (contextInvocation is not null &&
-			collectionTypes.Contains(contextInvocation.ContainingType))
+		var parentBaseType = typeSymbol?.BaseType;
+		var foundNonGenericBaseType = false;
+
+		while (parentBaseType is not null)
+		{
+			if (collectionTypes.Contains(parentBaseType))
+			{
+				foundNonGenericBaseType = true;
+				break;
+			}
+
+			parentBaseType = parentBaseType.BaseType;
+		}
+
+		if (foundNonGenericBaseType)
 		{
 			context.ReportDiagnostic(Diagnostic.Create(
-				DiscourageNonGenericCollectionCreationAnalyzer.rule, context.Operation.Syntax.GetLocation()));
+				DiscourageNonGenericCollectionTypeDeclarationUsageAnalyzer.rule, type.Identifier.GetLocation()));
 		}
 	}
 
@@ -68,5 +84,5 @@ public sealed class DiscourageNonGenericCollectionCreationAnalyzer
 	/// Gets an array of supported diagnostics from this analyzer.
 	/// </summary>
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		[DiscourageNonGenericCollectionCreationAnalyzer.rule];
+		[DiscourageNonGenericCollectionTypeDeclarationUsageAnalyzer.rule];
 }
