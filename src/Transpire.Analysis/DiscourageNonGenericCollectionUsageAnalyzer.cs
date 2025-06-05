@@ -17,10 +17,8 @@ namespace Transpire.Analysis;
 public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 	: DiagnosticAnalyzer
 {
-	private static readonly DiagnosticDescriptor creationRule =
-		DiscourageNonGenericCollectionCreationDescriptor.Create();
-	private static readonly DiagnosticDescriptor typeDeclarationRule =
-		DiscourageNonGenericCollectionTypeDeclarationUsageDescriptor.Create();
+	private static readonly DiagnosticDescriptor rule =
+		DiscourageNonGenericCollectionUsageDescriptor.Create();
 
 	/// <summary>
 	/// Initializes the analyzer.
@@ -39,7 +37,7 @@ public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 
 		context.RegisterCompilationStartAction(compilationContext =>
 		{
-			var collectionTypes = new HashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default)
+			var collectionTypes = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default)
 			{
 				compilationContext.Compilation.GetTypeByMetadataName(typeof(ArrayList).FullName)!,
 				compilationContext.Compilation.GetTypeByMetadataName(typeof(Hashtable).FullName)!,
@@ -50,17 +48,21 @@ public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 
 			compilationContext.RegisterOperationAction(operationContext =>
 				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeObjectCreationOperationAction(
-					operationContext, collectionTypes), 
+					operationContext, collectionTypes),
 				OperationKind.ObjectCreation);
 			compilationContext.RegisterSyntaxNodeAction(syntaxNodeContext =>
 				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeTypeDeclaration(
 					syntaxNodeContext, collectionTypes),
 				SyntaxKind.ClassDeclaration);
+			compilationContext.RegisterSyntaxNodeAction(syntaxNodeContext =>
+				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeMethodDeclaration(
+					syntaxNodeContext, collectionTypes),
+				SyntaxKind.MethodDeclaration);
 		});
 	}
 
 	private static void AnalyzeObjectCreationOperationAction(
-		OperationAnalysisContext context, HashSet<INamedTypeSymbol> collectionTypes)
+		OperationAnalysisContext context, HashSet<ITypeSymbol> collectionTypes)
 	{
 		var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
 
@@ -68,12 +70,41 @@ public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 			collectionTypes.Contains(contextInvocation.ContainingType))
 		{
 			context.ReportDiagnostic(Diagnostic.Create(
-				DiscourageNonGenericCollectionUsageAnalyzer.creationRule, context.Operation.Syntax.GetLocation()));
+				DiscourageNonGenericCollectionUsageAnalyzer.rule, context.Operation.Syntax.GetLocation()));
+		}
+	}
+
+	private static void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context,
+		HashSet<ITypeSymbol> collectionTypes)
+	{
+		var method = (MethodDeclarationSyntax)context.Node;
+		var model = context.SemanticModel;
+		var methodSymbol = model.GetDeclaredSymbol(method) as IMethodSymbol;
+
+		if (methodSymbol is not null)
+		{
+			if (!methodSymbol.ReturnsVoid && collectionTypes.Contains(methodSymbol.ReturnType))
+			{
+				context.ReportDiagnostic(Diagnostic.Create(
+					DiscourageNonGenericCollectionUsageAnalyzer.rule, method.ReturnType.GetLocation()));
+			}
+
+			for (var i = 0; i < methodSymbol.Parameters.Length; i++)
+			{
+				var parameter = methodSymbol.Parameters[i];
+				var parameterNodes = method.ParameterList.Parameters;
+
+				if (collectionTypes.Contains(parameter.Type))
+				{
+					context.ReportDiagnostic(Diagnostic.Create(
+						DiscourageNonGenericCollectionUsageAnalyzer.rule, parameterNodes[i].Type!.GetLocation()));
+				}
+			}
 		}
 	}
 
 	private static void AnalyzeTypeDeclaration(SyntaxNodeAnalysisContext context,
-		HashSet<INamedTypeSymbol> collectionTypes)
+		HashSet<ITypeSymbol> collectionTypes)
 	{
 		var type = (TypeDeclarationSyntax)context.Node;
 		var model = context.SemanticModel;
@@ -96,7 +127,7 @@ public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 		if (foundNonGenericBaseType)
 		{
 			context.ReportDiagnostic(Diagnostic.Create(
-				DiscourageNonGenericCollectionUsageAnalyzer.typeDeclarationRule, type.Identifier.GetLocation()));
+				DiscourageNonGenericCollectionUsageAnalyzer.rule, type.Identifier.GetLocation()));
 		}
 	}
 
@@ -104,8 +135,5 @@ public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 	/// Gets an array of supported diagnostics from this analyzer.
 	/// </summary>
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		[
-			DiscourageNonGenericCollectionUsageAnalyzer.creationRule,
-			DiscourageNonGenericCollectionUsageAnalyzer.typeDeclarationRule
-		];
+		[DiscourageNonGenericCollectionUsageAnalyzer.rule];
 }
