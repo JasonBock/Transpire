@@ -27,6 +27,25 @@ internal static class MethodParameterCountAnalyzerTests
 		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedParameterCountAsync(
 			100, MethodParameterCountErrorDescriptor.Create(0));
 
+	[Test]
+	public static async Task AnalyzeWhenMethodHasAcceptableGenericParameterCountAsync() =>
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedGenericParameterCountAsync(1, null);
+
+	[Test]
+	public static async Task AnalyzeWhenMethodHasMoreThanInfoLevelGenericParameterCountAsync() =>
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedGenericParameterCountAsync(
+			6, MethodGenericParameterCountInfoDescriptor.Create(0));
+
+	[Test]
+	public static async Task AnalyzeWhenMethodHasMoreThanWarningLevelGenericParameterCountAsync() =>
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedGenericParameterCountAsync(
+			18, MethodGenericParameterCountWarningDescriptor.Create(0));
+
+	[Test]
+	public static async Task AnalyzeWhenMethodHasMoreThanErrorLevelGenericParameterCountAsync() =>
+		await MethodParameterCountAnalyzerTests.AnalyzeWithSpecifiedGenericParameterCountAsync(
+			100, MethodGenericParameterCountErrorDescriptor.Create(0));
+
 	private static async Task AnalyzeWithSpecifiedParameterCountAsync(int parameterCount, DiagnosticDescriptor? descriptor)
 	{
 		var parameters = string.Join(", ", Enumerable.Range(0, parameterCount).Select(_ => $"int a{_}"));
@@ -39,6 +58,24 @@ internal static class MethodParameterCountAnalyzerTests
 			public sealed class StringTest
 			{
 				public void {{methodName}}({{parameters}}) { }
+			}
+			""";
+		await new Verify(
+			code, descriptor).RunAsync();
+	}
+
+	private static async Task AnalyzeWithSpecifiedGenericParameterCountAsync(int parameterCount, DiagnosticDescriptor? descriptor)
+	{
+		var parameters = string.Join(", ", Enumerable.Range(0, parameterCount).Select(_ => $"T{_}"));
+		var methodName = parameterCount <= 4 ? "MyMethod" : "[|MyMethod|]";
+
+		var code =
+			$$"""
+			using System;
+
+			public sealed class StringTest
+			{
+				public void {{methodName}}<{{parameters}}>() { }
 			}
 			""";
 		await new Verify(

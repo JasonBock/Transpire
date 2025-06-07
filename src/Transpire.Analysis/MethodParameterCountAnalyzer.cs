@@ -39,7 +39,14 @@ public sealed class MethodParameterCountAnalyzer
 		var options = context.Options.AnalyzerConfigOptionsProvider.GetOptions(context.Node.SyntaxTree);
 		var configuration = new MethodParameterCountAnalyzerConfiguration(options);
 		var method = (MethodDeclarationSyntax)context.Node;
+		MethodParameterCountAnalyzer.AnalyzeMethodParameters(method, context, configuration);
+		MethodParameterCountAnalyzer.AnalyzeMethodGenericParameters(method, context, configuration);
+	}
 
+	private static void AnalyzeMethodParameters(
+		MethodDeclarationSyntax method, SyntaxNodeAnalysisContext context, 
+		MethodParameterCountAnalyzerConfiguration configuration)
+	{
 		if (method.ParameterList.Parameters.Count > configuration.ErrorLimit)
 		{
 			context.ReportDiagnostic(Diagnostic.Create(MethodParameterCountErrorDescriptor.Create(configuration.ErrorLimit.Value),
@@ -57,6 +64,30 @@ public sealed class MethodParameterCountAnalyzer
 		}
 	}
 
+	private static void AnalyzeMethodGenericParameters(
+		MethodDeclarationSyntax method, SyntaxNodeAnalysisContext context,
+		MethodParameterCountAnalyzerConfiguration configuration)
+	{
+		if (method.TypeParameterList is not null)
+		{
+			if (method.TypeParameterList.Parameters.Count > configuration.GenericErrorLimit)
+			{
+				context.ReportDiagnostic(Diagnostic.Create(MethodGenericParameterCountErrorDescriptor.Create(configuration.GenericErrorLimit.Value),
+					method.Identifier.GetLocation()));
+			}
+			else if (method.TypeParameterList.Parameters.Count > configuration.GenericWarningLimit)
+			{
+				context.ReportDiagnostic(Diagnostic.Create(MethodGenericParameterCountWarningDescriptor.Create(configuration.GenericWarningLimit.Value),
+					method.Identifier.GetLocation()));
+			}
+			else if (method.TypeParameterList.Parameters.Count > configuration.GenericInfoLimit)
+			{
+				context.ReportDiagnostic(Diagnostic.Create(MethodGenericParameterCountInfoDescriptor.Create(configuration.GenericInfoLimit.Value),
+					method.Identifier.GetLocation()));
+			}
+		}
+	}
+
 	/// <summary>
 	/// Gets an array of supported diagnostics from this analyzer.
 	/// </summary>
@@ -65,5 +96,8 @@ public sealed class MethodParameterCountAnalyzer
 			MethodParameterCountInfoDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultInfoLimit),
 			MethodParameterCountWarningDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultWarningLimit),
 			MethodParameterCountErrorDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultErrorLimit),
+			MethodGenericParameterCountInfoDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultGenericInfoLimit),
+			MethodGenericParameterCountWarningDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultGenericWarningLimit),
+			MethodGenericParameterCountErrorDescriptor.Create(MethodParameterCountAnalyzerConfiguration.DefaultGenericErrorLimit),
 		];
 }
