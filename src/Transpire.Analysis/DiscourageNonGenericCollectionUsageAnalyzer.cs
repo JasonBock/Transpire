@@ -46,85 +46,21 @@ public sealed class DiscourageNonGenericCollectionUsageAnalyzer
 				compilationContext.Compilation.GetTypeByMetadataName(typeof(Stack).FullName)!,
 			};
 
-			compilationContext.RegisterOperationAction(operationContext =>
-				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeObjectCreationOperationAction(
-					operationContext, collectionTypes),
-				OperationKind.ObjectCreation);
 			compilationContext.RegisterSyntaxNodeAction(syntaxNodeContext =>
-				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeTypeDeclaration(
+				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeIdentifierName(
 					syntaxNodeContext, collectionTypes),
-				SyntaxKind.ClassDeclaration);
-			compilationContext.RegisterSyntaxNodeAction(syntaxNodeContext =>
-				DiscourageNonGenericCollectionUsageAnalyzer.AnalyzeMethodDeclaration(
-					syntaxNodeContext, collectionTypes),
-				SyntaxKind.MethodDeclaration);
+				SyntaxKind.IdentifierName);
 		});
 	}
 
-	private static void AnalyzeObjectCreationOperationAction(
-		OperationAnalysisContext context, HashSet<ITypeSymbol> collectionTypes)
-	{
-		var contextInvocation = ((IObjectCreationOperation)context.Operation).Constructor;
-
-		if (contextInvocation is not null &&
-			collectionTypes.Contains(contextInvocation.ContainingType))
-		{
-			context.ReportDiagnostic(Diagnostic.Create(
-				DiscourageNonGenericCollectionUsageAnalyzer.rule, context.Operation.Syntax.GetLocation()));
-		}
-	}
-
-	private static void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context,
+	private static void AnalyzeIdentifierName(SyntaxNodeAnalysisContext context,
 		HashSet<ITypeSymbol> collectionTypes)
 	{
-		var method = (MethodDeclarationSyntax)context.Node;
+		var type = (IdentifierNameSyntax)context.Node;
 		var model = context.SemanticModel;
-		var methodSymbol = model.GetDeclaredSymbol(method) as IMethodSymbol;
+		var typeSymbol = model.GetSymbolInfo(type).Symbol as ITypeSymbol;
 
-		if (methodSymbol is not null)
-		{
-			if (!methodSymbol.ReturnsVoid && collectionTypes.Contains(methodSymbol.ReturnType))
-			{
-				context.ReportDiagnostic(Diagnostic.Create(
-					DiscourageNonGenericCollectionUsageAnalyzer.rule, method.ReturnType.GetLocation()));
-			}
-
-			for (var i = 0; i < methodSymbol.Parameters.Length; i++)
-			{
-				var parameter = methodSymbol.Parameters[i];
-				var parameterNodes = method.ParameterList.Parameters;
-
-				if (collectionTypes.Contains(parameter.Type))
-				{
-					context.ReportDiagnostic(Diagnostic.Create(
-						DiscourageNonGenericCollectionUsageAnalyzer.rule, parameterNodes[i].Type!.GetLocation()));
-				}
-			}
-		}
-	}
-
-	private static void AnalyzeTypeDeclaration(SyntaxNodeAnalysisContext context,
-		HashSet<ITypeSymbol> collectionTypes)
-	{
-		var type = (TypeDeclarationSyntax)context.Node;
-		var model = context.SemanticModel;
-		var typeSymbol = model.GetDeclaredSymbol(type);
-
-		var parentBaseType = typeSymbol?.BaseType;
-		var foundNonGenericBaseType = false;
-
-		while (parentBaseType is not null)
-		{
-			if (collectionTypes.Contains(parentBaseType))
-			{
-				foundNonGenericBaseType = true;
-				break;
-			}
-
-			parentBaseType = parentBaseType.BaseType;
-		}
-
-		if (foundNonGenericBaseType)
+		if(typeSymbol is not null && collectionTypes.Contains(typeSymbol))
 		{
 			context.ReportDiagnostic(Diagnostic.Create(
 				DiscourageNonGenericCollectionUsageAnalyzer.rule, type.Identifier.GetLocation()));

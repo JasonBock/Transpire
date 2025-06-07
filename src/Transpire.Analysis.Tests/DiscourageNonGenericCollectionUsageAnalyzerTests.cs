@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
+using System.Collections;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
@@ -42,13 +43,13 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 	}
 
 	[Test]
-	public static async Task AnalyzeWhenNothingIsMadeAsync()
+	public static async Task AnalyzeWhenANonGenericCollectionIsNotUsedAsync()
 	{
 		var code =
 			"""
 			internal static class Test
 			{
-				public static int Make() => 1 + 2;
+				public static int GetCount(int value) => value;
 			}
 			""";
 
@@ -56,7 +57,7 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 	}
 
 	[Test]
-	public static async Task AnalyzeWhenGenericCollectionIsMadeAsync()
+	public static async Task AnalyzeWhenGenericCollectionIsUsedAsync()
 	{
 		var code =
 			"""
@@ -64,11 +65,7 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 
 			internal static class Test
 			{
-				public static int Make()
-				{
-					var stuff = new List<string>();
-					return stuff.GetHashCode();
-				}
+				public static int GetCount(List<string> value) => value.Count;
 			}
 			""";
 
@@ -80,109 +77,21 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 	[TestCase("Queue")]
 	[TestCase("SortedList")]
 	[TestCase("Stack")]
-	public static async Task AnalyzeWhenNonGenericCollectionIsMadeAsync(string typeName)
+	public static async Task AnalyzeWhenNonGenericCollectionIsUsedAsync(string typeName)
 	{
-		var objectCreationCode = $"new {typeName}()";
 		var code =
 			$$"""
 			using System.Collections;
 
 			internal static class Test
 			{
-				public static int Make()
-				{
-					var stuff = {{objectCreationCode}};
-					return stuff.GetHashCode();
-				}
+				public static int GetCount({{typeName}} value) => value.Count;
 			}
 			""";
 
 		var diagnostic = new DiagnosticResult(
 			DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId, DiagnosticSeverity.Error)
-			.WithSpan(7, 15, 7, 15 + objectCreationCode.Length);
+			.WithSpan(5, 29, 5, 29 + typeName.Length);
 		await TestAssistants.RunAnalyzerAsync<DiscourageNonGenericCollectionUsageAnalyzer>(code, [diagnostic]);
-	}
-
-	[Test]
-	public static async Task AnalyzeWhenBaseTypeIsNotNonGenericCollectionAsync()
-	{
-		var code =
-			"""
-			public sealed class Customers { }
-			""";
-
-		await TestAssistants.RunAnalyzerAsync<DiscourageNonGenericCollectionUsageAnalyzer>(code, []);
-	}
-
-	[TestCase("ArrayList")]
-	[TestCase("Hashtable")]
-	[TestCase("Queue")]
-	[TestCase("SortedList")]
-	[TestCase("Stack")]
-	public static async Task AnalyzeWhenBaseTypeIsNonGenericCollectionAsync(string typeName)
-	{
-		var code =
-			$$"""
-			using System.Collections;
-
-			public class Customers
-				: {{typeName}}
-			{ }
-
-			public class SpecialCustomers
-				: Customers
-			{ }
-			""";
-
-		var baseClassDiagnostic = new DiagnosticResult(
-			DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId, DiagnosticSeverity.Error)
-			.WithSpan(3, 14, 3, 23);
-		var subClassDiagnostic = new DiagnosticResult(
-			DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId, DiagnosticSeverity.Error)
-			.WithSpan(7, 14, 7, 30);
-		await TestAssistants.RunAnalyzerAsync<DiscourageNonGenericCollectionUsageAnalyzer>(
-			code, [baseClassDiagnostic, subClassDiagnostic]);
-	}
-
-	[Test]
-	public static async Task AnalyzeWhenMethodDoesNotUseNonGenericCollectionAsync()
-	{
-		var code =
-			"""
-			internal static class Test
-			{
-				public static int Add(int x, int y) => x + y;
-			}
-			""";
-
-		await TestAssistants.RunAnalyzerAsync<DiscourageNonGenericCollectionUsageAnalyzer>(code, []);
-	}
-
-	[TestCase("ArrayList")]
-	[TestCase("Hashtable")]
-	[TestCase("Queue")]
-	[TestCase("SortedList")]
-	[TestCase("Stack")]
-	public static async Task AnalyzeWhenMethodUsesNonGenericCollectionAsync(string typeName)
-	{
-		var code =
-			$$"""
-			using System.Collections;
-
-			internal static class Test
-			{
-				public static {{typeName}} Process(
-					{{typeName}} items) => items;
-			}
-			""";
-
-		var returnTypeDiagnostic = new DiagnosticResult(
-			DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId, DiagnosticSeverity.Error)
-			.WithSpan(5, 16, 5, 16 + typeName.Length);
-		var parameterTypeDiagnostic = new DiagnosticResult(
-			DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId, DiagnosticSeverity.Error)
-			.WithSpan(6, 3, 6, 3 + typeName.Length);
-		await TestAssistants.RunAnalyzerAsync<DiscourageNonGenericCollectionUsageAnalyzer>(
-			code, [returnTypeDiagnostic, parameterTypeDiagnostic]);
 	}
 }
