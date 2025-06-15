@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
-using System.Collections;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 

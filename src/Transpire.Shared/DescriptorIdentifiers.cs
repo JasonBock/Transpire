@@ -20,4 +20,5 @@ internal static class DescriptorIdentifiers
 	internal const string MethodGenericParameterCountErrorId = "TRANS16";
 	internal const string DeregionizeId = "TRANS17";
 	internal const string DiscourageNonGenericCollectionUsageId = "TRANS18";
+	internal const string DetectNonSeparatedDigitsId = "TRANS19";
 }
