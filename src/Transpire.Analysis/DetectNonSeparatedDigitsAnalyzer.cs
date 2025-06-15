@@ -40,18 +40,47 @@ public sealed class DetectNonSeparatedDigitsAnalyzer
 	private static void AnalyzeLiteralExpression(SyntaxNodeAnalysisContext context)
 	{
 		var literal = (LiteralExpressionSyntax)context.Node;
+		var literalText = literal.Token.Text;
 
-		if (!literal.Token.Text.Contains('_'))
+		if (!literalText.Contains('_'))
 		{
-			// TODO: We don't want to flag in cases like:
-			// 314
-			// 0b11
-			// 3.14
-			// We would want to do analysis for binary and floating point numbers
-			// and be more fine-grained.
-			context.ReportDiagnostic(
-				Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
-					literal.Token.GetLocation()));
+			// TODO: I need to be concered about literal suffixes, like
+			// var x = 3345ul;
+
+			var reportDiagnostic = false;
+
+			if (literalText.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ||
+				literalText.StartsWith("0b", StringComparison.OrdinalIgnoreCase))
+			{
+				if (literalText.Length > 4)
+				{
+					reportDiagnostic = true;
+				}
+			}
+			else
+			{
+				var dotPosition = literalText.IndexOf('.');
+
+				if (dotPosition > -1)
+				{
+					if (literalText.AsSpan(0, dotPosition).Length > 3 ||
+						literalText.AsSpan(dotPosition + 1).Length > 3)
+					{
+						reportDiagnostic = true;
+					}
+				}
+				else if (literalText.Length > 3)
+				{
+					reportDiagnostic = true;
+				}
+			}
+
+			if (reportDiagnostic)
+			{
+				context.ReportDiagnostic(
+					Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
+						literal.Token.GetLocation()));
+			}
 		}
 	}
 

@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
-using System.Reflection.Metadata;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
@@ -89,5 +88,46 @@ internal static class DetectNonSeparatedDigitsAnalyzerTests
 			DescriptorIdentifiers.DetectNonSeparatedDigitsId, DiagnosticSeverity.Info)
 			.WithSpan(3, 27, 3, 31);
 		await TestAssistants.RunAnalyzerAsync<DetectNonSeparatedDigitsAnalyzer>(code, [diagnostic]);
+	}
+
+	[TestCase("int", "312", false)]
+	[TestCase("int", "3123", true)]
+	[TestCase("int", "0b11", false)]
+	[TestCase("int", "0B11", false)]
+	[TestCase("int", "0b111", true)]
+	[TestCase("int", "0B111", true)]
+	[TestCase("int", "0x11", false)]
+	[TestCase("int", "0X11", false)]
+	[TestCase("int", "0x111", true)]
+	[TestCase("int", "0X111", true)]
+	[TestCase("double", "3.12", false)]
+	[TestCase("double", "312.312", false)]
+	[TestCase("double", "3312.312", true)]
+	[TestCase("double", "312.3123", true)]
+	[TestCase("double", ".12", false)]
+	[TestCase("double", ".1234", true)]
+	public static async Task AnalyzeWhenLiteralExpressionExistsWithNoSeparatorsAsync(
+		string literalType, string literalText, bool shouldCreateDiagnostic)
+	{
+		var code =
+			$$"""
+			public static class Test
+			{
+				public const {{literalType}} Value = 
+					{{literalText}};
+
+				public static void Run() { }
+			}
+			""";
+
+		var diagnostics = shouldCreateDiagnostic ?
+			new List<DiagnosticResult>
+			{
+				new DiagnosticResult(
+					DescriptorIdentifiers.DetectNonSeparatedDigitsId, DiagnosticSeverity.Info)
+					.WithSpan(4, 3, 4, 3 + literalText.Length)
+			} : [];
+
+		await TestAssistants.RunAnalyzerAsync<DetectNonSeparatedDigitsAnalyzer>(code, diagnostics);
 	}
 }
