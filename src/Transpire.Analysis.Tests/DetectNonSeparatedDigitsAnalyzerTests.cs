@@ -90,6 +90,25 @@ internal static class DetectNonSeparatedDigitsAnalyzerTests
 		await TestAssistants.RunAnalyzerAsync<DetectNonSeparatedDigitsAnalyzer>(code, [diagnostic]);
 	}
 
+	[Test]
+	public static async Task AnalyzeWhenLiteralExpressionExistsWithNoSeparatorsAndDiagnosticsExistAsync()
+	{
+		var code =
+			"""
+			public static class Test
+			{
+				public const int Value = 0b10011021;
+
+				public static void Run() { }
+			}
+			""";
+
+		// This diagnostic is a compilation error, not our analyzer diagnostic.
+		var diagnostic = DiagnosticResult.CompilerError("CS1003")
+			.WithSpan(3, 35, 3, 37).WithArguments(",");
+		await TestAssistants.RunAnalyzerAsync<DetectNonSeparatedDigitsAnalyzer>(code, [diagnostic]);
+	}
+
 	[TestCase("int", "312", false)]
 	[TestCase("int", "3123", true)]
 	[TestCase("int", "0b11", false)]

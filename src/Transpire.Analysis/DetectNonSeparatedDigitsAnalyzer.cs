@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
 using Transpire.Analysis.Descriptors;
+using Transpire.Analysis.Extensions;
 
 namespace Transpire.Analysis;
 
@@ -40,46 +41,55 @@ public sealed class DetectNonSeparatedDigitsAnalyzer
 	private static void AnalyzeLiteralExpression(SyntaxNodeAnalysisContext context)
 	{
 		var literal = (LiteralExpressionSyntax)context.Node;
-		var literalText = literal.Token.Text;
 
-		if (!literalText.Contains('_'))
+		if (!literal.MayContainDiagnostics())
 		{
-			// TODO: I need to be concered about literal suffixes, like
-			// var x = 3345ul;
+			var literalText = literal.Token.Text;
 
-			var reportDiagnostic = false;
-
-			if (literalText.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ||
-				literalText.StartsWith("0b", StringComparison.OrdinalIgnoreCase))
+			if (!literalText.Contains('_'))
 			{
-				if (literalText.Length > 4)
-				{
-					reportDiagnostic = true;
-				}
-			}
-			else
-			{
-				var dotPosition = literalText.IndexOf('.');
+				// TODO: I need to be concerned about literal suffixes
+				// and negative numbers and exponents, like
+				// var x = 0x3345ul;
+				// and
+				// var x = -0x3345L;
+				// and
+				// var d = 3_000e2f;
 
-				if (dotPosition > -1)
+				var reportDiagnostic = false;
+
+				if (literalText.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ||
+					literalText.StartsWith("0b", StringComparison.OrdinalIgnoreCase))
 				{
-					if (literalText.AsSpan(0, dotPosition).Length > 3 ||
-						literalText.AsSpan(dotPosition + 1).Length > 3)
+					if (literalText.Length > 4)
 					{
 						reportDiagnostic = true;
 					}
 				}
-				else if (literalText.Length > 3)
+				else
 				{
-					reportDiagnostic = true;
-				}
-			}
+					var dotPosition = literalText.IndexOf('.');
 
-			if (reportDiagnostic)
-			{
-				context.ReportDiagnostic(
-					Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
-						literal.Token.GetLocation()));
+					if (dotPosition > -1)
+					{
+						if (literalText.AsSpan(0, dotPosition).Length > 3 ||
+							literalText.AsSpan(dotPosition + 1).Length > 3)
+						{
+							reportDiagnostic = true;
+						}
+					}
+					else if (literalText.Length > 3)
+					{
+						reportDiagnostic = true;
+					}
+				}
+
+				if (reportDiagnostic)
+				{
+					context.ReportDiagnostic(
+						Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
+							literal.Token.GetLocation()));
+				}
 			}
 		}
 	}
