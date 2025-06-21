@@ -40,10 +40,10 @@ public sealed class DetectNonSeparatedDigitsAnalyzer
 
 	private static void AnalyzeLiteralExpression(SyntaxNodeAnalysisContext context)
 	{
-		var literal = (LiteralExpressionSyntax)context.Node;
-
-		if (!literal.MayContainDiagnostics())
+		if (context.FilterTree.GetRoot().ContainsDiagnostics)
 		{
+			var literal = (LiteralExpressionSyntax)context.Node;
+
 			var literalText = literal.Token.Text;
 
 			if (!literalText.Contains('_'))
@@ -55,7 +55,11 @@ public sealed class DetectNonSeparatedDigitsAnalyzer
 				// var x = -0x3345L;
 				// and
 				// var d = 3_000e2f;
-
+				// and
+				// var d = 0x748319789418f; // note this is actually a long
+				//
+				//var d = 0x74L;
+				
 				var reportDiagnostic = false;
 
 				if (literalText.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ||
