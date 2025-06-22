@@ -18,7 +18,9 @@ internal static class LiteralNumberInformationTests
 		foreach (var value in new List<string>
 		{
 			"0x123", "0x14uL", "0x1uL",
-			"0x14L", "0x1L"
+			"0x14L", "0x1L", "0x3d", "3d",
+			"4", "1e4", "14e10",
+			"3.4", "344.134", "3.4e5", "344.134e3"
 		})
 		{
 			yield return (value, new(LiteralNumberInformationTests.GetLiteralSyntax(GetCode(value))));

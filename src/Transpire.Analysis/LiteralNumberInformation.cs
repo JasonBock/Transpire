@@ -8,47 +8,93 @@ internal sealed class LiteralNumberInformation
 	[SetsRequiredMembers]
 	internal LiteralNumberInformation(LiteralExpressionSyntax syntax)
 	{
+		static string GetTypeSuffix(string literalText, bool isHexLiteral)
+		{
+			static bool IsTypeSuffixCharacter(char typeSuffixCandidate, bool isHexLiteral) =>
+				(isHexLiteral && !Uri.IsHexDigit(typeSuffixCandidate)) ||
+				!char.IsDigit(typeSuffixCandidate);
+
+			var typeSuffix = literalText[literalText.Length - 1];
+
+			if (IsTypeSuffixCharacter(typeSuffix, isHexLiteral))
+			{
+				var secondTypeSuffix = literalText[literalText.Length - 2];
+
+				return IsTypeSuffixCharacter(secondTypeSuffix, isHexLiteral) ?
+					$"{secondTypeSuffix}{typeSuffix}" : $"{typeSuffix}";
+			}
+
+			return string.Empty;
+		}
+
 		this.Prefix = this.WholePart =
 			this.DecimalPoint = this.FractionalPart = this.Exponent =
 			this.TypeSuffix = string.Empty;
 
 		var literalText = syntax.Token.Text;
-		var offset = 0;
 
-		if (literalText.Length >= 2 + offset)
+		if (literalText.Length >= 2)
 		{
-			var prefix = literalText.Substring(offset, 2);
+			const int PrefixOffset = 2;
+
+			var prefix = literalText.Substring(0, PrefixOffset);
 
 			if (prefix == "0x" || prefix == "0X" || prefix == "0b" || prefix == "0B")
 			{
 				this.Prefix = prefix;
-				offset += 2;
 
 				// We know at this point this is an integer, so the only thing we need to grab
 				// is the whole part and a type suffix if it exists.
-				var literalTextRemainderSpan = literalText.AsSpan(offset);
-				var typeSuffix = literalTextRemainderSpan[literalTextRemainderSpan.Length - 1];
-
-				if (!Uri.IsHexDigit(typeSuffix))
-				{
-					var secondTypeSuffix = literalTextRemainderSpan[literalTextRemainderSpan.Length - 2];
-
-					this.TypeSuffix = Uri.IsHexDigit(secondTypeSuffix) ?
-						$"{secondTypeSuffix}{typeSuffix}" : $"{typeSuffix}";
-				}
-
-				this.WholePart = literalText.Substring(offset, literalText.Length - offset - this.TypeSuffix.Length);
+				this.TypeSuffix = GetTypeSuffix(literalText, true);
+				this.WholePart = literalText.Substring(
+					PrefixOffset, literalText.Length - PrefixOffset - this.TypeSuffix.Length);
 			}
 			else
 			{
 				// At this point, we don't know if it's a integer or floating point number.
+				// We could have "3d" as the literal, so we have to be a bit careful.
 				// First, look at the last character(s) to determine if it has a type suffix.
+				this.TypeSuffix = GetTypeSuffix(literalText, false);
+				var remainderPart = literalText.Substring(0, literalText.Length - this.TypeSuffix.Length);
+				// Look for the exponent if it exists.
+				var exponentPosition = remainderPart.IndexOf('e');
+
+				if (exponentPosition > 0)
+				{
+					this.Exponent = remainderPart.Substring(exponentPosition);
+					remainderPart = remainderPart.Substring(0, exponentPosition);
+				}
+
+				var dotPosition = remainderPart.IndexOf('.');
+
+				if (dotPosition > -1)
+				{
+					this.DecimalPoint = ".";
+					var parts = remainderPart.Split('.');
+					this.WholePart = parts[0];
+					this.FractionalPart = this.Exponent == string.Empty ?
+						parts[1] : parts[1].Replace(this.Exponent, string.Empty);
+				}
+				else
+				{
+					this.WholePart = this.Exponent == string.Empty ?
+						remainderPart : remainderPart.Replace(this.Exponent, string.Empty);
+				}
 			}
 		}
+		else
+		{
+			this.WholePart = literalText;
+		}
+
+		this.NeedsSeparators = this.Prefix.Length > 0 ?
+			this.WholePart.Length > 2 && !this.WholePart.Contains('_') :
+			((this.WholePart.Length > 3 && !this.WholePart.Contains('_')) ||
+			(this.FractionalPart.Length > 3 && !this.FractionalPart.Contains('_')));
 	}
 
 	[SetsRequiredMembers]
-	internal LiteralNumberInformation(
+	private LiteralNumberInformation(
 		string prefix, string wholePart,
 		string decimalPoint, string fractionalPart, string exponent,
 		string typeSuffix, bool needsSeparator) =>
@@ -57,13 +103,17 @@ internal sealed class LiteralNumberInformation
 		(prefix, wholePart, decimalPoint,
 		fractionalPart, exponent, typeSuffix, needsSeparator);
 
-	public void Deconstruct(out string prefix, out string wholePart,
-		out string decimalPoint, out string fractionalPart, out string exponent,
-		out string typeSuffix, out bool needsSeparator) =>
-		(prefix, wholePart, decimalPoint,
-		fractionalPart, exponent, typeSuffix, needsSeparator) =
-		(this.Prefix, this.WholePart, this.DecimalPoint,
-		this.FractionalPart, this.Exponent, this.TypeSuffix, this.NeedsSeparators);
+	internal LiteralNumberInformation CreateSeparated(uint spacingSize)
+	{
+		if (!this.NeedsSeparators)
+		{
+			return this;
+		}
+
+		// TODO: This needs to actually change WholePart and/or FractionalPart,
+		// based on spacingSize.
+		return new(this.Prefix, this.WholePart, this.DecimalPoint, this.FractionalPart, this.Exponent, this.TypeSuffix, false);
+	}
 
 	public override string ToString() =>
 		$"{this.Prefix}{this.WholePart}{this.DecimalPoint}{this.FractionalPart}{this.Exponent}{this.TypeSuffix}";
