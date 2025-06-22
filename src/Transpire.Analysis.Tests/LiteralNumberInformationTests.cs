@@ -6,25 +6,35 @@ namespace Transpire.Analysis.Tests;
 
 internal static class LiteralNumberInformationTests
 {
-   [TestCaseSource(nameof(LiteralNumberInformationTests.GetTestInformation))]
-   public static void ParseLiteralText((string text, LiteralNumberInformation information) value) => 
-		Assert.That(value.information.ToString(), Is.EqualTo(value.text));
-
-   private static IEnumerable<(string, LiteralNumberInformation)> GetTestInformation()
+	[TestCase("0x12", false)]
+	[TestCase("0x123", true)]
+	[TestCase("12", false)]
+	[TestCase("1234", true)]
+	[TestCase("0x14uL", false)]
+	[TestCase("0x1uL", false)]
+	[TestCase("0x14L", false)]
+	[TestCase("0x1L", false)]
+	[TestCase("0x3d", false)]
+	[TestCase("3d", false)]
+	[TestCase("4", false)]
+	[TestCase("1e4", false)]
+	[TestCase("14e10", false)]
+	[TestCase("3.4", false)]
+	[TestCase("344.134", false)]
+	[TestCase("3.4e5", false)]
+	[TestCase("344.134e3", false)]
+	public static void ParseLiteralText(string value, bool needsSeparator)
 	{
 		static string GetCode(string literalText) =>
 			$"var value = {literalText};";
 
-		foreach (var value in new List<string>
+		var information = new LiteralNumberInformation(LiteralNumberInformationTests.GetLiteralSyntax(GetCode(value)));
+
+		Assert.Multiple(() =>
 		{
-			"0x123", "0x14uL", "0x1uL",
-			"0x14L", "0x1L", "0x3d", "3d",
-			"4", "1e4", "14e10",
-			"3.4", "344.134", "3.4e5", "344.134e3"
-		})
-		{
-			yield return (value, new(LiteralNumberInformationTests.GetLiteralSyntax(GetCode(value))));
-		}
+			Assert.That(information.ToString(), Is.EqualTo(value));
+			Assert.That(information.NeedsSeparators, Is.EqualTo(needsSeparator));
+		});
 	}
 
 	private static LiteralExpressionSyntax GetLiteralSyntax(string code) => 
