@@ -43,57 +43,13 @@ public sealed class DetectNonSeparatedDigitsAnalyzer
 		if (!context.FilterTree.GetRoot().ContainsDiagnostics)
 		{
 			var literal = (LiteralExpressionSyntax)context.Node;
+			var literalInformation = new LiteralNumberInformation(literal);
 
-			var literalText = literal.Token.Text;
-
-			if (!literalText.Contains('_'))
+			if (literalInformation.NeedsSeparators)
 			{
-				// TODO: I need to be concerned about literal suffixes
-				// and negative numbers and exponents, like
-				// var x = 0x3345ul;
-				// and
-				// var x = -0x3345L;
-				// and
-				// var d = 3_000e2f;
-				// and
-				// var d = 0x748319789418f; // note this is actually a long
-				//
-				//var d = 0x74L;
-
-				var reportDiagnostic = false;
-
-				if (literalText.StartsWith("0x", StringComparison.OrdinalIgnoreCase) ||
-					literalText.StartsWith("0b", StringComparison.OrdinalIgnoreCase))
-				{
-					if (literalText.Length > 4)
-					{
-						reportDiagnostic = true;
-					}
-				}
-				else
-				{
-					var dotPosition = literalText.IndexOf('.');
-
-					if (dotPosition > -1)
-					{
-						if (literalText.AsSpan(0, dotPosition).Length > 3 ||
-							literalText.AsSpan(dotPosition + 1).Length > 3)
-						{
-							reportDiagnostic = true;
-						}
-					}
-					else if (literalText.Length > 3)
-					{
-						reportDiagnostic = true;
-					}
-				}
-
-				if (reportDiagnostic)
-				{
-					context.ReportDiagnostic(
-						Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
-							literal.Token.GetLocation()));
-				}
+				context.ReportDiagnostic(
+					Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
+						literal.Token.GetLocation()));
 			}
 		}
 	}
