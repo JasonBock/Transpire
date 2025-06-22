@@ -15,8 +15,14 @@ internal static class LiteralNumberInformationTests
 		static string GetCode(string literalText) =>
 			$"var value = {literalText};";
 
-		yield return ("0x123", new(LiteralNumberInformationTests.GetLiteralSyntax(GetCode("0x123"))));
-		//yield return ("-123", new(LiteralNumberInformationTests.GetLiteralSyntax(GetCode("-123"))));
+		foreach (var value in new List<string>
+		{
+			"0x123", "0x14uL", "0x1uL",
+			"0x14L", "0x1L"
+		})
+		{
+			yield return (value, new(LiteralNumberInformationTests.GetLiteralSyntax(GetCode(value))));
+		}
 	}
 
 	private static LiteralExpressionSyntax GetLiteralSyntax(string code) => 

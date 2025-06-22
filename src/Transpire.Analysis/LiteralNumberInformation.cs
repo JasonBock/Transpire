@@ -8,14 +8,12 @@ internal sealed class LiteralNumberInformation
 	[SetsRequiredMembers]
 	internal LiteralNumberInformation(LiteralExpressionSyntax syntax)
 	{
-		this.NegativeSign = this.Prefix = this.WholePart =
+		this.Prefix = this.WholePart =
 			this.DecimalPoint = this.FractionalPart = this.Exponent =
 			this.TypeSuffix = string.Empty;
 
 		var literalText = syntax.Token.Text;
-
-		this.NegativeSign = literalText.StartsWith("-") ? "-" : string.Empty;
-		var offset = this.NegativeSign.Length;
+		var offset = 0;
 
 		if (literalText.Length >= 2 + offset)
 		{
@@ -28,8 +26,7 @@ internal sealed class LiteralNumberInformation
 
 				// We know at this point this is an integer, so the only thing we need to grab
 				// is the whole part and a type suffix if it exists.
-
-				var literalTextRemainderSpan = literalText.AsSpan(2 + offset);
+				var literalTextRemainderSpan = literalText.AsSpan(offset);
 				var typeSuffix = literalTextRemainderSpan[literalTextRemainderSpan.Length - 1];
 
 				if (!Uri.IsHexDigit(typeSuffix))
@@ -42,29 +39,34 @@ internal sealed class LiteralNumberInformation
 
 				this.WholePart = literalText.Substring(offset, literalText.Length - offset - this.TypeSuffix.Length);
 			}
+			else
+			{
+				// At this point, we don't know if it's a integer or floating point number.
+				// First, look at the last character(s) to determine if it has a type suffix.
+			}
 		}
 	}
 
 	[SetsRequiredMembers]
 	internal LiteralNumberInformation(
-		string negativeSign, string prefix, string wholePart,
+		string prefix, string wholePart,
 		string decimalPoint, string fractionalPart, string exponent,
 		string typeSuffix, bool needsSeparator) =>
-		(this.NegativeSign, this.Prefix, this.WholePart, this.DecimalPoint,
+		(this.Prefix, this.WholePart, this.DecimalPoint,
 		this.FractionalPart, this.Exponent, this.TypeSuffix, this.NeedsSeparators) =
-		(negativeSign, prefix, wholePart, decimalPoint,
+		(prefix, wholePart, decimalPoint,
 		fractionalPart, exponent, typeSuffix, needsSeparator);
 
-	public void Deconstruct(out string negativeSign, out string prefix, out string wholePart,
+	public void Deconstruct(out string prefix, out string wholePart,
 		out string decimalPoint, out string fractionalPart, out string exponent,
 		out string typeSuffix, out bool needsSeparator) =>
-		(negativeSign, prefix, wholePart, decimalPoint,
+		(prefix, wholePart, decimalPoint,
 		fractionalPart, exponent, typeSuffix, needsSeparator) =
-		(this.NegativeSign, this.Prefix, this.WholePart, this.DecimalPoint,
+		(this.Prefix, this.WholePart, this.DecimalPoint,
 		this.FractionalPart, this.Exponent, this.TypeSuffix, this.NeedsSeparators);
 
 	public override string ToString() =>
-		$"{this.NegativeSign}{this.Prefix}{this.WholePart}{this.DecimalPoint}{this.FractionalPart}{this.Exponent}{this.TypeSuffix}";
+		$"{this.Prefix}{this.WholePart}{this.DecimalPoint}{this.FractionalPart}{this.Exponent}{this.TypeSuffix}";
 
 	/// <summary>
 	/// Gets the decimal point.
@@ -89,12 +91,6 @@ internal sealed class LiteralNumberInformation
 	/// Returns <see langword="true"/> if <see cref="WholePart"/> or <see cref="FractionalPart"/> should have a separator in them.
 	/// </summary>
 	internal required bool NeedsSeparators { get; init; }
-
-	/// <summary>
-	/// Gets the negative sign.
-	/// Either "-" or "".
-	/// </summary>
-	internal required string NegativeSign { get; init; }
 
 	/// <summary>
 	/// Gets the prefix.
