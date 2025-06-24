@@ -114,10 +114,55 @@ internal sealed class LiteralNumberInformation
 		34_162
 
 		*/
-		static char[] SeparateCharacters(ReadOnlySpan<char> chars, uint spacingSize, bool inReverse)
+		static string SeparateCharacters(ReadOnlySpan<char> chars, uint spacingSize, bool inReverse)
 		{
-			var newChars = new char[chars.Length + spacingSize];
-			// Work our way from the end of the string to the front.
+			// Calculate the total number of underscores to be inserted
+			var inputLength = chars.Length;
+			var underscoreCount = (inputLength - 1) / spacingSize;
+
+			// Create buffer. Could stackalloc here to avoid double allocation
+			var bufferLength = inputLength + (int)underscoreCount;
+			var buffer = new char[bufferLength];
+
+			// Initialize indices
+			var readIndex = inReverse ? inputLength - 1 : 0;
+			var writeIndex = inReverse ? bufferLength - 1 : 0;
+			var charactersSinceSeparator = 0;
+			if (inReverse)
+			{
+				// Fill buffer right to left
+				while (readIndex >= 0)
+				{
+					buffer[writeIndex--] = chars[readIndex--];
+
+					// Insert underscore if not at end of input
+					charactersSinceSeparator++;
+					if (charactersSinceSeparator == spacingSize && readIndex >= 0)
+					{
+						buffer[writeIndex--] = '_';
+						charactersSinceSeparator = 0;
+					}
+				}
+			}
+			else
+			{
+				// Fill buffer left to right
+				while (readIndex < inputLength)
+				{
+					buffer[writeIndex++] = chars[readIndex++];
+
+					// Insert underscore if not at end of input
+					charactersSinceSeparator++;
+					if (charactersSinceSeparator == spacingSize && readIndex < inputLength)
+					{
+						buffer[writeIndex++] = '_';
+						charactersSinceSeparator = 0;
+					}
+				}
+			}
+
+			// Create and output string
+			return new(buffer);
 		}
 
 		if (!this.NeedsSeparators)
@@ -126,10 +171,10 @@ internal sealed class LiteralNumberInformation
 		}
 
 		var newWholePart = this.WholePart.Length > spacingSize ?
-			new string(SeparateCharacters(this.WholePart.AsSpan(), spacingSize, true)) : 
+			SeparateCharacters(this.WholePart.AsSpan(), spacingSize, true) :
 			this.WholePart;
 		var newFractionalPart = this.FractionalPart.Length > spacingSize ?
-			new string(SeparateCharacters(this.FractionalPart.AsSpan(), spacingSize, false)) :
+			SeparateCharacters(this.FractionalPart.AsSpan(), spacingSize, false) :
 			this.FractionalPart;
 
 		return new(this.Prefix, newWholePart, this.DecimalPoint, newFractionalPart, this.Exponent, this.TypeSuffix, false);
