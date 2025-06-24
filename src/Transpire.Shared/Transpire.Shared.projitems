@@ -11,5 +11,10 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DescriptorIdentifiers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LiteralNumberInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Polyfills\CompilerFeatureRequiredAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Polyfills\IsExternalInit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Polyfills\RequiredMemberAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Polyfills\SetsRequiredMembersAttribute.cs" />
   </ItemGroup>
 </Project>

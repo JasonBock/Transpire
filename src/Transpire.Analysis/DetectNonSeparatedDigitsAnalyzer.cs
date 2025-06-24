@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
 using Transpire.Analysis.Descriptors;
-using Transpire.Analysis.Extensions;
 
 namespace Transpire.Analysis;
 
@@ -49,7 +48,7 @@ public sealed class DetectNonSeparatedDigitsAnalyzer
 			{
 				context.ReportDiagnostic(
 					Diagnostic.Create(DetectNonSeparatedDigitsDescriptor.Create(),
-						literal.Token.GetLocation()));
+						literal.GetLocation()));
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Transpire.Analysis;
+namespace Transpire;
 
 internal sealed class LiteralNumberInformation
 {
@@ -105,14 +105,34 @@ internal sealed class LiteralNumberInformation
 
 	internal LiteralNumberInformation CreateSeparated(uint spacingSize)
 	{
+		/*
+		
+		34162
+
+		261_43
+
+		34_162
+
+		*/
+		static char[] SeparateCharacters(ReadOnlySpan<char> chars, uint spacingSize, bool inReverse)
+		{
+			var newChars = new char[chars.Length + spacingSize];
+			// Work our way from the end of the string to the front.
+		}
+
 		if (!this.NeedsSeparators)
 		{
 			return this;
 		}
 
-		// TODO: This needs to actually change WholePart and/or FractionalPart,
-		// based on spacingSize.
-		return new(this.Prefix, this.WholePart, this.DecimalPoint, this.FractionalPart, this.Exponent, this.TypeSuffix, false);
+		var newWholePart = this.WholePart.Length > spacingSize ?
+			new string(SeparateCharacters(this.WholePart.AsSpan(), spacingSize, true)) : 
+			this.WholePart;
+		var newFractionalPart = this.FractionalPart.Length > spacingSize ?
+			new string(SeparateCharacters(this.FractionalPart.AsSpan(), spacingSize, false)) :
+			this.FractionalPart;
+
+		return new(this.Prefix, newWholePart, this.DecimalPoint, newFractionalPart, this.Exponent, this.TypeSuffix, false);
 	}
 
 	public override string ToString() =>
