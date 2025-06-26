@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Immutable;
 using System.Composition;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Transpire.Completions;
 
@@ -78,49 +77,7 @@ public sealed class DetectNonSeparatedDigitsCodeFix
 		Diagnostic diagnostic, string newLiteralText,
 		LiteralExpressionSyntax literalNode, string title)
 	{
-		var literalTokenType = literalNode.Token.GetType();
-		SyntaxToken newLiteralToken;
-
-		if (literalTokenType == typeof(int))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (int)literalNode.Token.Value!);
-		}
-		else if (literalTokenType == typeof(uint))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (uint)literalNode.Token.Value!);
-		}
-		else if (literalTokenType == typeof(long))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (long)literalNode.Token.Value!);
-		}
-		else if (literalTokenType == typeof(ulong))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (ulong)literalNode.Token.Value!);
-		}
-		else if (literalTokenType == typeof(float))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (float)literalNode.Token.Value!);
-		}
-		else if (literalTokenType == typeof(double))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (double)literalNode.Token.Value!);
-		}
-		else if (literalTokenType == typeof(decimal))
-		{
-			newLiteralToken = SyntaxFactory.Literal(
-				newLiteralText, (decimal)literalNode.Token.Value!);
-		}
-		else
-		{
-			throw new NotSupportedException($"The type {literalTokenType.Name} is not supported");
-		}
-
+		var newLiteralToken = SyntaxFactory.ParseToken(newLiteralText);
 		var newLiteralNode = SyntaxFactory.LiteralExpression(
 			SyntaxKind.NumericLiteralExpression, newLiteralToken);
 		var newRoot = root.ReplaceNode(literalNode, newLiteralNode);
