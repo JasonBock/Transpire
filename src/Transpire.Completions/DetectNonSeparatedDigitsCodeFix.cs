@@ -44,7 +44,6 @@ public sealed class DetectNonSeparatedDigitsCodeFix
 	{
 		var root = (await context.Document.GetSyntaxRootAsync(context.CancellationToken))!;
 		var diagnostic = context.Diagnostics.First();
-		var diagnosticSpan = diagnostic.Location.SourceSpan;
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 

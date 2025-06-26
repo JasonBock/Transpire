@@ -105,22 +105,13 @@ internal sealed class LiteralNumberInformation
 
 	internal LiteralNumberInformation CreateSeparated(uint spacingSize)
 	{
-		/*
-		
-		34162
-
-		261_43
-
-		34_162
-
-		*/
 		static string SeparateCharacters(ReadOnlySpan<char> chars, uint spacingSize, bool inReverse)
 		{
 			// Calculate the total number of underscores to be inserted
 			var inputLength = chars.Length;
 			var underscoreCount = (inputLength - 1) / spacingSize;
 
-			// Create buffer. Could stackalloc here to avoid double allocation
+			// Create buffer.
 			var bufferLength = inputLength + (int)underscoreCount;
 			var buffer = new char[bufferLength];
 
@@ -128,6 +119,7 @@ internal sealed class LiteralNumberInformation
 			var readIndex = inReverse ? inputLength - 1 : 0;
 			var writeIndex = inReverse ? bufferLength - 1 : 0;
 			var charactersSinceSeparator = 0;
+
 			if (inReverse)
 			{
 				// Fill buffer right to left
@@ -137,6 +129,7 @@ internal sealed class LiteralNumberInformation
 
 					// Insert underscore if not at end of input
 					charactersSinceSeparator++;
+
 					if (charactersSinceSeparator == spacingSize && readIndex >= 0)
 					{
 						buffer[writeIndex--] = '_';
@@ -153,6 +146,7 @@ internal sealed class LiteralNumberInformation
 
 					// Insert underscore if not at end of input
 					charactersSinceSeparator++;
+
 					if (charactersSinceSeparator == spacingSize && readIndex < inputLength)
 					{
 						buffer[writeIndex++] = '_';
