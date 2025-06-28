@@ -21,4 +21,5 @@ internal static class DescriptorIdentifiers
 	internal const string DeregionizeId = "TRANS17";
 	internal const string DiscourageNonGenericCollectionUsageId = "TRANS18";
 	internal const string DetectNonSeparatedDigitsId = "TRANS19";
+	internal const string RecommendIsNullOrWhitespaceId = "TRANS20";
 }
