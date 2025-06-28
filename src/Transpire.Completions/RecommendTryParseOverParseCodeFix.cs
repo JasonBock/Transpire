@@ -76,7 +76,7 @@ public sealed class RecommendTryParseOverParseCodeFix
 		context.RegisterCodeFix(
 			CodeAction.Create(
 				RecommendTryParseOverParseCodeFix.ChangeToTryParseDescription,
-				_ => Task.FromResult<Document>(context.Document.WithSyntaxRoot(newRoot)),
+				_ => Task.FromResult(context.Document.WithSyntaxRoot(newRoot)),
 				RecommendTryParseOverParseCodeFix.ChangeToTryParseDescription), diagnostic);
 	}
 

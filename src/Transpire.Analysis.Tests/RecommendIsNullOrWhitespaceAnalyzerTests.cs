@@ -6,12 +6,12 @@ using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
 
-internal static class RecommendIsNullOrWhitespaceAnalyzerTests
+internal static class RecommendIsNullOrWhiteSpaceAnalyzerTests
 {
 	[Test]
 	public static void VerifySupportedDiagnostics()
 	{
-		var analyzer = new RecommendIsNullOrWhitespaceAnalyzer();
+		var analyzer = new RecommendIsNullOrWhiteSpaceAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
 		Assert.Multiple(() =>
@@ -20,11 +20,11 @@ internal static class RecommendIsNullOrWhitespaceAnalyzerTests
 
 			var diagnostic = diagnostics[0];
 
-			Assert.That(diagnostic.Id, Is.EqualTo(DescriptorIdentifiers.RecommendIsNullOrWhitespaceId),
+			Assert.That(diagnostic.Id, Is.EqualTo(DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId),
 				nameof(DiagnosticDescriptor.Id));
-			Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendIsNullOrWhitespaceDescriptor.Title),
+			Assert.That(diagnostic.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendIsNullOrWhiteSpaceDescriptor.Title),
 				nameof(DiagnosticDescriptor.Title));
-			Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendIsNullOrWhitespaceDescriptor.Message),
+			Assert.That(diagnostic.MessageFormat.ToString(CultureInfo.CurrentCulture), Is.EqualTo(RecommendIsNullOrWhiteSpaceDescriptor.Message),
 				nameof(DiagnosticDescriptor.MessageFormat));
 			Assert.That(diagnostic.Category, Is.EqualTo(DescriptorConstants.Usage),
 				nameof(DiagnosticDescriptor.Category));
@@ -35,8 +35,8 @@ internal static class RecommendIsNullOrWhitespaceAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri,
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.RecommendIsNullOrWhitespaceId,
-						RecommendIsNullOrWhitespaceDescriptor.Title)),
+						DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId,
+						RecommendIsNullOrWhiteSpaceDescriptor.Title)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}
@@ -52,7 +52,7 @@ internal static class RecommendIsNullOrWhitespaceAnalyzerTests
 			}
 			""";
 
-		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhitespaceAnalyzer>(code, []);
+		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhiteSpaceAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -71,7 +71,26 @@ internal static class RecommendIsNullOrWhitespaceAnalyzerTests
 			}
 			""";
 
-		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhitespaceAnalyzer>(code, []);
+		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhiteSpaceAnalyzer>(code, []);
+	}
+
+	[Test]
+	public static async Task AnalyzeWhenMethodIsInvokedOnStringThatIsNotIsNullOrEmptyAsync()
+	{
+		var code =
+			"""
+			using System;
+
+			public static class Test
+			{
+				public static void Run() 
+				{ 
+					_ = string.Compare("a", "b", StringComparison.OrdinalIgnoreCase);
+				}
+			}
+			""";
+
+		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhiteSpaceAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -89,8 +108,8 @@ internal static class RecommendIsNullOrWhitespaceAnalyzerTests
 			""";
 
 		var diagnostic = new DiagnosticResult(
-			DescriptorIdentifiers.RecommendIsNullOrWhitespaceId, DiagnosticSeverity.Error)
+			DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId, DiagnosticSeverity.Error)
 			.WithSpan(5, 7, 5, 32);
-		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhitespaceAnalyzer>(code, [diagnostic]);
+		await TestAssistants.RunAnalyzerAsync<RecommendIsNullOrWhiteSpaceAnalyzer>(code, [diagnostic]);
 	}
 }

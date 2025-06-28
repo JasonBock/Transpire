@@ -11,10 +11,10 @@ namespace Transpire.Analysis;
 /// <see cref="string.IsNullOrWhiteSpace(string)"/> when applicable.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public sealed class RecommendIsNullOrWhitespaceAnalyzer
+public sealed class RecommendIsNullOrWhiteSpaceAnalyzer
 	: DiagnosticAnalyzer
 {
-	private static readonly DiagnosticDescriptor rule = RecommendIsNullOrWhitespaceDescriptor.Create();
+	private static readonly DiagnosticDescriptor rule = RecommendIsNullOrWhiteSpaceDescriptor.Create();
 
 	/// <summary>
 	/// Initializes the analyzer.
@@ -35,7 +35,7 @@ public sealed class RecommendIsNullOrWhitespaceAnalyzer
 		{
 			compilationContext.RegisterOperationAction(operationContext =>
 			{
-				RecommendIsNullOrWhitespaceAnalyzer.AnalyzeOperationAction(operationContext);
+				RecommendIsNullOrWhiteSpaceAnalyzer.AnalyzeOperationAction(operationContext);
 			}, OperationKind.Invocation);
 		});
 	}
@@ -51,7 +51,7 @@ public sealed class RecommendIsNullOrWhitespaceAnalyzer
 			invocationReference.Parameters[0].Type.SpecialType == SpecialType.System_String &&
 			invocationReference.ContainingType.SpecialType == SpecialType.System_String)
 		{
-			context.ReportDiagnostic(Diagnostic.Create(RecommendIsNullOrWhitespaceAnalyzer.rule,
+			context.ReportDiagnostic(Diagnostic.Create(RecommendIsNullOrWhiteSpaceAnalyzer.rule,
 				context.Operation.Syntax.GetLocation()));
 		}
 	}
@@ -60,5 +60,5 @@ public sealed class RecommendIsNullOrWhitespaceAnalyzer
 	/// Gets an array of supported diagnostics from this analyzer.
 	/// </summary>
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-		[RecommendIsNullOrWhitespaceAnalyzer.rule];
+		[RecommendIsNullOrWhiteSpaceAnalyzer.rule];
 }

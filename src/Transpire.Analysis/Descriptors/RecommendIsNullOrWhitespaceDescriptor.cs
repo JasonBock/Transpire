@@ -2,16 +2,16 @@
 
 namespace Transpire.Analysis.Descriptors;
 
-internal static class RecommendIsNullOrWhitespaceDescriptor
+internal static class RecommendIsNullOrWhiteSpaceDescriptor
 {
 	internal static DiagnosticDescriptor Create() =>
-		new(DescriptorIdentifiers.RecommendIsNullOrWhitespaceId,
-			RecommendIsNullOrWhitespaceDescriptor.Title,
-			RecommendIsNullOrWhitespaceDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
+		new(DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId,
+			RecommendIsNullOrWhiteSpaceDescriptor.Title,
+			RecommendIsNullOrWhiteSpaceDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.RecommendIsNullOrWhitespaceId,
-				RecommendIsNullOrWhitespaceDescriptor.Title));
+				DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId,
+				RecommendIsNullOrWhiteSpaceDescriptor.Title));
 
-	internal const string Message = "Use IsNullOrWhitespace() instead of IsNullOrEmpty().";
-	internal const string Title = "Recommend string.IsNullOrWhitespace()";
+	internal const string Message = "Use IsNullOrWhiteSpace() instead of IsNullOrEmpty().";
+	internal const string Title = "Recommend string.IsNullOrWhiteSpace()";
 }
