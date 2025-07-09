@@ -35,8 +35,7 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri,
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId,
-						DiscourageNonGenericCollectionUsageDescriptor.Title)),
+						DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

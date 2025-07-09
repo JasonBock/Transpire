@@ -10,8 +10,7 @@ internal static class DetectNonSeparatedDigitsDescriptor
 			DetectNonSeparatedDigitsDescriptor.Message,
 			DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.DetectNonSeparatedDigitsId,
-				DetectNonSeparatedDigitsDescriptor.Title));
+				DescriptorIdentifiers.DetectNonSeparatedDigitsId));
 
 	internal const string Message = "Numbers should use digit separators.";
 	internal const string Title = "Non-Separated Numbers Detected";

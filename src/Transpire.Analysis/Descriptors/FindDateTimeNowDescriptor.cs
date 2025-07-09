@@ -10,8 +10,7 @@ internal static class FindDateTimeNowDescriptor
 			FindDateTimeNowDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.FindDateTimeNowId, 
-				FindDateTimeNowDescriptor.Title));
+				DescriptorIdentifiers.FindDateTimeNowId));
 
 	internal const string Message = "Do not use DateTime.Now.";
 	internal const string Title = "Find Usage of DateTime.Now";

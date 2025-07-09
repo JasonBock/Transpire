@@ -35,8 +35,7 @@ internal static class RecommendIsNullOrWhiteSpaceAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri,
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId,
-						RecommendIsNullOrWhiteSpaceDescriptor.Title)),
+						DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

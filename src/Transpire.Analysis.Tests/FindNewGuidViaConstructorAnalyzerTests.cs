@@ -38,8 +38,7 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri, 
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.FindNewGuidViaConstructorId, 
-						FindNewGuidViaConstructorDescriptor.Title)),
+						DescriptorIdentifiers.FindNewGuidViaConstructorId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

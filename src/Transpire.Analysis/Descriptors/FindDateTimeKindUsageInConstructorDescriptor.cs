@@ -10,8 +10,7 @@ internal static class FindDateTimeKindUsageInConstructorDescriptor
 			FindDateTimeKindUsageInConstructorDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.FindDateTimeKindUsageInConstructorId, 
-				FindDateTimeKindUsageInConstructorDescriptor.Title));
+				DescriptorIdentifiers.FindDateTimeKindUsageInConstructorId));
 
 	internal const string Message = "Do not use DateTimeKind.Local or DateTimeKind.Unspecified in a DateTime constructor.";
 	internal const string Title = "Using DateTimeKind in DateTime Constructor";

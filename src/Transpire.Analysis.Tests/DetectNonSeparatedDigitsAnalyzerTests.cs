@@ -35,8 +35,7 @@ internal static class DetectNonSeparatedDigitsAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri,
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.DetectNonSeparatedDigitsId,
-						DetectNonSeparatedDigitsDescriptor.Title)),
+						DescriptorIdentifiers.DetectNonSeparatedDigitsId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

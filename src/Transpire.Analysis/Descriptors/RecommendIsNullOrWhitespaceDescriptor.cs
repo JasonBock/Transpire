@@ -9,8 +9,7 @@ internal static class RecommendIsNullOrWhiteSpaceDescriptor
 			RecommendIsNullOrWhiteSpaceDescriptor.Title,
 			RecommendIsNullOrWhiteSpaceDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId,
-				RecommendIsNullOrWhiteSpaceDescriptor.Title));
+				DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId));
 
 	internal const string Message = "Use IsNullOrWhiteSpace() instead of IsNullOrEmpty().";
 	internal const string Title = "Recommend string.IsNullOrWhiteSpace()";

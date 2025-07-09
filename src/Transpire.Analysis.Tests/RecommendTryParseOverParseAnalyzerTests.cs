@@ -38,8 +38,7 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri, 
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.RecommendTryParseOverParseId, 
-						RecommendTryParseOverParseDescriptor.Title)),
+						DescriptorIdentifiers.RecommendTryParseOverParseId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

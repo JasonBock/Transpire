@@ -9,8 +9,7 @@ internal static class RecommendTryParseOverParseDescriptor
 			RecommendTryParseOverParseDescriptor.Title,
 			RecommendTryParseOverParseDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.RecommendTryParseOverParseId, 
-				RecommendTryParseOverParseDescriptor.Title));
+				DescriptorIdentifiers.RecommendTryParseOverParseId));
 
 	internal const string Message = "Use TryParse() instead of Parse().";
 	internal const string Title = "Find Usages of Parse()";

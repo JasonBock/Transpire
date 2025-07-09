@@ -10,8 +10,7 @@ internal static class VerifyDispatchProxyTProxyIsNotAbstractDescriptor
 			VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.VerifyDispatchProxyTProxyIsNotAbstractId, 
-				VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Title));
+				DescriptorIdentifiers.VerifyDispatchProxyTProxyIsNotAbstractId));
 
 	internal const string Message = "TProxy must not be abstract.";
 	internal const string Title = "Correct Usage of TProxy Parameter for DispatchProxy.Create";

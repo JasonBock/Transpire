@@ -10,8 +10,7 @@ internal static class DiscourageNonGenericCollectionUsageDescriptor
 			DiscourageNonGenericCollectionUsageDescriptor.Message,
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId,
-				DiscourageNonGenericCollectionUsageDescriptor.Title));
+				DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId));
 
 	internal const string Message = "Using non-generic collections should be avoided.";
 	internal const string Title = "Discourage Non-Generic Collection Usage";

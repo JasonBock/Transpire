@@ -38,8 +38,7 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri, 
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.FindDateTimeKindUsageInConstructorId, 
-						FindDateTimeKindUsageInConstructorDescriptor.Title)),
+						DescriptorIdentifiers.FindDateTimeKindUsageInConstructorId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

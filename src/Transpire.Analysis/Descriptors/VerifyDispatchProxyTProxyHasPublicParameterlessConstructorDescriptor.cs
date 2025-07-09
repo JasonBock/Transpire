@@ -10,8 +10,7 @@ internal static class VerifyDispatchProxyTProxyHasPublicParameterlessConstructor
 			VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.VerifyDispatchProxyTProxyHasPublicParameterlessConstructorId, 
-				VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Title));
+				DescriptorIdentifiers.VerifyDispatchProxyTProxyHasPublicParameterlessConstructorId));
 
 	internal const string Message = "TProxy must have a internal parameterless constructor.";
 	internal const string Title = "Correct Usage of TProxy Parameter for DispatchProxy.Create";

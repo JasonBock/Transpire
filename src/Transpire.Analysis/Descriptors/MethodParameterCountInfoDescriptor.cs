@@ -11,8 +11,7 @@ internal static class MethodParameterCountInfoDescriptor
 			string.Format(CultureInfo.InvariantCulture, MethodParameterCountInfoDescriptor.Message, parameterCount),
 			DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.MethodParameterCountInfoId, 
-				MethodParameterCountInfoDescriptor.Title));
+				DescriptorIdentifiers.MethodParameterCountInfoId));
 
 	internal readonly static string Message = "Consider defining this method with {0} or less parameters.";
 	internal const string Title = "Method Parameter Count";

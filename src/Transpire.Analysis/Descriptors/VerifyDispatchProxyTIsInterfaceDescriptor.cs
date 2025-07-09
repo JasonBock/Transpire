@@ -9,8 +9,7 @@ internal static class VerifyDispatchProxyTIsInterfaceDescriptor
 			VerifyDispatchProxyTIsInterfaceDescriptor.Title,
 			VerifyDispatchProxyTIsInterfaceDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.VerifyDispatchProxyTIsInterfaceId, 
-				VerifyDispatchProxyTIsInterfaceDescriptor.Title));
+				DescriptorIdentifiers.VerifyDispatchProxyTIsInterfaceId));
 
 	internal const string Message = "T must be an interface.";
 	internal const string Title = "Correct Usage of T Parameter for DispatchProxy.Create";

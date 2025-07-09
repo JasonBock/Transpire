@@ -38,8 +38,7 @@ internal static class DeregionizerAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri, 
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.DeregionizeId, 
-						DeregionizeDescriptor.Title)),
+						DescriptorIdentifiers.DeregionizeId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

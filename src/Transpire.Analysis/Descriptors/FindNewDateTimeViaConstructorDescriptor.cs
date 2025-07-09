@@ -10,8 +10,7 @@ internal static class FindNewDateTimeViaConstructorDescriptor
 			FindNewDateTimeViaConstructorDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.FindNewDateTimeViaConstructorId, 
-				FindNewDateTimeViaConstructorDescriptor.Title));
+				DescriptorIdentifiers.FindNewDateTimeViaConstructorId));
 
 	internal const string Message = "Do not create a new DateTime via its no-argument constructor.";
 	internal const string Title = "Creating New DateTime Via No-Argument Constructor";

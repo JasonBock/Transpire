@@ -9,8 +9,7 @@ internal static class RemoveInterpolatedStringDescriptor
 			RemoveInterpolatedStringDescriptor.Title,
 			RemoveInterpolatedStringDescriptor.Message, DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.RemoveInterpolatedStringId, 
-				RemoveInterpolatedStringDescriptor.Title));
+				DescriptorIdentifiers.RemoveInterpolatedStringId));
 
 	internal const string Message = "This string is not an interpolated string.";
 	internal const string Title = "Find Instance of Unnecessary Interpolated Strings";

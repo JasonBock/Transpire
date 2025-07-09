@@ -1,4 +1,4 @@
-# Consider defining this method with 4 or less parameters
+# Consider defining this method with 8192 or less parameters
 
 ## Issue
 

@@ -10,8 +10,7 @@ internal static class DeregionizeDescriptor
 			DeregionizeDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.DeregionizeId, 
-				DeregionizeDescriptor.Title));
+				DescriptorIdentifiers.DeregionizeId));
 
 	internal const string Message = "#region and #endregion directives should be avoided.";
 	internal const string Title = "Using #region And/Or #endregion Directives";

@@ -11,8 +11,7 @@ internal static class MethodGenericParameterCountInfoDescriptor
 			string.Format(CultureInfo.InvariantCulture, MethodGenericParameterCountInfoDescriptor.Message, parameterCount),
 			DescriptorConstants.Usage, DiagnosticSeverity.Info, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.MethodGenericParameterCountInfoId, 
-				MethodGenericParameterCountInfoDescriptor.Title));
+				DescriptorIdentifiers.MethodGenericParameterCountInfoId));
 
 	internal readonly static string Message = "Consider defining this method with {0} or less generic parameters.";
 	internal const string Title = "Method Generic Parameter Count";

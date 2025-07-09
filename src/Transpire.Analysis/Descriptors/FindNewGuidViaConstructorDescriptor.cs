@@ -10,8 +10,7 @@ internal static class FindNewGuidViaConstructorDescriptor
 			FindNewGuidViaConstructorDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.FindNewGuidViaConstructorId, 
-				FindNewGuidViaConstructorDescriptor.Title));
+				DescriptorIdentifiers.FindNewGuidViaConstructorId));
 
 	internal const string Message = "Do not create a new Guid via its no-argument constructor.";
 	internal const string Title = "Creating New Guid Via No-Argument Constructor";

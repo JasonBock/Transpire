@@ -10,8 +10,7 @@ internal static class VerifyDispatchProxyTProxyIsNotSealedDescriptor
 			VerifyDispatchProxyTProxyIsNotSealedDescriptor.Message, 
 			DescriptorConstants.Usage, DiagnosticSeverity.Error, true,
 			helpLinkUri: HelpUrlBuilder.Build(
-				DescriptorIdentifiers.VerifyDispatchProxyTProxyIsNotSealedId, 
-				VerifyDispatchProxyTProxyIsNotSealedDescriptor.Title));
+				DescriptorIdentifiers.VerifyDispatchProxyTProxyIsNotSealedId));
 
 	internal const string Message = "TProxy must not be sealed.";
 	internal const string Title = "Correct Usage of TProxy Parameter for DispatchProxy.Create";

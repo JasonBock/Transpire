@@ -38,8 +38,7 @@ internal static class FindDateTimeNowAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri, 
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.FindDateTimeNowId, 
-						FindDateTimeNowDescriptor.Title)),
+						DescriptorIdentifiers.FindDateTimeNowId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}

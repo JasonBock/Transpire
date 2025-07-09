@@ -38,8 +38,7 @@ internal static class RemoveInterpolatedStringAnalyzerTests
 			Assert.That(diagnostic.HelpLinkUri, 
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
-						DescriptorIdentifiers.RemoveInterpolatedStringId, 
-						RemoveInterpolatedStringDescriptor.Title)),
+						DescriptorIdentifiers.RemoveInterpolatedStringId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
 		});
 	}
