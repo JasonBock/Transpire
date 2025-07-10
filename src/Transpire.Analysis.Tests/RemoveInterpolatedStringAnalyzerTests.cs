@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<RemoveInterpolatedStringAnalyzer, DefaultVerifier>;
 
 internal static class RemoveInterpolatedStringAnalyzerTests
 {
@@ -54,11 +51,14 @@ internal static class RemoveInterpolatedStringAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					var x = [|$"This has no interpolations."|];
+					var x = $"This has no interpolations.";
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.RemoveInterpolatedStringId, DiagnosticSeverity.Info)
+			.WithSpan(7, 11, 7, 41);
+		await TestAssistants.RunAnalyzerAsync<RemoveInterpolatedStringAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -76,7 +76,8 @@ internal static class RemoveInterpolatedStringAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RemoveInterpolatedStringAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -94,6 +95,7 @@ internal static class RemoveInterpolatedStringAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RemoveInterpolatedStringAnalyzer>(code, []);
 	}
 }

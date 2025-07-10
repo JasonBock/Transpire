@@ -53,7 +53,8 @@ public sealed class VerifyDispatchProxyGenericParametersAnalyzer
 			compilationContext.RegisterOperationAction(operationContext =>
 			{
 				var createSymbol = (IMethodSymbol)dispatchProxySymbol.GetMembers(
-					VerifyDispatchProxyGenericParametersAnalyzer.DispatchProxyCreateName)[0];
+					VerifyDispatchProxyGenericParametersAnalyzer.DispatchProxyCreateName)
+					.Single(_ => _ is IMethodSymbol method && method.Parameters.Length == 0 && method.TypeParameters.Length == 2);
 
 				VerifyDispatchProxyGenericParametersAnalyzer.AnalyzeOperationAction(
 					operationContext, createSymbol);

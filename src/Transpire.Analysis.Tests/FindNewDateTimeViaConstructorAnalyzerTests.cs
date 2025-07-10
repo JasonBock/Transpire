@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<FindNewDateTimeViaConstructorAnalyzer, DefaultVerifier>;
 
 internal static class FindNewDateTimeViaConstructorAnalyzerTests
 {
@@ -53,7 +50,8 @@ internal static class FindNewDateTimeViaConstructorAnalyzerTests
 				public static int Make() => 1 + 2;
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewDateTimeViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -66,7 +64,8 @@ internal static class FindNewDateTimeViaConstructorAnalyzerTests
 				public static string Make() => new string('a', 1);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewDateTimeViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -81,7 +80,8 @@ internal static class FindNewDateTimeViaConstructorAnalyzerTests
 				public static DateTime Make() => new DateTime(100, DateTimeKind.Local);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewDateTimeViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -93,10 +93,13 @@ internal static class FindNewDateTimeViaConstructorAnalyzerTests
 
 			internal static class Test
 			{
-				public static DateTime Make() => [|new DateTime()|];
+				public static DateTime Make() => new DateTime();
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindNewDateTimeViaConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(5, 35, 5, 49);
+		await TestAssistants.RunAnalyzerAsync<FindNewDateTimeViaConstructorAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -108,9 +111,12 @@ internal static class FindNewDateTimeViaConstructorAnalyzerTests
 
 			internal static class Test
 			{
-				public static DateTime Make() => [|new()|];
+				public static DateTime Make() => new();
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindNewDateTimeViaConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(5, 35, 5, 40);
+		await TestAssistants.RunAnalyzerAsync<FindNewDateTimeViaConstructorAnalyzer>(code, [diagnostic]);
 	}
 }

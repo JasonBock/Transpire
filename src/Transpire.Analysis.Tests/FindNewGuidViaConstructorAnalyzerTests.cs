@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<FindNewGuidViaConstructorAnalyzer, DefaultVerifier>;
 
 internal static class FindNewGuidViaConstructorAnalyzerTests
 {
@@ -53,7 +50,8 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 				public static int Make() => 1 + 2;
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewGuidViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -66,7 +64,8 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 				public static string Make() => new string('a', 1);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewGuidViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -81,7 +80,8 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 				public static Guid Make() => Guid.NewGuid();
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewGuidViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -96,7 +96,8 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 				public static Guid Make() => new Guid("83d926c8-9fe6-4cd2-8495-e294e8ade4cb");
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindNewGuidViaConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -108,10 +109,13 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 
 			internal static class Test
 			{
-				public static Guid Make() => [|new Guid()|];
+				public static Guid Make() => new Guid();
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindNewGuidViaConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(5, 31, 5, 41);
+		await TestAssistants.RunAnalyzerAsync<FindNewGuidViaConstructorAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -123,9 +127,12 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 
 			internal static class Test
 			{
-				public static Guid Make() => [|new()|];
+				public static Guid Make() => new();
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindNewGuidViaConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(5, 31, 5, 36);
+		await TestAssistants.RunAnalyzerAsync<FindNewGuidViaConstructorAnalyzer>(code, [diagnostic]);
 	}
 }

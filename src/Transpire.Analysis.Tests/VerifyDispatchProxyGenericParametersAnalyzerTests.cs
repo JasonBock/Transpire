@@ -1,9 +1,8 @@
-﻿using NUnit.Framework;
-using Transpire.Analysis.Descriptors;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
+using NUnit.Framework;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = VerifyAnalyzerWithMultipleDescriptorsTest<VerifyDispatchProxyGenericParametersAnalyzer>;
 
 internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 {
@@ -19,20 +18,23 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					[|DispatchProxy.Create<Target, TargetProxy>()|];
+					DispatchProxy.Create<Target, TargetProxy>();
 				}
 			}
 
 			public class Target { }
 
 			public class TargetProxy
-			: DispatchProxy
+				: DispatchProxy
 			{
-				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
+				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => 
+					throw new NotImplementedException();
 			}
 			""";
-		await new Verify(code, VerifyDispatchProxyTIsInterfaceDescriptor.Create())
-			.RunAsync();
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.VerifyDispatchProxyTIsInterfaceId, DiagnosticSeverity.Error)
+			.WithSpan(8, 3, 8, 46);
+		await TestAssistants.RunAnalyzerAsync<VerifyDispatchProxyGenericParametersAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -47,7 +49,7 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+					DispatchProxy.Create<ITarget, TargetProxy>();
 				}
 			}
 
@@ -58,11 +60,14 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 			{
 				public TargetProxy() { }
 
-				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
+				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => 
+					throw new NotImplementedException();
 			}
 			""";
-		await new Verify(code, VerifyDispatchProxyTProxyIsNotAbstractDescriptor.Create())
-			.RunAsync();
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.VerifyDispatchProxyTProxyIsNotAbstractId, DiagnosticSeverity.Error)
+			.WithSpan(8, 3, 8, 47);
+		await TestAssistants.RunAnalyzerAsync<VerifyDispatchProxyGenericParametersAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -77,7 +82,7 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+					DispatchProxy.Create<ITarget, TargetProxy>();
 				}
 			}
 
@@ -89,8 +94,10 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 			}
 			""";
-		await new Verify(code, VerifyDispatchProxyTProxyIsNotSealedDescriptor.Create())
-			.RunAsync();
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.VerifyDispatchProxyTProxyIsNotSealedId, DiagnosticSeverity.Error)
+			.WithSpan(8, 3, 8, 47);
+		await TestAssistants.RunAnalyzerAsync<VerifyDispatchProxyGenericParametersAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -105,7 +112,7 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+					DispatchProxy.Create<ITarget, TargetProxy>();
 				}
 			}
 
@@ -119,8 +126,10 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 			}
 			""";
-		await new Verify(code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create())
-			.RunAsync();
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.VerifyDispatchProxyTProxyHasPublicParameterlessConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(8, 3, 8, 47);
+		await TestAssistants.RunAnalyzerAsync<VerifyDispatchProxyGenericParametersAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -135,7 +144,7 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					[|DispatchProxy.Create<ITarget, TargetProxy>()|];
+					DispatchProxy.Create<ITarget, TargetProxy>();
 				}
 			}
 
@@ -149,8 +158,10 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 			}
 			""";
-		await new Verify(code, VerifyDispatchProxyTProxyHasPublicParameterlessConstructorDescriptor.Create())
-			.RunAsync();
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.VerifyDispatchProxyTProxyHasPublicParameterlessConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(8, 3, 8, 47);
+		await TestAssistants.RunAnalyzerAsync<VerifyDispatchProxyGenericParametersAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -177,7 +188,7 @@ internal static class VerifyDispatchProxyGenericParametersAnalyzerTests
 				protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => throw new NotImplementedException();
 			}
 			""";
-		await new Verify(code, null)
-			.RunAsync();
+
+		await TestAssistants.RunAnalyzerAsync<VerifyDispatchProxyGenericParametersAnalyzer>(code, []);
 	}
 }

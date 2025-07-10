@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<FindDateTimeKindUsageInConstructorAnalyzer, DefaultVerifier>;
 
 internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 {
@@ -55,7 +52,8 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 				public static Usage Make() => new Usage();
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -75,7 +73,8 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 				public static Usage Make() => new Usage(DateTimeKind.Local);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -91,7 +90,7 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 			}
 			""";
 
-		await Verify.VerifyAnalyzerAsync(code);
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -106,7 +105,8 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 				public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -118,10 +118,13 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 
 			internal static class Test
 			{
-				public static DateTime Make() => new DateTime(100, [|DateTimeKind.Local|]);
+				public static DateTime Make() => new DateTime(100, DateTimeKind.Local);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindDateTimeKindUsageInConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(5, 53, 5, 71);
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -133,9 +136,12 @@ internal static class FindDateTimeKindUsageInConstructorAnalyzerTests
 
 			internal static class Test
 			{
-				public static DateTime Make() => new(100, [|DateTimeKind.Local|]);
+				public static DateTime Make() => new(100, DateTimeKind.Local);
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindDateTimeKindUsageInConstructorId, DiagnosticSeverity.Error)
+			.WithSpan(5, 44, 5, 62);
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeKindUsageInConstructorAnalyzer>(code, [diagnostic]);
 	}
 }

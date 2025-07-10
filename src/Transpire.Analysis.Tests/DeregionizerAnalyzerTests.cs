@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<DeregionizeAnalyzer, DefaultVerifier>;
 
 internal static class DeregionizerAnalyzerTests
 {
@@ -52,7 +49,8 @@ internal static class DeregionizerAnalyzerTests
 
 			public interface IAmUseless { }
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<DeregionizeAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -60,12 +58,15 @@ internal static class DeregionizerAnalyzerTests
 	{
 		var code =
 			"""
-			[|using System;
+			using System;
 
 			#region Useless code
 			public interface IAmUseless { }
-			#endregion|]
+			#endregion
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.DeregionizeId, DiagnosticSeverity.Info)
+			.WithSpan(1, 1, 5, 11);
+		await TestAssistants.RunAnalyzerAsync<DeregionizeAnalyzer>(code, [diagnostic]);
 	}
 }

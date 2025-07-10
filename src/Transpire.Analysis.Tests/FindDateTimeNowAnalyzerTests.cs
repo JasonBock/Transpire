@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<FindDateTimeNowAnalyzer, DefaultVerifier>;
 
 internal static class FindDateTimeNowAnalyzerTests
 {
@@ -54,11 +51,14 @@ internal static class FindDateTimeNowAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					var x = [|DateTime.Now|];
+					var x = DateTime.Now;
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindDateTimeNowId, DiagnosticSeverity.Error)
+			.WithSpan(7, 11, 7, 23);
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeNowAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -72,11 +72,14 @@ internal static class FindDateTimeNowAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					var x = [|DT.Now|];
+					var x = DT.Now;
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.FindDateTimeNowId, DiagnosticSeverity.Error)
+			.WithSpan(7, 11, 7, 17);
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeNowAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -94,7 +97,8 @@ internal static class FindDateTimeNowAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeNowAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -112,7 +116,8 @@ internal static class FindDateTimeNowAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeNowAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -132,6 +137,7 @@ internal static class FindDateTimeNowAnalyzerTests
 				public string Now { get; set; }
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<FindDateTimeNowAnalyzer>(code, []);
 	}
 }

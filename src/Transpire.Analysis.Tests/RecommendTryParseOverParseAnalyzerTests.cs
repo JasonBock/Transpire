@@ -1,13 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
 using System.Globalization;
 using Transpire.Analysis.Descriptors;
 
 namespace Transpire.Analysis.Tests;
-
-using Verify = CSharpAnalyzerVerifier<RecommendTryParseOverParseAnalyzer, DefaultVerifier>;
 
 internal static class RecommendTryParseOverParseAnalyzerTests
 {
@@ -54,11 +51,14 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 			{
 				public void MyMethod()
 				{
-					var x = [|int.Parse("3")|];
+					var x = int.Parse("3");
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.RecommendTryParseOverParseId, DiagnosticSeverity.Error)
+			.WithSpan(7, 11, 7, 25);
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, [diagnostic]);
 	}
 
 	[Test]
@@ -81,7 +81,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -105,7 +106,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -134,7 +136,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -158,7 +161,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -187,7 +191,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -210,7 +215,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -233,7 +239,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -256,7 +263,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -279,7 +287,8 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 
 	[Test]
@@ -297,6 +306,7 @@ internal static class RecommendTryParseOverParseAnalyzerTests
 				}
 			}
 			""";
-		await Verify.VerifyAnalyzerAsync(code);
+
+		await TestAssistants.RunAnalyzerAsync<RecommendTryParseOverParseAnalyzer>(code, []);
 	}
 }
