@@ -22,4 +22,5 @@ internal static class DescriptorIdentifiers
 	internal const string DiscourageNonGenericCollectionUsageId = "TRANS18";
 	internal const string DetectNonSeparatedDigitsId = "TRANS19";
 	internal const string RecommendIsNullOrWhiteSpaceId = "TRANS20";
+	internal const string DetectGotoUsageId = "TRANS21";
 }
