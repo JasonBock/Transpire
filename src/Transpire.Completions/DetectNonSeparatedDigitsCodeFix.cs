@@ -47,7 +47,7 @@ public sealed class DetectNonSeparatedDigitsCodeFix
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 
-		var literalNode = (LiteralExpressionSyntax)root.FindNode(diagnostic.Location.SourceSpan);
+		var literalNode = (LiteralExpressionSyntax)root.FindNode(diagnostic.Location.SourceSpan, getInnermostNodeForTie: true);
 		var literalInformation = new LiteralNumberInformation(literalNode);
 
 		if (literalInformation.Prefix != string.Empty)
