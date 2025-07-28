@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added an analyzer to detect `goto` usage (issue [#34](https://github.com/JasonBock/Transpire/issues/34))
 
+### Fixed
+- Fixed a cast issue with `DetectNonSeparatedDigitsCodeFix` (PR [#35](https://github.com/JasonBock/Transpire/pull/35))
+
 ## [1.0.0] - 2025-07-09
 
 ### Added
