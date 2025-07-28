@@ -46,4 +46,35 @@ internal static class DetectNonSeparatedDigitsCodeFixTests
 
 		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
 	}
+
+	[Test]
+	public static async Task VerifyGetDetectNonSeparatedDigitsCodeFixWithinArgumentAsync()
+	{
+		var originalCode =
+			"""
+			public static class Test
+			{
+				public static void Caller()
+				{
+					Callee([|10000|]);
+				}
+			
+				public static void Callee(int value) { }
+			}
+			""";
+		var fixedCode =
+			"""
+			public static class Test
+			{
+				public static void Caller()
+				{
+					Callee([|10_000|]);
+				}
+			
+				public static void Callee(int value) { }
+			}
+			""";
+
+		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+	}
 }
