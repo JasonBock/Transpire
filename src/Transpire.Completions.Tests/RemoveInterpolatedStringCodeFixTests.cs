@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<RemoveInterpolatedStringAnalyzer, RemoveInterpolatedStringCodeFix, DefaultVerifier>;
 
 internal static class RemoveInterpolatedStringCodeFixTests
 {
@@ -49,7 +45,9 @@ internal static class RemoveInterpolatedStringCodeFixTests
 				}
 			}
 			""";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+
+		await TestAssistants.RunCodeFixAsync<RemoveInterpolatedStringAnalyzer, RemoveInterpolatedStringCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 
 	[Test]
@@ -83,6 +81,8 @@ internal static class RemoveInterpolatedStringCodeFixTests
 				}
 			}
 			""";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+
+		await TestAssistants.RunCodeFixAsync<RemoveInterpolatedStringAnalyzer, RemoveInterpolatedStringCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }

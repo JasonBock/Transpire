@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix, DefaultVerifier>;
 
 internal static class RecommendTryParseOverParseCodeFixTests
 {
@@ -50,6 +46,7 @@ internal static class RecommendTryParseOverParseCodeFixTests
 			}
 			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+		await TestAssistants.RunCodeFixAsync<RecommendTryParseOverParseAnalyzer, RecommendTryParseOverParseCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }

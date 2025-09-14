@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Test = CSharpCodeFixTest<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix, DefaultVerifier>;
 
 internal static class FindNewGuidViaConstructorCodeFixTests
 {
@@ -43,7 +39,9 @@ internal static class FindNewGuidViaConstructorCodeFixTests
 				public static Guid Make() => Guid.NewGuid();
 			}
 			""";
-		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 0);
+
+		await TestAssistants.RunCodeFixAsync<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 
 	[Test]
@@ -67,7 +65,9 @@ internal static class FindNewGuidViaConstructorCodeFixTests
 				public static Guid Make() => Guid.Empty;
 			}
 			""";
-		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 1);
+
+		await TestAssistants.RunCodeFixAsync<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix>(
+			originalCode, fixedCode, 1);
 	}
 
 	[Test]
@@ -91,18 +91,34 @@ internal static class FindNewGuidViaConstructorCodeFixTests
 				public static Guid Make() => default(Guid);
 			}
 			""";
-		await FindNewGuidViaConstructorCodeFixTests.VerifyAsync(originalCode, fixedCode, 2);
+
+		await TestAssistants.RunCodeFixAsync<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix>(
+			originalCode, fixedCode, 2);
 	}
 
-	private static async Task VerifyAsync(string originalCode, string fixedCode, int codeActionIndex)
+	[Test]
+	public static async Task VerifyGuidCreateVersion7CodeFixAsync()
 	{
-		var test = new Test
-		{
-			TestCode = originalCode,
-			FixedCode = fixedCode,
-			CodeActionIndex = codeActionIndex
-		};
+		var originalCode =
+			"""
+			using System;
 
-		await test.RunAsync();
+			internal static class Test
+			{
+				public static Guid Make() => [|new Guid()|];
+			}
+			""";
+		var fixedCode =
+			"""
+			using System;
+
+			internal static class Test
+			{
+				public static Guid Make() => Guid.CreateVersion7();
+			}
+			""";
+
+		await TestAssistants.RunCodeFixAsync<FindNewGuidViaConstructorAnalyzer, FindNewGuidViaConstructorCodeFix>(
+			originalCode, fixedCode, 3);
 	}
 }

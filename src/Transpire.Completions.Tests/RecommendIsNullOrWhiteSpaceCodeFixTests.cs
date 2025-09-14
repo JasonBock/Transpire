@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<RecommendIsNullOrWhiteSpaceAnalyzer, RecommendIsNullOrWhiteSpaceCodeFix, DefaultVerifier>;
 
 internal static class RecommendIsNullOrWhiteSpaceCodeFixTests
 {
@@ -46,7 +42,8 @@ internal static class RecommendIsNullOrWhiteSpaceCodeFixTests
 			}
 			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+		await TestAssistants.RunCodeFixAsync<RecommendIsNullOrWhiteSpaceAnalyzer, RecommendIsNullOrWhiteSpaceCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 
 	[Test]
@@ -79,6 +76,7 @@ internal static class RecommendIsNullOrWhiteSpaceCodeFixTests
 			}
 			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+		await TestAssistants.RunCodeFixAsync<RecommendIsNullOrWhiteSpaceAnalyzer, RecommendIsNullOrWhiteSpaceCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }

@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<DeregionizeAnalyzer, DeregionizeCodeFix, DefaultVerifier>;
 
 internal static class DeregionizerCodeFixTests
 {
@@ -50,6 +46,7 @@ internal static class DeregionizerCodeFixTests
 			}
 			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+		await TestAssistants.RunCodeFixAsync<DeregionizeAnalyzer, DeregionizeCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }

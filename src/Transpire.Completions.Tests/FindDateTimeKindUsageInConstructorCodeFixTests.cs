@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<FindDateTimeKindUsageInConstructorAnalyzer, FindDateTimeKindUsageInConstructorCodeFix, DefaultVerifier>;
 
 internal static class FindDateTimeKindUsageInConstructorCodeFixTests
 {
@@ -43,6 +39,8 @@ internal static class FindDateTimeKindUsageInConstructorCodeFixTests
 				public static DateTime Make() => new DateTime(100, DateTimeKind.Utc);
 			}
 			""";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+
+		await TestAssistants.RunCodeFixAsync<FindDateTimeKindUsageInConstructorAnalyzer, FindDateTimeKindUsageInConstructorCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }

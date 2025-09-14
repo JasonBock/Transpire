@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<FindDateTimeNowAnalyzer, FindDateTimeNowCodeFix, DefaultVerifier>;
 
 internal static class FindDateTimeNowCodeFixTests
 {
@@ -49,6 +45,8 @@ internal static class FindDateTimeNowCodeFixTests
 				}
 			}
 			""";
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+
+		await TestAssistants.RunCodeFixAsync<FindDateTimeNowAnalyzer, FindDateTimeNowCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }

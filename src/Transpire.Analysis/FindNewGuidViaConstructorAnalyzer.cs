@@ -13,11 +13,6 @@ namespace Transpire.Analysis;
 public sealed class FindNewGuidViaConstructorAnalyzer
 	: DiagnosticAnalyzer
 {
-	/// <summary>
-	/// Specifies the name of the <c>CreateVersion7</c> method name on <see cref="Guid"/>.
-	/// </summary>
-	public const string CreateVersion7MemberName = "CreateVersion7";
-
 	private static readonly DiagnosticDescriptor rule =
 		FindNewGuidViaConstructorDescriptor.Create();
 
@@ -46,8 +41,8 @@ public sealed class FindNewGuidViaConstructorAnalyzer
 
 				if (guidConstructorSymbol is not null)
 				{
-					var doesCreateVersion7Exist = guidSymbol.GetMembers(FindNewGuidViaConstructorAnalyzer.CreateVersion7MemberName)
-						.Any(_ => _.Name == FindNewGuidViaConstructorAnalyzer.CreateVersion7MemberName && 
+					var doesCreateVersion7Exist = guidSymbol.GetMembers(Constants.CreateVersion7MemberName)
+						.Any(_ => _.Name == Constants.CreateVersion7MemberName && 
 							_ is IMethodSymbol);
 
 					compilationContext.RegisterOperationAction(operationContext =>

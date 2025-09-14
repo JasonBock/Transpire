@@ -49,8 +49,7 @@ public sealed class FindNewGuidViaConstructorCodeFix
 	/// <returns>A <see cref="Task"/> instance.</returns>
 	public override async Task RegisterCodeFixesAsync(CodeFixContext context)
 	{
-		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken)
-			;
+		var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken);
 		var diagnostic = context.Diagnostics.First();
 		var creationNode = root!.FindNode(diagnostic.Location.SourceSpan);
 
@@ -106,7 +105,7 @@ public sealed class FindNewGuidViaConstructorCodeFix
 			SyntaxFactory.MemberAccessExpression(
 				SyntaxKind.SimpleMemberAccessExpression,
 				SyntaxFactory.IdentifierName(nameof(Guid)),
-				SyntaxFactory.IdentifierName(Constants.DoesCreateVersion7ExistKey)))
+				SyntaxFactory.IdentifierName(Constants.CreateVersion7MemberName)))
 			.NormalizeWhitespace().WithAdditionalAnnotations(Formatter.Annotation);
 		FindNewGuidViaConstructorCodeFix.AddCodeFix(context, root, diagnostic,
 			creationNode, newInvocationNode, FindNewGuidViaConstructorCodeFix.AddGuidCreateVersion7Description);

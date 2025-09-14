@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Transpire.Analysis;
 
 namespace Transpire.Completions.Tests;
-
-using Verify = CSharpCodeFixVerifier<DetectNonSeparatedDigitsAnalyzer, DetectNonSeparatedDigitsCodeFix, DefaultVerifier>;
 
 internal static class DetectNonSeparatedDigitsCodeFixTests
 {
@@ -44,7 +40,8 @@ internal static class DetectNonSeparatedDigitsCodeFixTests
 			}
 			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+		await TestAssistants.RunCodeFixAsync<DetectNonSeparatedDigitsAnalyzer, DetectNonSeparatedDigitsCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 
 	[Test]
@@ -75,6 +72,7 @@ internal static class DetectNonSeparatedDigitsCodeFixTests
 			}
 			""";
 
-		await Verify.VerifyCodeFixAsync(originalCode, fixedCode);
+		await TestAssistants.RunCodeFixAsync<DetectNonSeparatedDigitsAnalyzer, DetectNonSeparatedDigitsCodeFix>(
+			originalCode, fixedCode, 0);
 	}
 }
