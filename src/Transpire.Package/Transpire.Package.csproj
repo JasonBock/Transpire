@@ -29,9 +29,9 @@
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
 		<None Include="..\..\README.md" Pack="true" PackagePath="" />
 		<None Include="..\Images\Icon.png" Pack="true" PackagePath="" Visible="false" />
-		<None Include="../Transpire.Analysis/bin/$(Configuration)/netstandard2.0/Transpire.Analysis.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-		<None Include="../Transpire.Completions/bin/$(Configuration)/netstandard2.0/Transpire.Completions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-		<None Include="bin/$(Configuration)/netstandard2.0/_._" Pack="true" PackagePath="lib/netstandard2.0/_._" />
+		<None Include="../artifacts/bin/Transpire.Analysis/$(Configuration)/Transpire.Analysis.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="../artifacts/bin/Transpire.Completions/$(Configuration)/Transpire.Completions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="../artifacts/bin/Transpire.Package/$(Configuration)/_._" Pack="true" PackagePath="lib/netstandard2.0/_._" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="../Transpire.Analysis/Transpire.Analysis.csproj" ReferenceOutputAssembly="false" />
