@@ -16,7 +16,7 @@ internal sealed class LiteralNumberInformation
 				'U' or 'u' or 'L' or 'l' => true,
 
 				// 'F', 'D', and 'M' (and lowercase variants) are valid for floating-point literals
-				'D' or 'd' or 'F' or 'f' or 'M' or 'm' => isHexLiteral == false,
+				'D' or 'd' or 'F' or 'f' or 'M' or 'm' when !isHexLiteral => true,
 
 				// All other characters are not known suffixes
 				_ => false,
