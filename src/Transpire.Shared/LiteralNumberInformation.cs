@@ -10,9 +10,17 @@ internal sealed class LiteralNumberInformation
 	{
 		static string GetTypeSuffix(string literalText, bool isHexLiteral)
 		{
-			static bool IsTypeSuffixCharacter(char typeSuffixCandidate, bool isHexLiteral) =>
-				(isHexLiteral && !Uri.IsHexDigit(typeSuffixCandidate)) ||
-				!char.IsDigit(typeSuffixCandidate);
+			static bool IsTypeSuffixCharacter(char typeSuffixCandidate, bool isHexLiteral) => typeSuffixCandidate switch
+			{
+				// 'U' and 'L' (and lowercase variants) are valid for integer literals (decimal, hex, binary)
+				'U' or 'u' or 'L' or 'l' => true,
+
+				// 'F', 'D', and 'M' (and lowercase variants) are valid for floating-point literals
+				'D' or 'd' or 'F' or 'f' or 'M' or 'm' when !isHexLiteral => true,
+
+				// All other characters are not known suffixes
+				_ => false,
+			};
 
 			var typeSuffix = literalText[literalText.Length - 1];
 
