@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed the `CreateVersion7()` code fix option for `Guid` (issue [#38](https://github.com/JasonBock/Transpire/issues/38))
+- Fixed hexadecimal literal `0f` issue (issue [#40](https://github.com/JasonBock/Transpire/issues/40))
 
 ## [1.1.0] - 2025-08-01
 
