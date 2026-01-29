@@ -10,6 +10,7 @@
 		<Nullable>enable</Nullable>
 		<TargetFramework>net9.0</TargetFramework>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<UseArtifactsOutput>true</UseArtifactsOutput>
 		<Version>1.2.0</Version>
 	</PropertyGroup>
 </Project>
