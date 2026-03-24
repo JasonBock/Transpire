@@ -15,7 +15,6 @@
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/jasonbock/transpire</RepositoryUrl>
-		<TargetFramework>netstandard2.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
@@ -31,19 +30,18 @@
 		<None Include="..\Images\Icon.png" Pack="true" PackagePath="" Visible="false" />
 		<None Include="../artifacts/bin/Transpire.Analysis/$(Configuration)/Transpire.Analysis.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 		<None Include="../artifacts/bin/Transpire.Completions/$(Configuration)/Transpire.Completions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-		<None Include="../artifacts/bin/Transpire.Package/$(Configuration)/_._" Pack="true" PackagePath="lib/netstandard2.0/_._" />
+		<TfmSpecificPackageFile
+			Include="../artifacts/bin/Transpire/$(Configuration)/Transpire.dll"
+            Pack="true"
+            PackagePath="lib/$(TargetFramework)" />
+		<TfmSpecificPackageFile
+			Include="../artifacts/bin/Transpire/$(Configuration)/Transpire.xml"
+            Pack="true"
+            PackagePath="lib/$(TargetFramework)" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="../Transpire.Analysis/Transpire.Analysis.csproj" ReferenceOutputAssembly="false" />
 		<ProjectReference Include="../Transpire.Completions/Transpire.Completions.csproj" ReferenceOutputAssembly="false" />
-	</ItemGroup>
-	<ItemGroup>
-		<!--
-		If you're wondering why there's a blank file being copied, it's to solve this issue:
-		https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5128
-		-->
-		<None Update="_._">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		<ProjectReference Include="../Transpire/Transpire.csproj" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 </Project>
