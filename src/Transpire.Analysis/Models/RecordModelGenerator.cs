@@ -4,22 +4,22 @@ namespace Transpire.Analysis.Models;
 
 internal sealed class RecordModelGenerator
 {
-	internal static RecordModelGenerator Create(ITypeSymbol recordSymbol, HashSet<string> propertyNames)
+	internal static RecordModelGenerator Create(ITypeSymbol recordSymbol, Compilation compilation)
 	{
 		var diagnostics = new List<Diagnostic>();
 
 		// TODO: Validation and diagnostic creation goes here...
 		// such as:
-		// * A property name doesn't match
-		// * The target isn't a record
-		// * The target isn't partial, although I may not really want to check for that.
+		//	* If `[Equality]` exists on a property that's defined on a type that isn't a record, error
+		//	* If `[EqualityMarkup]` exists on a non-record, error
+		//	* If `[EqualityMarkup]` exists on a record that doesn't have any properties marked with `[Equality]`, error
 
 		var canGenerate = !diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error);
 
 		return new(
 			!canGenerate ? 
 				null :
-				new RecordModel(recordSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat), [.. propertyNames]),
+				new RecordModel(recordSymbol, compilation),
 			[.. diagnostics]);
 	}
 

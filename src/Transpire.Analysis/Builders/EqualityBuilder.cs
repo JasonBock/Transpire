@@ -7,9 +7,9 @@ using Transpire.Analysis.Models;
 
 namespace Transpire.Analysis.Builders;
 
-internal sealed class ExcludePropertiesBuilder
+internal sealed class EqualityBuilder
 {
-	internal ExcludePropertiesBuilder(RecordModel model)
+	internal EqualityBuilder(RecordModel model)
 	{
 		this.Model = model;
 
@@ -61,7 +61,7 @@ internal sealed class ExcludePropertiesBuilder
 
 		indentWriter.WriteLines(
 			$$"""
-			{{accessibility}} {{derivation}}partial {{typeKind}} record {{this.Model.GetClassName()}}
+			{{accessibility}} {{derivation}}partial {{typeKind}} record {{this.Model.ClassName}}
 			{
 			""");
 
@@ -70,7 +70,7 @@ internal sealed class ExcludePropertiesBuilder
 		indentWriter.WriteLine("}");
 
 		this.Text = SourceText.From(writer.ToString(), Encoding.UTF8);
-		this.FileName = $"{this.Model.BusinessObject.FullyQualifiedName.GenerateFileName()}_GeneratorSerialization.g.cs";
+		this.FileName = $"{this.Model.FullyQualifiedName.GenerateFileName()}_EqualityMarkup.g.cs";
 	}
 
 	internal string FileName { get; }

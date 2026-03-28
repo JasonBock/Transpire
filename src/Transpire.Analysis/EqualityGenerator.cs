@@ -1,20 +1,19 @@
 ﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
-using System.Text;
+using Transpire.Analysis.Builders;
 using Transpire.Analysis.Models;
 
 namespace Transpire.Analysis;
 
 [Generator]
-internal sealed class ExcludePropertiesOnRecordsGenerator
+internal sealed class EqualityGenerator
 	: IIncrementalGenerator
 {
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
 		var records = context.SyntaxProvider
 			.ForAttributeWithMetadataName(
-				"Transpire.ExcludeAttribute",
+				"Transpire.EqualityMarkupAttribute",
 				(_, _) => true,
 				(context, token) =>
 				{
@@ -22,10 +21,10 @@ internal sealed class ExcludePropertiesOnRecordsGenerator
 
 					foreach (var attribute in context.Attributes)
 					{
-						var propertyNames = new HashSet<string>((string[])attribute.ConstructorArguments[1].Value!);
 						var recordSymbol = (ITypeSymbol)context.TargetSymbol;
 
-						var modelInformation = RecordModelGenerator.Create(recordSymbol, propertyNames);
+						var modelInformation = RecordModelGenerator.Create(
+							recordSymbol, context.SemanticModel.Compilation);
 
 						if (modelInformation.Model is not null)
 						{
@@ -40,29 +39,15 @@ internal sealed class ExcludePropertiesOnRecordsGenerator
 		var collectedRecords = records.Collect();
 
 		context.RegisterSourceOutput(collectedRecords,
-			(context, source) => ExcludePropertiesOnRecordsGenerator.CreateOutput(source, context));
+			(context, source) => EqualityGenerator.CreateOutput(source, context));
 	}
 
 	private static void CreateOutput(ImmutableArray<RecordModel> source, SourceProductionContext context)
 	{
 		foreach (var record in source)
 		{
-			var code =
-				$$"""
-				using System;
-
-				public sealed partial record {{record.RecordFullyQualifiedName}}
-					: IEquatable<{{record.RecordFullyQualifiedName}}>
-				{
-					// TODO: Lots of stuff.
-				}
-				""";
-
-			var text = SourceText.From(
-				string.Join(Environment.NewLine, code),
-				Encoding.UTF8);
-
-			context.AddSource($"{record.RecordFullyQualifiedName}.g.cs", text);
+			var builder = new EqualityBuilder(record);
+			context.AddSource(builder.FileName, builder.Text);
 		}
 	}
 }
