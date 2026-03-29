@@ -54,8 +54,7 @@ internal sealed class EqualityBuilder
 				model.IsAbstract ?
 					"abstract " :
 					string.Empty;
-		// TODO: I don't think we want to do this unless it was
-		// explicitly declared before on the record.
+
 		var typeKind =
 			model.TypeKind == TypeKind.Class ?
 				"class" :
@@ -68,7 +67,6 @@ internal sealed class EqualityBuilder
 			{
 			""");
 
-		// TODO: Equals() and GetHashCode() generation.
 		indentWriter.Indent++;
 		this.BuildEquals(indentWriter);
 		indentWriter.WriteLine();
