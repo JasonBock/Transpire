@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Transpire.Analysis;
+using Transpire.Analysis.Analyzers;
 
 namespace Transpire.Completions.Tests;
 

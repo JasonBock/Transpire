@@ -9,7 +9,7 @@
 /// considered for equality and, if so, its relative order in the comparison sequence. This is useful when customizing
 /// equality semantics beyond the default behavior.
 /// </remarks>
-[AttributeUsage(AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public sealed class EqualityAttribute
   : Attribute
 {
