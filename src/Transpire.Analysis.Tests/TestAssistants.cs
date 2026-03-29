@@ -34,6 +34,47 @@ internal static class TestAssistants
 		await test.RunAsync();
 	}
 
+	internal static async Task RunGeneratorAsync<TGenerator>(string code,
+		IEnumerable<(string, string)> generatedSources,
+		IEnumerable<DiagnosticResult> expectedDiagnostics,
+		OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary,
+		IEnumerable<MetadataReference>? additionalReferences = null,
+		ReportDiagnostic generalDiagnosticOption = ReportDiagnostic.Default,
+		List<string>? disabledDiagnostics = null)
+		where TGenerator : IIncrementalGenerator, new()
+	{
+		var test = new IncrementalGeneratorTest<TGenerator>(generalDiagnosticOption)
+		{
+			ReferenceAssemblies = TestAssistants.net10ReferenceAssemblies.Value,
+			TestState =
+			{
+				Sources = { code },
+				OutputKind = outputKind,
+			},
+		};
+
+		if (disabledDiagnostics is not null)
+		{
+			test.DisabledDiagnostics.AddRange(disabledDiagnostics);
+		}
+
+		foreach (var (generatedFileName, generatedCode) in generatedSources)
+		{
+			test.TestState.GeneratedSources.Add((typeof(EqualityGenerator), generatedFileName, generatedCode));
+		}
+
+		test.TestState.AdditionalReferences.Add(typeof(TGenerator).Assembly);
+		test.TestState.AdditionalReferences.Add(typeof(EqualityMarkupAttribute).Assembly);
+
+		if (additionalReferences is not null)
+		{
+			test.TestState.AdditionalReferences.AddRange(additionalReferences);
+		}
+
+		test.TestState.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+		await test.RunAsync();
+	}
+
 	private static readonly Lazy<ReferenceAssemblies> net10ReferenceAssemblies = new(() =>
 	{
 		// Always look here for the latest version of a particular runtime:

@@ -8,6 +8,7 @@ internal sealed record RecordModel
 {
 	internal RecordModel(ITypeSymbol recordSymbol, Compilation compilation)
 	{
+		this.TypeKind = recordSymbol.TypeKind;
 		this.Name = recordSymbol.Name;
 		this.Namespace = recordSymbol.GetNamespace();
 		this.FullyQualifiedName = recordSymbol.GetFullyQualifiedName(compilation);
@@ -15,31 +16,52 @@ internal sealed record RecordModel
 
 		this.DeclaredAccessibility = recordSymbol.DeclaredAccessibility;
 
-		// TODO: I want all the properties that are included -
-		// that is, properties that don't have [Equality] or they do
-		// and have RecordUsage.Include.
-		// For each of those properties,
-		// first, get the list of those that have [Equality] and a given value
-		// for Order, and sort (ascending).
-		// Append to this result the rest of the included properties (order doesn't matter).
-		// This result needs to be included into a "Properties" property that contains
-		// the name of the property, and its' FQN.
+		var properties = new List<(PropertyModel, uint)>();
 
-		var properties = new List<PropertyModel>();
-
-		foreach (var property in recordSymbol.GetMembers().OfType<IPropertySymbol>())
+		foreach (var property in recordSymbol.GetMembers().OfType<IPropertySymbol>()
+			.Where(property => property.Name != "EqualityContract"))
 		{
 			var equalityAttribute = property.GetAttributes().SingleOrDefault(
 				attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, compilation.GetTypeByMetadataName("Transpire.EqualityAttribute")));
 
-			// TODO: How do I get the values from the attribute?
 			if (equalityAttribute is null)
 			{
-				properties.Add(new(property.Name, property.Type.GetFullyQualifiedName(compilation)));
+				properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), uint.MaxValue));
+			}
+			else
+			{
+				// 0 == RecordUsage.Include
+				if (equalityAttribute.ConstructorArguments.Length == 2)
+				{
+					var recordUsage = (int)equalityAttribute.ConstructorArguments[0].Value!;
+					var order = (uint)equalityAttribute.ConstructorArguments[1].Value!;
+
+					if (recordUsage == 0)
+					{
+						properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), order));
+					}
+				}
+				else
+				{
+					if (equalityAttribute.ConstructorArguments[0].Type?.SpecialType == SpecialType.System_UInt32)
+					{
+						var order = (uint)equalityAttribute.ConstructorArguments[0].Value!;
+						properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), order));
+					}
+					else
+					{
+						var recordUsage = (int)equalityAttribute.ConstructorArguments[0].Value!;
+
+						if (recordUsage == 0)
+						{
+							properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), uint.MaxValue));
+						}
+					}
+				}
 			}
 		}
 
-		this.Properties = [.. properties];
+		this.Properties = [.. properties.OrderBy(_ => _.Item2).Select(_ => _.Item1)];
 	}
 
 	private static string GetClassName(ITypeSymbol recordSymbol)

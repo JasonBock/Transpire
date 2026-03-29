@@ -63,7 +63,7 @@ internal sealed class EqualityBuilder
 
 		indentWriter.WriteLines(
 			$$"""
-			{{accessibility}} {{derivation}}partial {{typeKind}} record {{this.Model.ClassName}}
+			{{accessibility}} {{derivation}}partial record {{typeKind}} {{this.Model.ClassName}}
 				: global::System.IEquatable<{{this.Model.ClassName}}>
 			{
 			""");
@@ -83,11 +83,14 @@ internal sealed class EqualityBuilder
 
 	private void BuildEquals(IndentedTextWriter indentWriter)
 	{
+		var otherNullability = this.Model.TypeKind == TypeKind.Class ? "?" : string.Empty;
+		var allowOverriding = this.Model.IsSealed ? string.Empty : "virtual ";
+
 		indentWriter.WriteLines(
 			$$"""
-			public bool Equals({{this.Model.ClassName}} other) =>
+			public {{allowOverriding}}bool Equals({{this.Model.ClassName}}{{otherNullability}} other) =>
 				(object)this == other ||
-					((object)other != null &&
+					(other is not null &&
 					this.EqualityContract == other.EqualityContract &&	
 			""");
 		indentWriter.Indent += 2;
@@ -95,9 +98,9 @@ internal sealed class EqualityBuilder
 		for (var i = 0; i < this.Model.Properties.Length; i++)
 		{
 			var property = this.Model.Properties[i];
-			var trailingAnd = i == this.Model.Properties.Length - 1 ? string.Empty : " &&";
+			var trailingCode = i == this.Model.Properties.Length - 1 ? ");" : " &&";
 			indentWriter.WriteLine(
-				$"global::System.Collections.Generic.EqualityComparer<{property.FullyQualifiedTypeName}>.Default.Equals(this.{property.Name}, other.{property.Name}){trailingAnd}");
+				$"global::System.Collections.Generic.EqualityComparer<{property.FullyQualifiedTypeName}>.Default.Equals(this.{property.Name}, other.{property.Name}){trailingCode}");
 		}
 
 		indentWriter.Indent -= 2;
@@ -109,7 +112,7 @@ internal sealed class EqualityBuilder
 			"""
 			public override int GetHashCode()
 			{
-			    var hash = new global::System.HashCode();			
+				var hash = new global::System.HashCode();			
 			""");
 		indentWriter.Indent++;
 
@@ -122,7 +125,7 @@ internal sealed class EqualityBuilder
 		indentWriter.Indent--;
 		indentWriter.WriteLines(
 			"""
-			    return hash.ToHashCode();
+				return hash.ToHashCode();
 			}
 			""");
 	}
