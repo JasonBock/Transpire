@@ -75,13 +75,17 @@ Success!
   * When record is `struct`, should change `Equals()` to not be `virtual`, `struct` added to definition, and `Equals` should not have `?` for the parameter
   * When record is `sealed`, should change `Equals()` to not be `virtual`, `sealed` added to definition
   * When `[EqualityMarkup]` doesn't exist, nothing should be done
+  * Excluding property
+  * Multiple sorting and excluding
   * Generic records
   * Nullable properties
   * Putting record in namespace
   * Accessibility - e.g. `internal`
   * Abstract record
+  * Integration tests
 * Diagnostics:
-  * If `[Equality]` exists on a property that's defined on a type that isn't a record, error
+  * If `[Excluded]` or `[Ordered]` exist on a property that's defined on a type that isn't a record, error
+  * If both `[Excluded]` and `[Ordered]` exist on a property, error
   * If `[EqualityMarkup]` exists on a non-record, error
-  * If `[EqualityMarkup]` exists on a record that doesn't have any properties marked with `[Equality]`, error
+  * If `[EqualityMarkup]` exists on a record that doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
   * If every property ends up being excluded, error

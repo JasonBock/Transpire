@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Transpire.Analysis.Extensions;
 using Transpire.Analysis.Generators.Builders;
+using Transpire.Analysis.Models;
 
-namespace Transpire.Analysis.Models;
+namespace Transpire.Analysis.Generators.Models;
 
 internal sealed record RecordModel
 {
@@ -14,6 +15,8 @@ internal sealed record RecordModel
 		this.FullyQualifiedName = recordSymbol.GetFullyQualifiedName(compilation);
 		this.ClassName = RecordModel.GetClassName(recordSymbol);
 
+		this.IsSealed = recordSymbol.IsSealed;
+		this.IsAbstract = recordSymbol.IsAbstract;
 		this.DeclaredAccessibility = recordSymbol.DeclaredAccessibility;
 
 		var properties = new List<(PropertyModel, uint)>();
@@ -21,43 +24,22 @@ internal sealed record RecordModel
 		foreach (var property in recordSymbol.GetMembers().OfType<IPropertySymbol>()
 			.Where(property => property.Name != "EqualityContract"))
 		{
-			var equalityAttribute = property.GetAttributes().SingleOrDefault(
-				attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, compilation.GetTypeByMetadataName("Transpire.EqualityAttribute")));
+			var excludedAttribute = property.GetAttributes().SingleOrDefault(
+				attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, compilation.GetTypeByMetadataName("Transpire.ExcludedAttribute")));
 
-			if (equalityAttribute is null)
+			if (excludedAttribute is null)
 			{
-				properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), uint.MaxValue));
-			}
-			else
-			{
-				// 0 == RecordUsage.Include
-				if (equalityAttribute.ConstructorArguments.Length == 2)
-				{
-					var recordUsage = (int)equalityAttribute.ConstructorArguments[0].Value!;
-					var order = (uint)equalityAttribute.ConstructorArguments[1].Value!;
+				var order = uint.MaxValue;
 
-					if (recordUsage == 0)
-					{
-						properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), order));
-					}
-				}
-				else
-				{
-					if (equalityAttribute.ConstructorArguments[0].Type?.SpecialType == SpecialType.System_UInt32)
-					{
-						var order = (uint)equalityAttribute.ConstructorArguments[0].Value!;
-						properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), order));
-					}
-					else
-					{
-						var recordUsage = (int)equalityAttribute.ConstructorArguments[0].Value!;
+				var orderedAttribute = property.GetAttributes().SingleOrDefault(
+					attribute => SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, compilation.GetTypeByMetadataName("Transpire.OrderedAttribute")));
 
-						if (recordUsage == 0)
-						{
-							properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), uint.MaxValue));
-						}
-					}
+				if (orderedAttribute is not null)
+				{
+					order = (uint)orderedAttribute.ConstructorArguments[0].Value!;
 				}
+
+				properties.Add((new(property.Name, property.Type.GetFullyQualifiedName(compilation)), order));
 			}
 		}
 

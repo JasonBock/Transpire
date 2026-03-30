@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using Transpire.Analysis.Generators.Builders;
+using Transpire.Analysis.Generators.Models;
 using Transpire.Analysis.Models;
 
 namespace Transpire.Analysis;

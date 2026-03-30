@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Text;
 using System.CodeDom.Compiler;
 using System.Text;
 using Transpire.Analysis.Extensions;
-using Transpire.Analysis.Models;
+using Transpire.Analysis.Generators.Models;
 
 namespace Transpire.Analysis.Generators.Builders;
 
@@ -49,7 +49,7 @@ internal sealed class EqualityBuilder
 		};
 
 		var derivation =
-			model.IsSealed ?
+			model.IsSealed && model.TypeKind != TypeKind.Struct ?
 				"sealed " :
 				model.IsAbstract ?
 					"abstract " :
@@ -81,27 +81,45 @@ internal sealed class EqualityBuilder
 
 	private void BuildEquals(IndentedTextWriter indentWriter)
 	{
-		var otherNullability = this.Model.TypeKind == TypeKind.Class ? "?" : string.Empty;
-		var allowOverriding = this.Model.IsSealed ? string.Empty : "virtual ";
+		var indentSize = 0;
 
-		indentWriter.WriteLines(
-			$$"""
-			public {{allowOverriding}}bool Equals({{this.Model.ClassName}}{{otherNullability}} other) =>
-				(object)this == other ||
-					(other is not null &&
-					this.EqualityContract == other.EqualityContract &&	
-			""");
-		indentWriter.Indent += 2;
+		if (this.Model.TypeKind == TypeKind.Class)
+		{
+			var allowOverriding = this.Model.IsSealed ? string.Empty : "virtual ";
+			indentWriter.WriteLines(
+				$$"""
+				public {{allowOverriding}}bool Equals({{this.Model.ClassName}}? other) =>
+					(object)this == other ||
+						(other is not null &&
+						this.EqualityContract == other.EqualityContract &&	
+				""");
+			indentSize = 2;
+		}
+		else
+		{
+			indentWriter.WriteLines(
+				$$"""
+				public bool Equals({{this.Model.ClassName}} other) =>
+				""");
+			indentSize = 1;
+		}
+
+		indentWriter.Indent += indentSize;
 
 		for (var i = 0; i < this.Model.Properties.Length; i++)
 		{
 			var property = this.Model.Properties[i];
-			var trailingCode = i == this.Model.Properties.Length - 1 ? ");" : " &&";
+			var trailingCode = 
+				i == this.Model.Properties.Length - 1 ? 
+					this.Model.TypeKind == TypeKind.Struct ?
+						";" :
+						");" : 
+					" &&";
 			indentWriter.WriteLine(
 				$"global::System.Collections.Generic.EqualityComparer<{property.FullyQualifiedTypeName}>.Default.Equals(this.{property.Name}, other.{property.Name}){trailingCode}");
 		}
 
-		indentWriter.Indent -= 2;
+		indentWriter.Indent -= indentSize;
 	}
 
 	private void BuildGetHashCode(IndentedTextWriter indentWriter)

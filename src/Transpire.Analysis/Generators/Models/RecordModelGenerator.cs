@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Transpire.Analysis.Generators.Models;
 
 namespace Transpire.Analysis.Models;
 
