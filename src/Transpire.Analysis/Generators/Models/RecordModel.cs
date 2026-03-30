@@ -13,11 +13,22 @@ internal sealed record RecordModel
 		this.Name = recordSymbol.Name;
 		this.Namespace = recordSymbol.GetNamespace();
 		this.FullyQualifiedName = recordSymbol.GetFullyQualifiedName(compilation);
-		this.ClassName = RecordModel.GetClassName(recordSymbol);
-
+		this.ClassName = recordSymbol.GetClassName();
 		this.IsSealed = recordSymbol.IsSealed;
 		this.IsAbstract = recordSymbol.IsAbstract;
 		this.DeclaredAccessibility = recordSymbol.DeclaredAccessibility;
+
+		var nestedTypes = new List<NestedTypeModel>();
+
+		var containingType = recordSymbol.ContainingType;
+
+		while (containingType is not null)
+		{
+			nestedTypes.Insert(0, new(containingType));
+			containingType = containingType.ContainingType;
+		}
+
+		this.NestedTypes = [.. nestedTypes];
 
 		var properties = new List<(PropertyModel, uint)>();
 
@@ -46,22 +57,6 @@ internal sealed record RecordModel
 		this.Properties = [.. properties.OrderBy(_ => _.Item2).Select(_ => _.Item1)];
 	}
 
-	private static string GetClassName(ITypeSymbol recordSymbol)
-	{
-		if (recordSymbol is INamedTypeSymbol namedRecordSymbol)
-		{
-			if (namedRecordSymbol.TypeArguments.IsDefaultOrEmpty)
-			{
-				return namedRecordSymbol.Name;
-			}
-
-			var typeArgs = string.Join(", ", namedRecordSymbol.TypeArguments.Select(_ => GetClassName(_)));
-			return $"{namedRecordSymbol.Name}<{typeArgs}>";
-		}
-
-		return recordSymbol.Name;
-	}
-
 	internal string ClassName { get; }
 	internal string FullyQualifiedName { get; }
 	internal bool IsAbstract { get; }
@@ -69,6 +64,7 @@ internal sealed record RecordModel
 	internal Accessibility DeclaredAccessibility { get; }
 	internal string Name { get; }
 	internal string Namespace { get; }
+	internal EquatableArray<NestedTypeModel> NestedTypes { get; }
 	internal EquatableArray<PropertyModel> Properties { get; }
 	internal TypeKind TypeKind { get; }
 }

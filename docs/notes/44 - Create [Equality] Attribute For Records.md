@@ -70,22 +70,36 @@ Fixes
 
 Success!
 
+    // /0/Test0.cs(11,25): error CS9034: Required member 'Customer.Name' must be settable.
+    DiagnosticResult.CompilerError("CS9034").WithSpan(11, 25, 11, 29).WithArguments("Customer.Name"),
+
+    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs(10,96): error CS1002: ; expected
+    DiagnosticResult.CompilerError("CS1002").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs", 10, 96, 10, 97),
+    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs(10,96): error CS1519: Invalid token ')' in a member declaration
+    DiagnosticResult.CompilerError("CS1519").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs", 10, 96, 10, 97).WithArguments(")"),
+
+
+
 # TODO
 * Tests cases:
-  * When record is `struct`, should change `Equals()` to not be `virtual`, `struct` added to definition, and `Equals` should not have `?` for the parameter
-  * When record is `sealed`, should change `Equals()` to not be `virtual`, `sealed` added to definition
-  * When `[EqualityMarkup]` doesn't exist, nothing should be done
-  * Excluding property
-  * Multiple sorting and excluding
-  * Generic records
-  * Nullable properties
-  * Putting record in namespace
-  * Accessibility - e.g. `internal`
-  * Abstract record
+  * DONE - When record is `struct`, should change `Equals()` to not be `virtual`, `struct` added to definition, and `Equals` should not have `?` for the parameter
+  * DONE - When `[EqualityMarkup]` doesn't exist, nothing should be done
+  * DONE - Excluding and ordered declared property
+  * DONE - Multiple sorting and excluding
+  * DONE - Generic records
+    * DONE - With constraints
+  * DONE - Nullable properties
+  * DONE - Putting record in namespace
+  * DONE - Accessibility - e.g. `internal`
+  * DONE - Sealed record
+  * DONE - Abstract record
+  * DONE - Nested record
   * Integration tests
 * Diagnostics:
   * If `[Excluded]` or `[Ordered]` exist on a property that's defined on a type that isn't a record, error
   * If both `[Excluded]` and `[Ordered]` exist on a property, error
   * If `[EqualityMarkup]` exists on a non-record, error
+  * If `[EqualityMarkup]` exists on a record that isn't partial, error
   * If `[EqualityMarkup]` exists on a record that doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
   * If every property ends up being excluded, error
+  * If there's only one property, and it has `[Ordered]`, error

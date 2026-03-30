@@ -4,6 +4,22 @@ namespace Transpire.Analysis.Extensions;
 
 internal static class ITypeSymbolExtensions
 {
+	internal static string GetClassName(this ITypeSymbol self)
+	{
+		if (self is INamedTypeSymbol namedRecordSymbol)
+		{
+			if (namedRecordSymbol.TypeArguments.IsDefaultOrEmpty)
+			{
+				return namedRecordSymbol.Name;
+			}
+
+			var typeArgs = string.Join(", ", namedRecordSymbol.TypeArguments.Select(_ => GetClassName(_)));
+			return $"{namedRecordSymbol.Name}<{typeArgs}>";
+		}
+
+		return self.Name;
+	}
+
 	internal static string GetFullyQualifiedName(this ITypeSymbol self, Compilation compilation)
 	{
 		const string GlobalPrefix = "global::";

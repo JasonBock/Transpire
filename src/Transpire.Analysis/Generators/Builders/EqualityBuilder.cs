@@ -37,6 +37,39 @@ internal sealed class EqualityBuilder
 				""");
 		}
 
+		foreach (var nestedType in this.Model.NestedTypes)
+		{
+			var nestedAccessibility = nestedType.DeclaredAccessibility switch
+			{
+				Accessibility.Public => "public",
+				Accessibility.Internal => "internal",
+				Accessibility.Protected => "protected",
+				Accessibility.ProtectedOrInternal => "protected internal",
+				Accessibility.Private => "private",
+				Accessibility.ProtectedAndInternal => "private protected",
+				_ => string.Empty
+			};
+
+			var nestedDerivation =
+				nestedType.IsSealed && nestedType.TypeKind != TypeKind.Struct ?
+					"sealed " :
+					nestedType.IsAbstract ?
+						"abstract " :
+						string.Empty;
+
+			var nestedTypeKind =
+				nestedType.TypeKind == TypeKind.Class ?
+					"class" :
+					"struct";
+
+			indentWriter.WriteLines(
+				$$"""
+				{{nestedAccessibility}} {{nestedDerivation}}partial {{nestedTypeKind}} {{nestedType.ClassName}}
+				{
+				""");
+			indentWriter.Indent++;
+		}
+
 		var accessibility = model.DeclaredAccessibility switch
 		{
 			Accessibility.Public => "public",
@@ -72,8 +105,13 @@ internal sealed class EqualityBuilder
 		indentWriter.WriteLine();
 		this.BuildGetHashCode(indentWriter);
 		indentWriter.Indent--;
-
 		indentWriter.WriteLine("}");
+
+		foreach (var nestedType in this.Model.NestedTypes)
+		{
+			indentWriter.Indent--;
+			indentWriter.WriteLine("}");
+		}
 
 		this.Text = SourceText.From(writer.ToString(), Encoding.UTF8);
 		this.FileName = $"{this.Model.FullyQualifiedName.GenerateFileName()}_EqualityMarkup.g.cs";
@@ -109,11 +147,11 @@ internal sealed class EqualityBuilder
 		for (var i = 0; i < this.Model.Properties.Length; i++)
 		{
 			var property = this.Model.Properties[i];
-			var trailingCode = 
-				i == this.Model.Properties.Length - 1 ? 
+			var trailingCode =
+				i == this.Model.Properties.Length - 1 ?
 					this.Model.TypeKind == TypeKind.Struct ?
 						";" :
-						");" : 
+						");" :
 					" &&";
 			indentWriter.WriteLine(
 				$"global::System.Collections.Generic.EqualityComparer<{property.FullyQualifiedTypeName}>.Default.Equals(this.{property.Name}, other.{property.Name}){trailingCode}");
