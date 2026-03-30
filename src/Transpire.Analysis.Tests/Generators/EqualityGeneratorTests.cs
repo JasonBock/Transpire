@@ -625,7 +625,7 @@ internal static class EqualityGeneratorTests
 			{
 				[EqualityMarkup]
 				public partial record Customer(
-					Guid Id, [property: Excluded] string Name, uint Age)
+					Guid Id, [property: Excluded] string Name, uint Age);
 			}
 			""";
 
