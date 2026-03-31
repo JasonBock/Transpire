@@ -9,6 +9,6 @@
 /// identification of types with custom equality semantics.
 /// </remarks>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public sealed class EqualityMarkupAttribute
+public sealed class EqualityAttribute
   : Attribute
 { }

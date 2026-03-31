@@ -114,7 +114,7 @@ internal sealed class EqualityBuilder
 		}
 
 		this.Text = SourceText.From(writer.ToString(), Encoding.UTF8);
-		this.FileName = $"{this.Model.FullyQualifiedName.GenerateFileName()}_EqualityMarkup.g.cs";
+		this.FileName = $"{this.Model.FullyQualifiedName.GenerateFileName()}_Equality.g.cs";
 	}
 
 	private void BuildEquals(IndentedTextWriter indentWriter)

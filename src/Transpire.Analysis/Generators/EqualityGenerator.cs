@@ -14,7 +14,7 @@ internal sealed class EqualityGenerator
 	{
 		var records = context.SyntaxProvider
 			.ForAttributeWithMetadataName(
-				"Transpire.EqualityMarkupAttribute",
+				"Transpire.EqualityAttribute",
 				(_, _) => true,
 				(context, token) =>
 				{

@@ -5,7 +5,7 @@ namespace Transpire.Analysis.Tests.Generators;
 internal static class EqualityGeneratorTests
 {
 	[Test]
-	public static async Task GenerateWithMissingEqualityMarkupAsync()
+	public static async Task GenerateWithMissingEqualityAsync()
 	{
 		var code =
 			"""
@@ -33,7 +33,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer(
 				Guid Id, [property: Excluded] string Name, uint Age);
 			""";
@@ -66,7 +66,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -80,7 +80,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer(
 				Guid Id, uint Age)
 			{
@@ -117,7 +117,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -131,7 +131,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer(
 				Guid Id, [property: Ordered(3)] string Name, uint Age);
 			""";
@@ -166,7 +166,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -180,7 +180,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer(
 				Guid Id, uint Age)
 			{
@@ -219,7 +219,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -233,7 +233,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer(
 				[property: Ordered(2)] Guid Id, [property: Excluded] string Name, [property: Ordered(1)] uint Age, [property: Excluded] string EmailAddress);
 			""";
@@ -266,7 +266,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -280,7 +280,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer<T>(
 				[property: Ordered(2)] Guid Id, [property: Excluded] string Name, [property: Ordered(1)] uint Age, T Address);
 			""";
@@ -315,7 +315,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_T_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_T_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -329,7 +329,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			internal partial record Customer<T>([property: Ordered(0)] string Name) where T : struct;
 			""";
 
@@ -359,7 +359,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_T_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_T_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -375,7 +375,7 @@ internal static class EqualityGeneratorTests
 
 			namespace Entities;
 		
-			[EqualityMarkup]
+			[Equality]
 			public partial record Customer(
 				Guid Id, [property: Excluded] string Name, [property: Ordered(3)] uint Age);
 			""";
@@ -410,7 +410,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Entities.Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Entities.Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -426,7 +426,7 @@ internal static class EqualityGeneratorTests
 
 			namespace Entities;
 		
-			[EqualityMarkup]
+			[Equality]
 			internal partial record Customer(
 				Guid Id, [property: Excluded] string Name, [property: Ordered(3)] uint Age);
 			""";
@@ -461,7 +461,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Entities.Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Entities.Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -477,7 +477,7 @@ internal static class EqualityGeneratorTests
 
 			namespace Entities;
 		
-			[EqualityMarkup]
+			[Equality]
 			internal sealed partial record Customer(
 				Guid Id, [property: Excluded] string Name, [property: Ordered(3)] uint Age);
 			""";
@@ -512,7 +512,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Entities.Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Entities.Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -528,7 +528,7 @@ internal static class EqualityGeneratorTests
 
 			namespace Entities;
 		
-			[EqualityMarkup]
+			[Equality]
 			internal abstract partial record Customer(
 				Guid Id, [property: Excluded] string Name, [property: Ordered(3)] uint Age);
 			""";
@@ -563,7 +563,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Entities.Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Entities.Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -577,7 +577,7 @@ internal static class EqualityGeneratorTests
 
 			#nullable enable
 			
-			[EqualityMarkup]
+			[Equality]
 			public partial record struct Customer(
 				Guid Id, [property: Excluded] string Name, uint Age);
 			""";
@@ -607,7 +607,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 
@@ -623,7 +623,7 @@ internal static class EqualityGeneratorTests
 			
 			public sealed partial class Entities
 			{
-				[EqualityMarkup]
+				[Equality]
 				public partial record Customer(
 					Guid Id, [property: Excluded] string Name, uint Age);
 			}
@@ -660,7 +660,7 @@ internal static class EqualityGeneratorTests
 			"""";
 
 		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
-			[("Entities.Customer_EqualityMarkup.g.cs", generatedCode)],
+			[("Entities.Customer_Equality.g.cs", generatedCode)],
 			[]);
 	}
 }

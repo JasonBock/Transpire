@@ -12,8 +12,8 @@ internal sealed class RecordModelGenerator
 		// TODO: Validation and diagnostic creation goes here...
 		// such as:
 		//	* If `[Equality]` exists on a property that's defined on a type that isn't a record, error
-		//	* If `[EqualityMarkup]` exists on a non-record, error
-		//	* If `[EqualityMarkup]` exists on a record that doesn't have any properties marked with `[Equality]`, error
+		//	* If `[Equality]` exists on a non-record, error
+		//	* If `[Equality]` exists on a record that doesn't have any properties marked with `[Equality]`, error
 
 		var canGenerate = !diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error);
 

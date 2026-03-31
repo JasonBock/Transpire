@@ -64,7 +64,7 @@ internal static class TestAssistants
 		}
 
 		test.TestState.AdditionalReferences.Add(typeof(TGenerator).Assembly);
-		test.TestState.AdditionalReferences.Add(typeof(EqualityMarkupAttribute).Assembly);
+		test.TestState.AdditionalReferences.Add(typeof(EqualityAttribute).Assembly);
 
 		if (additionalReferences is not null)
 		{
