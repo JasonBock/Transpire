@@ -81,7 +81,7 @@ Success!
 
 
 # TODO
-* Tests cases:
+* DONE - Tests cases:
   * DONE - When record is `struct`, should change `Equals()` to not be `virtual`, `struct` added to definition, and `Equals` should not have `?` for the parameter
   * DONE - When `[Equality]` doesn't exist, nothing should be done
   * DONE - Excluding and ordered declared property
@@ -94,12 +94,14 @@ Success!
   * DONE - Sealed record
   * DONE - Abstract record
   * DONE - Nested record
-  * Integration tests
-* Diagnostics:
-  * If `[Excluded]` or `[Ordered]` exist on a property that's defined on a type that isn't a record, error
-  * If both `[Excluded]` and `[Ordered]` exist on a property, error
-  * If `[Equality]` exists on a non-record, error
-  * If `[Equality]` exists on a record that isn't partial, error
-  * If `[Equality]` exists on a record that doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
-  * If every property ends up being excluded, error
-  * If there's only one property, and it has `[Ordered]`, error
+  * DONE - Integration tests
+* Diagnostics (note that the first bullet point is not covered by the diagnostic analysis in the source generator):
+  * If `[Equality]` does not exist
+    * If `[Excluded]` or `[Ordered]` exist on a property, error
+  * If `[Equality]` exists
+    * On a non-record, error
+    * On a record that isn't partial, error
+    * Both `[Excluded]` and `[Ordered]` exist on a property, error
+    * The type doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
+    * If every property ends up being excluded, error
+    * If there's only one property, and it has `[Ordered]`, error
