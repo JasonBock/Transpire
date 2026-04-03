@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - Not Yet Released
 
+### Added
+- Added a source generator to customize record equality (issue [#44](https://github.com/JasonBock/Transpire/issues/44))
+
 ### Fixed
 - Fixed the `CreateVersion7()` code fix option for `Guid` (issue [#38](https://github.com/JasonBock/Transpire/issues/38))
 - Fixed hexadecimal literal `0xF` issue (issue [#40](https://github.com/JasonBock/Transpire/issues/40))
