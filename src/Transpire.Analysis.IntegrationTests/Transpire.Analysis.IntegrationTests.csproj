@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyName>Transpire.Analysis.IntegrationTests</AssemblyName>
+		<EnableNUnitRunner>true</EnableNUnitRunner>
+		<NoWarn>$(NoWarn),NU1608,NU1701</NoWarn>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Transpire.Analysis.IntegrationTests</RootNamespace>
+		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+		<PackageReference Include="Microsoft.Testing.Extensions.VSTestBridge" />
+		<PackageReference Include="Microsoft.Testing.Platform.MSBuild" />
+		<PackageReference Include="NUnit.Analyzers">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit3TestAdapter">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Transpire.Analysis\Transpire.Analysis.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\Transpire\Transpire.csproj" />
+	</ItemGroup>
+</Project>

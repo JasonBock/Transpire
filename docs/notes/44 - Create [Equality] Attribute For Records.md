@@ -28,7 +28,7 @@ public override int GetHashCode()
 Design #2:
 
 ```c#
-[EqualityMarkup]
+[Equality]
 public record Customer([property: Equality(3)] string Name)
 {
   public Customer(Guid id)
@@ -44,7 +44,7 @@ public record Customer([property: Equality(3)] string Name)
 public enum RecordUsage { Included, Excluded }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-public sealed class EqualityMarkupAttribute
+public sealed class EqualityAttribute
   : Attribute { }
 
 [AttributeUsage(AttributeTargets.Property)]
@@ -65,25 +65,25 @@ Fixes
 * It's outputting `struct` and it shouldn't
 * The properties should always exclude `EqualityContract`
 
-    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs(10,5): error CS8600: Converting null literal or possible null value to non-nullable type.
-    DiagnosticResult.CompilerError("CS8600").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs", 10, 5, 10, 18),
+    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_Equality.g.cs(10,5): error CS8600: Converting null literal or possible null value to non-nullable type.
+    DiagnosticResult.CompilerError("CS8600").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_Equality.g.cs", 10, 5, 10, 18),
 
 Success!
 
     // /0/Test0.cs(11,25): error CS9034: Required member 'Customer.Name' must be settable.
     DiagnosticResult.CompilerError("CS9034").WithSpan(11, 25, 11, 29).WithArguments("Customer.Name"),
 
-    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs(10,96): error CS1002: ; expected
-    DiagnosticResult.CompilerError("CS1002").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs", 10, 96, 10, 97),
-    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs(10,96): error CS1519: Invalid token ')' in a member declaration
-    DiagnosticResult.CompilerError("CS1519").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_EqualityMarkup.g.cs", 10, 96, 10, 97).WithArguments(")"),
+    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_Equality.g.cs(10,96): error CS1002: ; expected
+    DiagnosticResult.CompilerError("CS1002").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_Equality.g.cs", 10, 96, 10, 97),
+    // Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_Equality.g.cs(10,96): error CS1519: Invalid token ')' in a member declaration
+    DiagnosticResult.CompilerError("CS1519").WithSpan("Transpire.Analysis\Transpire.Analysis.EqualityGenerator\Customer_Equality.g.cs", 10, 96, 10, 97).WithArguments(")"),
 
 
 
 # TODO
 * Tests cases:
   * DONE - When record is `struct`, should change `Equals()` to not be `virtual`, `struct` added to definition, and `Equals` should not have `?` for the parameter
-  * DONE - When `[EqualityMarkup]` doesn't exist, nothing should be done
+  * DONE - When `[Equality]` doesn't exist, nothing should be done
   * DONE - Excluding and ordered declared property
   * DONE - Multiple sorting and excluding
   * DONE - Generic records
@@ -98,8 +98,8 @@ Success!
 * Diagnostics:
   * If `[Excluded]` or `[Ordered]` exist on a property that's defined on a type that isn't a record, error
   * If both `[Excluded]` and `[Ordered]` exist on a property, error
-  * If `[EqualityMarkup]` exists on a non-record, error
-  * If `[EqualityMarkup]` exists on a record that isn't partial, error
-  * If `[EqualityMarkup]` exists on a record that doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
+  * If `[Equality]` exists on a non-record, error
+  * If `[Equality]` exists on a record that isn't partial, error
+  * If `[Equality]` exists on a record that doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
   * If every property ends up being excluded, error
   * If there's only one property, and it has `[Ordered]`, error

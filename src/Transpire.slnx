@@ -7,6 +7,7 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
+  <Project Path="Transpire.Analysis.IntegrationTests/Transpire.Analysis.IntegrationTests.csproj" Id="ca401fc5-4ce4-4f21-ad9c-43361bdd23f0" />
   <Project Path="Transpire.Analysis.Tests/Transpire.Analysis.Tests.csproj" Id="2429290b-dc0f-45be-9029-a708437835c7" />
   <Project Path="Transpire.Analysis/Transpire.Analysis.csproj" Id="db18e64f-ef0d-4361-b02a-03d231c34b16" />
   <Project Path="Transpire.Completions.Tests/Transpire.Completions.Tests.csproj" Id="d33015fd-d57d-4b0c-84e4-782f2767bb6c" />
