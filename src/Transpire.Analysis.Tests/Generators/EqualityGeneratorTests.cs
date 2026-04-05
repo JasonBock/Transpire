@@ -25,6 +25,25 @@ internal static class EqualityGeneratorTests
 	}
 
 	[Test]
+	public static async Task GenerateWhenDiagnosticsExistAsync()
+	{
+		var code =
+			"""
+			using Transpire;
+			using System;
+
+			#nullable enable
+			
+			[Equality]
+			public partial record Customer([property: Ordered(3u)] string Name);
+			""";
+
+		await TestAssistants.RunGeneratorAsync<EqualityGenerator>(code,
+			[],
+			[]);
+	}
+
+	[Test]
 	public static async Task GenerateWithExcludedPropertyAsync()
 	{
 		var code =

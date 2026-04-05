@@ -25,6 +25,7 @@ internal static class TestAssistants
 		};
 
 		test.TestState.AdditionalReferences.Add(typeof(TAnalyzer).Assembly);
+		test.TestState.AdditionalReferences.Add(typeof(EqualityAttribute).Assembly);
 
 		if (additionalReferences is not null)
 		{

@@ -96,12 +96,14 @@ Success!
   * DONE - Nested record
   * DONE - Integration tests
 * Diagnostics (note that the first bullet point is not covered by the diagnostic analysis in the source generator):
-  * If `[Equality]` does not exist
-    * If `[Excluded]` or `[Ordered]` exist on a property, error
-  * If `[Equality]` exists
-    * On a non-record, error
-    * On a record that isn't partial, error
-    * Both `[Excluded]` and `[Ordered]` exist on a property, error
-    * The type doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
-    * If every property ends up being excluded, error
-    * If there's only one property, and it has `[Ordered]`, error
+  * DONE - If `[Equality]` exists
+    * DONE - On a non-record, error
+    * DONE - On a record that isn't partial, error
+    * DONE - Both `[Excluded]` and `[Ordered]` exist on a property, error
+    * DONE - The type doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
+    * DONE - If every property ends up being excluded, error
+    * DONE - If there's only one property, and it has `[Ordered]`, error
+  * Analyzer: needs to include the diagnostics found above, along with:
+    * If `[Equality]` does not exist, and `[Excluded]` or `[Ordered]` exist on a property, error
+  * Write help Markdown docs for each diagnostic
+  * Tests
