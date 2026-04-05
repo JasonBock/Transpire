@@ -107,3 +107,4 @@ Success!
     * If `[Equality]` does not exist, and `[Excluded]` or `[Ordered]` exist on a property, error
   * Write help Markdown docs for each diagnostic
   * Tests
+  * Include analyzer and generator scenarios to Transpire.Scenarios
