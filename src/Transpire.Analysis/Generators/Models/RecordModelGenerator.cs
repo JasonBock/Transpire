@@ -1,26 +1,28 @@
 ﻿using Microsoft.CodeAnalysis;
-using Transpire.Analysis.Generators.Models;
+using Transpire.Analysis.Extensions;
 
-namespace Transpire.Analysis.Models;
+namespace Transpire.Analysis.Generators.Models;
 
 internal sealed class RecordModelGenerator
 {
-	internal static RecordModelGenerator Create(ITypeSymbol recordSymbol, Compilation compilation)
+	internal static RecordModelGenerator Create(SyntaxNode node, ITypeSymbol recordSymbol, Compilation compilation)
 	{
-		var diagnostics = new List<Diagnostic>();
+		if (recordSymbol.HasErrors())
+		{
+			// This one will stop everything. There's no need to move on
+			// if the given type is in error.
+			return new(null, []);
+		}
 
-		// TODO: Validation and diagnostic creation goes here...
-		// such as:
-		//	* If `[Equality]` exists on a property that's defined on a type that isn't a record, error
-		//	* If `[Equality]` exists on a non-record, error
-		//	* If `[Equality]` exists on a record that doesn't have any properties marked with `[Equality]`, error
+		var diagnostics = new List<Diagnostic>();
+		var model = new RecordModel(node, recordSymbol, compilation, diagnostics);
 
 		var canGenerate = !diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error);
 
 		return new(
-			!canGenerate ? 
+			!canGenerate ?
 				null :
-				new RecordModel(recordSymbol, compilation),
+				model,
 			[.. diagnostics]);
 	}
 

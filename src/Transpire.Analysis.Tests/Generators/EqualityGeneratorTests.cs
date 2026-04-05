@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Transpire.Analysis.Generators;
 
 namespace Transpire.Analysis.Tests.Generators;
 
@@ -330,7 +331,7 @@ internal static class EqualityGeneratorTests
 			#nullable enable
 			
 			[Equality]
-			internal partial record Customer<T>([property: Ordered(0)] string Name) where T : struct;
+			internal partial record Customer<T>(Guid Id, [property: Ordered(0)] string Name) where T : struct;
 			""";
 
 		var generatedCode =
@@ -346,12 +347,14 @@ internal static class EqualityGeneratorTests
 					(object)this == other ||
 						(other is not null &&
 						this.EqualityContract == other.EqualityContract &&	
-						global::System.Collections.Generic.EqualityComparer<string>.Default.Equals(this.Name, other.Name));
+						global::System.Collections.Generic.EqualityComparer<string>.Default.Equals(this.Name, other.Name) &&
+						global::System.Collections.Generic.EqualityComparer<global::System.Guid>.Default.Equals(this.Id, other.Id));
 				
 				public override int GetHashCode()
 				{
 					var hash = new global::System.HashCode();			
 					hash.Add(this.Name);
+					hash.Add(this.Id);
 					return hash.ToHashCode();
 				}
 			}

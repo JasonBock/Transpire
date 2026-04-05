@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
-namespace Transpire.Analysis.Models;
+namespace Transpire.Analysis.Generators.Models;
 
 /// <summary>
 /// Extensions for <see cref="EquatableArray{T}"/>.

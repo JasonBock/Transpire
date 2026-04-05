@@ -1,0 +1,12 @@
+﻿using Microsoft.CodeAnalysis;
+using Transpire.Analysis.Descriptors;
+using Transpire.Analysis.Extensions;
+
+namespace Transpire.Analysis.Diagnostics;
+
+internal static class CannotUseExcludedAndOrderedOnPropertyDiagnostic
+{
+	internal static Diagnostic Create(SyntaxNode node, ITypeSymbol type, Compilation compilation) =>
+		Diagnostic.Create(CannotUseExcludedAndOrderedOnPropertyDescriptor.Create(),
+			node.GetLocation(), type.GetFullyQualifiedName(compilation));
+}

@@ -23,4 +23,9 @@ internal static class DescriptorIdentifiers
 	internal const string DetectNonSeparatedDigitsId = "TRANS19";
 	internal const string RecommendIsNullOrWhiteSpaceId = "TRANS20";
 	internal const string DetectGotoUsageId = "TRANS21";
+	internal const string CanOnlyUseEqualityAttributeOnRecordsId = "TRANS22";
+	internal const string CannotUseExcludedAndOrderedOnPropertyId = "TRANS23";
+	internal const string NoExcludedOrOrderedUsageId = "TRANS24";
+	internal const string AllPropertiesExcludedId = "TRANS25";
+	internal const string OnePropertyOrderedId = "TRANS26";
 }

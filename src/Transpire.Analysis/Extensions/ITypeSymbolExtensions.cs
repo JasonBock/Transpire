@@ -4,6 +4,10 @@ namespace Transpire.Analysis.Extensions;
 
 internal static class ITypeSymbolExtensions
 {
+	internal static bool HasErrors(this ITypeSymbol self) =>
+		self.TypeKind == TypeKind.Error ||
+			(self is INamedTypeSymbol namedSelf && namedSelf.TypeArguments.Any(_ => _.HasErrors()));
+
 	internal static string GetClassName(this ITypeSymbol self)
 	{
 		if (self is INamedTypeSymbol namedRecordSymbol)

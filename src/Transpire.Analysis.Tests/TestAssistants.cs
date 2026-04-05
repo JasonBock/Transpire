@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
 using NuGet.Frameworks;
+using Transpire.Analysis.Generators;
 
 namespace Transpire.Analysis.Tests;
 

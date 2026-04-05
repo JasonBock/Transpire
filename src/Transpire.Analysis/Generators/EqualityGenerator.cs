@@ -2,9 +2,8 @@
 using System.Collections.Immutable;
 using Transpire.Analysis.Generators.Builders;
 using Transpire.Analysis.Generators.Models;
-using Transpire.Analysis.Models;
 
-namespace Transpire.Analysis;
+namespace Transpire.Analysis.Generators;
 
 [Generator]
 internal sealed class EqualityGenerator
@@ -24,12 +23,15 @@ internal sealed class EqualityGenerator
 					{
 						var recordSymbol = (ITypeSymbol)context.TargetSymbol;
 
-						var modelInformation = RecordModelGenerator.Create(
-							recordSymbol, context.SemanticModel.Compilation);
-
-						if (modelInformation.Model is not null)
+						if(attribute.ApplicationSyntaxReference is not null)
 						{
-							models.Add(modelInformation.Model);
+							var modelInformation = RecordModelGenerator.Create(
+								attribute.ApplicationSyntaxReference.GetSyntax(token), recordSymbol, context.SemanticModel.Compilation);
+
+							if (modelInformation.Model is not null)
+							{
+								models.Add(modelInformation.Model);
+							}
 						}
 					}
 
