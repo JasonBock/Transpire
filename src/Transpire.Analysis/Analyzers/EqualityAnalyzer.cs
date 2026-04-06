@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Operations;
 using System.Collections.Immutable;
 using Transpire.Analysis.Descriptors;
+using Transpire.Analysis.Diagnostics;
 using Transpire.Analysis.Generators.Models;
 
 namespace Transpire.Analysis.Analyzers;
@@ -43,8 +44,8 @@ public sealed class EqualityAnalyzer
 			{
 				AnalyzeEqualityAttribute(
 					operationContext, equalityAttributeSymbol);
-				//AnalyzeDependentAttributes(
-				//	operationContext, excludedAttributeSymbol, orderedAttributeSymbol);
+				AnalyzeDependentAttributes(
+					operationContext, equalityAttributeSymbol, excludedAttributeSymbol, orderedAttributeSymbol);
 			}, OperationKind.Attribute);
 		});
 	}
@@ -74,6 +75,34 @@ public sealed class EqualityAnalyzer
 		}
 	}
 
+	private static void AnalyzeDependentAttributes(
+		OperationAnalysisContext context, INamedTypeSymbol equalityAttributeSymbol, INamedTypeSymbol excludedAttributeSymbol, INamedTypeSymbol orderedAttributeSymbol)
+	{
+		if (context.Operation is IAttributeOperation { Operation: IObjectCreationOperation attribute })
+		{
+			var attributeType = attribute.Constructor?.ContainingType;
+			var isExcludedAttribute = SymbolEqualityComparer.Default.Equals(attributeType, excludedAttributeSymbol);
+			var isOrderedAttribute = SymbolEqualityComparer.Default.Equals(attributeType, orderedAttributeSymbol);
+
+			if (attributeType is not null && (isExcludedAttribute || isOrderedAttribute))
+			{
+				// The attribute should be contained by a method or a property.
+				var recordSymbol = context.ContainingSymbol.ContainingType;
+
+				if (recordSymbol is not null)
+				{
+					if (!recordSymbol.GetAttributes().Any(
+						data => SymbolEqualityComparer.Default.Equals(data.AttributeClass, equalityAttributeSymbol)))
+					{
+						context.ReportDiagnostic(
+							ExcludedOrOrderedUsedWithoutEqualityDiagnostic.Create(
+								context.Operation.Syntax, isExcludedAttribute ? excludedAttributeSymbol : orderedAttributeSymbol, context.Compilation));
+					}
+				}
+			}
+		}
+	}
+
 	/// <summary>
 	/// Gets an array of supported diagnostics from this analyzer.
 	/// </summary>
@@ -84,5 +113,6 @@ public sealed class EqualityAnalyzer
 			CanOnlyUseEqualityAttributeOnRecordsDescriptor.Create(),
 			NoExcludedOrOrderedUsageDescriptor.Create(),
 			OnePropertyOrderedDescriptor.Create(),
+			ExcludedOrOrderedUsedWithoutEqualityDescriptor.Create(),
 		];
 }

@@ -47,4 +47,23 @@ internal static class EqualityAnalyzerTests
 			.WithSpan(6, 2, 6, 10);
 		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
 	}
+
+	[Test]
+	public static async Task AnalyzeWhenOrderedExistsAndEqualityDoesNotUsingConstructorAsync()
+	{
+		var code =
+			"""
+			using Transpire;
+			using System;
+
+			#nullable enable
+			
+			public partial record Customer(
+				Guid Id, [property: Ordered(3u)] string Name, uint Age);
+			""";
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.ExcludedOrOrderedUsedWithoutEqualityId, DiagnosticSeverity.Error)
+			.WithSpan(7, 22, 7, 33);
+		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
+	}
 }

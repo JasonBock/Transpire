@@ -28,4 +28,5 @@ internal static class DescriptorIdentifiers
 	internal const string NoExcludedOrOrderedUsageId = "TRANS24";
 	internal const string AllPropertiesExcludedId = "TRANS25";
 	internal const string OnePropertyOrderedId = "TRANS26";
+	internal const string ExcludedOrOrderedUsedWithoutEqualityId = "TRANS27";
 }
