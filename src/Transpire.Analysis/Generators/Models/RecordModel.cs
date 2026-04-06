@@ -78,7 +78,7 @@ internal sealed record RecordModel
 
 		if (!usedExcludedAttribute && !usedOrderedAttribute)
 		{
-			diagnostics.Add(CannotUseExcludedAndOrderedOnPropertyDiagnostic.Create(node, recordSymbol, compilation));
+			diagnostics.Add(NoExcludedOrOrderedUsageDiagnostic.Create(node, recordSymbol, compilation));
 		}
 
 		if (this.Properties.Length == 0)
@@ -87,7 +87,7 @@ internal sealed record RecordModel
 		}
 		else if (this.Properties.Length == 1 && this.Properties[0].WasOrdered)
 		{
-			diagnostics.Add(AllPropertiesExcludedDiagnostic.Create(node, recordSymbol, compilation));
+			diagnostics.Add(OnePropertyOrderedDiagnostic.Create(node, recordSymbol, compilation));
 		}
 
 		if (!recordSymbol.IsRecord)

@@ -26,6 +26,46 @@ internal static class EqualityAnalyzerTests
 	}
 
 	[Test]
+	public static async Task AnalyzeWhenAllPropertiesAreExcludedAsync()
+	{
+		var code =
+			"""
+			using Transpire;
+			using System;
+
+			#nullable enable
+			
+			[Equality]
+			public partial record Customer(
+				[property: Excluded] Guid Id, [property: Excluded] string Name, [property: Excluded] uint Age);
+			""";
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.AllPropertiesExcludedId, DiagnosticSeverity.Error)
+			.WithSpan(6, 2, 6, 10);
+		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
+	}
+
+	[Test]
+	public static async Task AnalyzeWhenExcludedAndOrderedAreUsedTogetherAsync()
+	{
+		var code =
+			"""
+			using Transpire;
+			using System;
+
+			#nullable enable
+			
+			[Equality]
+			public partial record Customer(
+				Guid Id, [property: Excluded, Ordered(3u)] string Name, uint Age);
+			""";
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.CannotUseExcludedAndOrderedOnPropertyId, DiagnosticSeverity.Error)
+			.WithSpan(6, 2, 6, 10);
+		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
+	}
+
+	[Test]
 	public static async Task AnalyzeWhenEqualityExistsOnNonRecordAsync()
 	{
 		var code =
@@ -44,6 +84,45 @@ internal static class EqualityAnalyzerTests
 			""";
 
 		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.CanOnlyUseEqualityAttributeOnRecordsId, DiagnosticSeverity.Error)
+			.WithSpan(6, 2, 6, 10);
+		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
+	}
+
+	[Test]
+	public static async Task AnalyzeWhenExcludedAndOrderedAreNotUsedAsync()
+	{
+		var code =
+			"""
+			using Transpire;
+			using System;
+
+			#nullable enable
+			
+			[Equality]
+			public partial record Customer(
+				Guid Id, string Name, uint Age);
+			""";
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.NoExcludedOrOrderedUsageId, DiagnosticSeverity.Error)
+			.WithSpan(6, 2, 6, 10);
+		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
+	}
+
+	[Test]
+	public static async Task AnalyzeWhenOnePropertyOrderedAsync()
+	{
+		var code =
+			"""
+			using Transpire;
+			using System;
+
+			#nullable enable
+			
+			[Equality]
+			public partial record Customer([property: Ordered(3u)] Guid Id);
+			""";
+
+		var diagnostic = new DiagnosticResult(DescriptorIdentifiers.OnePropertyOrderedId, DiagnosticSeverity.Error)
 			.WithSpan(6, 2, 6, 10);
 		await TestAssistants.RunAnalyzerAsync<EqualityAnalyzer>(code, [diagnostic]);
 	}
