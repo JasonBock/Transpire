@@ -7,7 +7,9 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
   </Folder>
-  <Project Path="Transpire.Analysis.IntegrationTests/Transpire.Analysis.IntegrationTests.csproj" Id="ca401fc5-4ce4-4f21-ad9c-43361bdd23f0" />
+  <Project Path="Transpire.Analysis.IntegrationTests/Transpire.Analysis.IntegrationTests.csproj" Id="ca401fc5-4ce4-4f21-ad9c-43361bdd23f0">
+    <Build Solution="Release|*" Project="false" />
+  </Project>
   <Project Path="Transpire.Analysis.Tests/Transpire.Analysis.Tests.csproj" Id="2429290b-dc0f-45be-9029-a708437835c7" />
   <Project Path="Transpire.Analysis/Transpire.Analysis.csproj" Id="db18e64f-ef0d-4361-b02a-03d231c34b16" />
   <Project Path="Transpire.Completions.Tests/Transpire.Completions.Tests.csproj" Id="d33015fd-d57d-4b0c-84e4-782f2767bb6c" />
@@ -15,5 +17,7 @@
   <Project Path="Transpire.Package/Transpire.Package.csproj" Id="6cc3ce3a-1244-4a1c-8b38-d3723fae61b9" />
   <Project Path="Transpire.Shared/Transpire.Shared.shproj" Id="c4b46dbd-a9ed-4e3e-91d3-1595fb414dc3" />
   <Project Path="Transpire.Tests.Performance/Transpire.Tests.Performance.csproj" />
-  <Project Path="Transpire/Transpire.csproj" Id="0f81397e-3098-4470-a47f-4e01d35b10d6" />
+  <Project Path="Transpire/Transpire.csproj" Id="0f81397e-3098-4470-a47f-4e01d35b10d6">
+    <Build Solution="Release|*" Project="false" />
+  </Project>
 </Solution>
