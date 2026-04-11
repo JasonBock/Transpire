@@ -5,5 +5,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Transpire.Analysis\Transpire.Analysis.csproj" OutputItemType="Analyzer" />
 		<ProjectReference Include="..\Transpire.Completions\Transpire.Completions.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\Transpire\Transpire.csproj" />
 	</ItemGroup>
 </Project>

@@ -106,5 +106,5 @@ Success!
   * DONE - Analyzer: needs to include the diagnostics found above, along with:
     * DONE - If `[Equality]` does not exist, and `[Excluded]` or `[Ordered]` exist on a property, error
   * DONE - Tests
-  * Write help Markdown docs for each diagnostic
-  * Include analyzer and generator scenarios to Transpire.Scenarios
+  * DONE - Write help Markdown docs for each diagnostic
+  * DONE - Include analyzer and generator scenarios to Transpire.Scenarios
