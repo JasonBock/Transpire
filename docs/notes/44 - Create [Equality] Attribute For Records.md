@@ -103,8 +103,8 @@ Success!
     * DONE - The type doesn't have any properties marked with either `[Excluded]` or `[Ordered]`, error
     * DONE - If every property ends up being excluded, error
     * DONE - If there's only one property, and it has `[Ordered]`, error
-  * Analyzer: needs to include the diagnostics found above, along with:
-    * If `[Equality]` does not exist, and `[Excluded]` or `[Ordered]` exist on a property, error
+  * DONE - Analyzer: needs to include the diagnostics found above, along with:
+    * DONE - If `[Equality]` does not exist, and `[Excluded]` or `[Ordered]` exist on a property, error
+  * DONE - Tests
   * Write help Markdown docs for each diagnostic
-  * Tests
   * Include analyzer and generator scenarios to Transpire.Scenarios
