@@ -11,11 +11,11 @@ internal static class DeregionizerCodeFixTests
 		var fix = new DeregionizeCodeFix();
 		var ids = fix.FixableDiagnosticIds;
 
-		Assert.Multiple(() =>
-		{
+	  using (Assert.EnterMultipleScope())
+	  {
 			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(DescriptorIdentifiers.DeregionizeId), nameof(DescriptorIdentifiers.DeregionizeId));
-		});
+		}
 	}
 
 	[Test]

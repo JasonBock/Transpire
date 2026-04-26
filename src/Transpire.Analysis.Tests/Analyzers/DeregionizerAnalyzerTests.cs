@@ -15,8 +15,8 @@ internal static class DeregionizerAnalyzerTests
 		var analyzer = new DeregionizeAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
-		Assert.Multiple(() =>
-		{
+	  using (Assert.EnterMultipleScope())
+	  {
 			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
 			var diagnostic = diagnostics[0];
@@ -38,7 +38,7 @@ internal static class DeregionizerAnalyzerTests
 					HelpUrlBuilder.Build(
 						DescriptorIdentifiers.DeregionizeId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
-		});
+		}
 	}
 
 	[Test]

@@ -15,7 +15,7 @@ internal static class RecommendIsNullOrWhiteSpaceAnalyzerTests
 		var analyzer = new RecommendIsNullOrWhiteSpaceAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
@@ -38,7 +38,7 @@ internal static class RecommendIsNullOrWhiteSpaceAnalyzerTests
 					HelpUrlBuilder.Build(
 						DescriptorIdentifiers.RecommendIsNullOrWhiteSpaceId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
-		});
+		}
 	}
 
 	[Test]

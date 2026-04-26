@@ -15,7 +15,7 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 		var analyzer = new FindNewGuidViaConstructorAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
@@ -33,12 +33,12 @@ internal static class FindNewGuidViaConstructorAnalyzerTests
 				nameof(DiagnosticDescriptor.DefaultSeverity));
 			Assert.That(diagnostic.IsEnabledByDefault, Is.True,
 				nameof(DiagnosticDescriptor.IsEnabledByDefault));
-			Assert.That(diagnostic.HelpLinkUri, 
+			Assert.That(diagnostic.HelpLinkUri,
 				Is.EqualTo(
 					HelpUrlBuilder.Build(
 						DescriptorIdentifiers.FindNewGuidViaConstructorId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
-		});
+		}
 	}
 
 	[Test]

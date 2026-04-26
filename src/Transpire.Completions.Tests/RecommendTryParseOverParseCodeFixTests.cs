@@ -11,11 +11,11 @@ internal static class RecommendTryParseOverParseCodeFixTests
 		var fix = new RecommendTryParseOverParseCodeFix();
 		var ids = fix.FixableDiagnosticIds;
 
-		Assert.Multiple(() =>
-		{
+	  using (Assert.EnterMultipleScope())
+	  {
 			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(DescriptorIdentifiers.RecommendTryParseOverParseId), nameof(DescriptorIdentifiers.RecommendTryParseOverParseId));
-		});
+		}
 	}
 
 	[Test]

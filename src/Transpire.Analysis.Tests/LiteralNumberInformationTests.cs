@@ -62,11 +62,11 @@ internal static class LiteralNumberInformationTests
 	{
 		var information = new LiteralNumberInformation(LiteralNumberInformationTests.GetLiteralSyntax(GetCode(value)));
 
-		Assert.Multiple(() =>
-		{
+	  using (Assert.EnterMultipleScope())
+	  {
 			Assert.That(information.ToString(), Is.EqualTo(value));
 			Assert.That(information.NeedsSeparators, Is.EqualTo(needsSeparator));
-		});
+		}
 	}
 
 	// Integer Literals

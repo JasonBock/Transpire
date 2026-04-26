@@ -11,11 +11,11 @@ internal static class RemoveInterpolatedStringCodeFixTests
 		var fix = new RemoveInterpolatedStringCodeFix();
 		var ids = fix.FixableDiagnosticIds;
 
-		Assert.Multiple(() =>
-		{
+	  using (Assert.EnterMultipleScope())
+	  {
 			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(DescriptorIdentifiers.RemoveInterpolatedStringId), nameof(DescriptorIdentifiers.RemoveInterpolatedStringId));
-		});
+		}
 	}
 
 	[Test]

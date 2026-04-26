@@ -11,11 +11,11 @@ internal static class FindNewGuidViaConstructorCodeFixTests
 		var fix = new FindNewGuidViaConstructorCodeFix();
 		var ids = fix.FixableDiagnosticIds;
 
-		Assert.Multiple(() =>
-		{
+	  using (Assert.EnterMultipleScope())
+	  {
 			Assert.That(ids, Has.Length.EqualTo(1), nameof(ids.Length));
 			Assert.That(ids[0], Is.EqualTo(DescriptorIdentifiers.FindNewGuidViaConstructorId), nameof(DescriptorIdentifiers.FindNewGuidViaConstructorId));
-		});
+		}
 	}
 
 	[Test]

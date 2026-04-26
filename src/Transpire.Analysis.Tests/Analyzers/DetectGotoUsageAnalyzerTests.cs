@@ -15,7 +15,7 @@ internal static class DetectGotoUsageAnalyzerTests
 		var analyzer = new DetectGotoUsageAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
@@ -38,7 +38,7 @@ internal static class DetectGotoUsageAnalyzerTests
 					HelpUrlBuilder.Build(
 						DescriptorIdentifiers.DetectGotoUsageId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
-		});
+		}
 	}
 
 	[Test]

@@ -15,7 +15,7 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 		var analyzer = new DiscourageNonGenericCollectionUsageAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
@@ -38,7 +38,7 @@ internal static class DiscourageNonGenericCollectionUsageAnalyzerTests
 					HelpUrlBuilder.Build(
 						DescriptorIdentifiers.DiscourageNonGenericCollectionUsageId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
-		});
+		}
 	}
 
 	[Test]

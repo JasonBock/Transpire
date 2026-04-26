@@ -15,7 +15,7 @@ internal static class DetectNonSeparatedDigitsAnalyzerTests
 		var analyzer = new DetectNonSeparatedDigitsAnalyzer();
 		var diagnostics = analyzer.SupportedDiagnostics;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostics, Has.Length.EqualTo(1), nameof(diagnostics.Length));
 
@@ -38,7 +38,7 @@ internal static class DetectNonSeparatedDigitsAnalyzerTests
 					HelpUrlBuilder.Build(
 						DescriptorIdentifiers.DetectNonSeparatedDigitsId)),
 				nameof(DiagnosticDescriptor.HelpLinkUri));
-		});
+		}
 	}
 
 	[Test]
