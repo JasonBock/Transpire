@@ -47,6 +47,7 @@ internal static class SyntaxNodeExtensions
 		return self.ReplaceTrivia(triviaToRemove, (_, _) => new SyntaxTrivia());
 	}
 
+	// TODO: Can probably replace this with AncestorsAndSelf().
 	internal static T? FindParent<T>(this SyntaxNode @this)
 		where T : SyntaxNode
 	{
