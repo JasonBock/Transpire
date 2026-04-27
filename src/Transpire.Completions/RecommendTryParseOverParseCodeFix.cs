@@ -41,7 +41,7 @@ public sealed class RecommendTryParseOverParseCodeFix
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 
-		var localDeclarationNode = node.FindParent<LocalDeclarationStatementSyntax>();
+		var localDeclarationNode = node.Ancestors().FirstOrDefault(node => node is LocalDeclarationStatementSyntax) as LocalDeclarationStatementSyntax;
 		var outType = string.Empty;
 		var target = string.Empty;
 
@@ -54,7 +54,7 @@ public sealed class RecommendTryParseOverParseCodeFix
 		}
 		else
 		{
-			var assignmentNode = node.FindParent<AssignmentExpressionSyntax>();
+			var assignmentNode = node.Ancestors().FirstOrDefault(node => node is AssignmentExpressionSyntax) as AssignmentExpressionSyntax;
 
 			if (assignmentNode is not null)
 			{
@@ -70,7 +70,7 @@ public sealed class RecommendTryParseOverParseCodeFix
 		var tryParseExpression =
 			SyntaxFactory.ParseStatement(tryParseInvocation);
 
-		var statementNode = node.FindParent<StatementSyntax>()!;
+		var statementNode = (StatementSyntax)node.Ancestors().First(node => node is StatementSyntax);
 		var newRoot = root.ReplaceNode(statementNode, tryParseExpression.WithTriviaFrom(statementNode));
 
 		context.RegisterCodeFix(

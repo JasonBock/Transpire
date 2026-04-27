@@ -65,5 +65,8 @@ class Test {
 }
 ```
 
+* Handle TODO in `DeregionizeCodeFix`
+* Make help Markdown doc for this analyzer
+
 TODO:
 * Consider creating an analyzer to discourage usage of `Expression<>`
