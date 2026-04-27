@@ -4,6 +4,21 @@ namespace Transpire.Analysis.Extensions;
 
 internal static class ITypeSymbolExtensions
 {
+	internal static bool DerivesFrom(this ITypeSymbol? self, ITypeSymbol source)
+	{
+		while (self is not null)
+		{
+			if (SymbolEqualityComparer.Default.Equals(self, source))
+			{
+				return true;
+			}
+
+			self = self.BaseType;
+		}
+
+		return false;
+	}
+
 	internal static bool HasErrors(this ITypeSymbol self) =>
 		self.TypeKind == TypeKind.Error ||
 			(self is INamedTypeSymbol namedSelf && namedSelf.TypeArguments.Any(_ => _.HasErrors()));

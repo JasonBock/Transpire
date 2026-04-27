@@ -102,4 +102,24 @@ internal static class FindNullChecksWithOperatorsAnalyzerTests
 			.WithSpan(6, 4, 6, 17);
 		await TestAssistants.RunAnalyzerAsync<FindNullChecksWithOperatorsAnalyzer>(code, [diagnostic]);
 	}
+
+	[Test]
+	public static async Task AnalyzeWhenBinaryExpressionExistsWithinExpressionAsync()
+	{
+		var code =
+			"""
+			using System;
+			using System.Linq.Expressions;
+			
+			public static class Test
+			{
+				public static void Run()
+				{
+					Expression<Func<string, bool>> expr = value => value == null;
+				}
+			}
+			""";
+
+		await TestAssistants.RunAnalyzerAsync<FindNullChecksWithOperatorsAnalyzer>(code, []);
+	}
 }

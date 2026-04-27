@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Immutable;
 using Transpire.Analysis.Descriptors;
+using Transpire.Analysis.Extensions;
 
 namespace Transpire.Analysis.Analyzers;
 
@@ -48,10 +49,33 @@ public sealed class FindNullChecksWithOperatorsAnalyzer
 		if (node.Left.Kind() == SyntaxKind.NullLiteralExpression ||
 			node.Right.Kind() == SyntaxKind.NullLiteralExpression)
 		{
-			context.ReportDiagnostic(
-				Diagnostic.Create(FindNullChecksWithOperatorsDescriptor.Create(),
-					context.Node.GetLocation()));
+			if (!FindNullChecksWithOperatorsAnalyzer.IsInsideExpressionTree(node, context.SemanticModel))
+			{
+				context.ReportDiagnostic(
+					Diagnostic.Create(FindNullChecksWithOperatorsDescriptor.Create(),
+						context.Node.GetLocation()));
+			}
 		}
+	}
+
+	static bool IsInsideExpressionTree(SyntaxNode node, SemanticModel model)
+	{
+		// Walk up to the nearest lambda or anonymous method
+		var lambda = node.AncestorsAndSelf()
+							  .FirstOrDefault(n => n is LambdaExpressionSyntax || n is AnonymousMethodExpressionSyntax);
+
+		if (lambda is null)
+		{
+			return false;
+		}
+
+		// Get the type the lambda is being converted to
+		var typeInfo = model.GetTypeInfo(lambda);
+		var convertedType = typeInfo.ConvertedType;
+
+		// Check if it's Expression<TDelegate>
+		return convertedType is not null &&
+			convertedType.OriginalDefinition.DerivesFrom(model.Compilation.GetTypeByMetadataName("System.Linq.Expressions.Expression")!);
 	}
 
 	/// <summary>
