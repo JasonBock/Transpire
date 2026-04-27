@@ -4,7 +4,7 @@
 
 This analyzer is tripped if you call the no-argument constructor to `Guid`:
 
-```
+```c#
 var id = new Guid();
 ```
 

@@ -65,8 +65,9 @@ class Test {
 }
 ```
 
-* Handle TODO in `DeregionizeCodeFix`
-* Make help Markdown doc for this analyzer
+* DONE - Handle TODO in `DeregionizeCodeFix`
+* DONE - Make help Markdown doc for this analyzer
+* Why aren't the code fixes running in Transpire.Scenarios?
 
 TODO:
 * Consider creating an analyzer to discourage usage of `Expression<>`
