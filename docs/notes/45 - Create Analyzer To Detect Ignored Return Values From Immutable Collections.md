@@ -36,3 +36,19 @@ holder.Content = items.AddRange(["11", "22"]);
 ```
 
 So if we do an `Ancestors()` call and look for `AssignmentExpressionSyntax` and we don't find one, then that's an issue.
+
+However...
+
+```c#
+items.FindAll(value => ...);
+```
+
+`FindAll()` returns an `ImmutableList<>`, so my approach would catch it, but for a different reason. If a user wants to ignore a return value, that's what a [discard](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/functional/discards) is for. There are three style rules (IDE0058, IDE0059, and IDE0060) that can inform the developer that a return value is being ignored/unused. `FindAll()` isn't a "mutation" operation like `AddRange()` and `Remove()`.
+
+Now, `ImmutableList<>` implements `IImmutableList<>`, and the methods on `IImmutableList` are all mutation operations. There are a core set of interfaces:
+
+* `IImmutableDictionary<,>`
+* `IImmutableList<>`
+* `IImmutableQueue<>`
+* `IImmutableSet<>`
+* `IImmutableStack<>`
