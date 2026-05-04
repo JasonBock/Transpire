@@ -4,16 +4,19 @@ namespace Transpire.Analysis.Extensions;
 
 internal static class ITypeSymbolExtensions
 {
-	internal static bool DerivesFrom(this ITypeSymbol? self, ITypeSymbol source)
+	internal static bool DerivesFrom(this ITypeSymbol? self, ITypeSymbol? source)
 	{
-		while (self is not null)
+		if (source is not null)
 		{
-			if (SymbolEqualityComparer.Default.Equals(self, source))
+			while (self is not null)
 			{
-				return true;
-			}
+				if (SymbolEqualityComparer.Default.Equals(self, source))
+				{
+					return true;
+				}
 
-			self = self.BaseType;
+				self = self.BaseType;
+			}
 		}
 
 		return false;

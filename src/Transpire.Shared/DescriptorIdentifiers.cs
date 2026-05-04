@@ -30,4 +30,5 @@ internal static class DescriptorIdentifiers
 	internal const string OnePropertyOrderedId = "TRANS26";
 	internal const string ExcludedOrOrderedUsedWithoutEqualityId = "TRANS27";
 	internal const string FindNullChecksWithOperatorsId = "TRANS28";
+	internal const string FindUnassignedImmutableCollectionsId = "TRANS29";
 }

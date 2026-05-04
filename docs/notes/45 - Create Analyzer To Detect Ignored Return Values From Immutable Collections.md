@@ -47,11 +47,11 @@ items.FindAll(value => ...);
 
 Now, `ImmutableList<>` implements `IImmutableList<>`, and the methods on `IImmutableList` are all mutation operations. There are a core set of interfaces:
 
-* `ImmutableArray<>`
-* `ImmutableDictionary<,>`
-* `ImmutableList<>`
-* `ImmutableQueue<>`
-* `ImmutableSet<>`
-* `ImmutableStack<>`
+* `ImmutableArray<>` - struct
+* `ImmutableDictionary<,>` - class
+* `ImmutableList<>` - class
+* `ImmutableQueue<>` - class
+* `ImmutableSet<>` - ?
+* `ImmutableStack<>` - class
 
 There is also [`CA1806`](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1806). If a method is marked with `[Pure]`, that would trip `CA1806`. Unfortunately, this would require work done with the immutable types, and that would be a non-trivial "lift". Funny, it seems like they were there, but they were removed: https://github.com/dotnet/runtime/pull/35118. Related: https://github.com/dotnet/runtime/issues/34098.
