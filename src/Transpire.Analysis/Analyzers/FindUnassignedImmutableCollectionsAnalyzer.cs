@@ -50,39 +50,25 @@ public sealed class FindUnassignedImmutableCollectionsAnalyzer
 	{
 		var invocationOperation = (IInvocationOperation)context.Operation;
 		var invocationReference = invocationOperation.TargetMethod;
+		var invocationSyntax = context.Operation.Syntax;
 
 		if (!invocationReference.IsStatic &&
 			!invocationReference.ReturnsVoid &&
 			FindUnassignedImmutableCollectionsAnalyzer.IsImmutableCollection(invocationReference.ContainingType, context.Compilation) &&
-			!FindUnassignedImmutableCollectionsAnalyzer.IsReturnValueCaptured(invocationReference, context.CancellationToken))
+			SymbolEqualityComparer.Default.Equals(invocationReference.ReturnType, invocationReference.ContainingType) &&
+			!FindUnassignedImmutableCollectionsAnalyzer.IsReturnValueCaptured(invocationReference, invocationSyntax, context.CancellationToken))
 		{
 			context.ReportDiagnostic(Diagnostic.Create(FindUnassignedImmutableCollectionsAnalyzer.rule,
-				context.Operation.Syntax.GetLocation()));
+				invocationSyntax.GetLocation()));
 		}
 	}
 
-	// Note: we're only looking for method that return a type
-	// that is the same as the containing type. We should have
-	// already filtered out methods that return void.
-	private static bool IsReturnValueCaptured(IMethodSymbol method, CancellationToken cancellationToken)
+	private static bool IsReturnValueCaptured(IMethodSymbol method, SyntaxNode node, CancellationToken cancellationToken)
 	{
-		var returnType = method.ReturnType;
+		var assignmentExpressionSyntax = node.Ancestors()
+			.FirstOrDefault(node => node is AssignmentExpressionSyntax) as AssignmentExpressionSyntax;
 
-		if (SymbolEqualityComparer.Default.Equals(returnType, method.ContainingType))
-		{
-			// There should be only declaring syntax reference
-			// and it SHOULD be InvocationExpressionSyntax.
-			if (method.DeclaringSyntaxReferences.Length == 1)
-			{
-				var syntaxReference = method.DeclaringSyntaxReferences[0].GetSyntax(cancellationToken);
-				var assignmentExpressionSyntax = syntaxReference.Ancestors()
-					.FirstOrDefault(node => node is AssignmentExpressionSyntax) as AssignmentExpressionSyntax;
-
-				return assignmentExpressionSyntax is not null;
-			}
-		}
-
-		return false;
+		return assignmentExpressionSyntax is not null;
 	}
 
 	private static bool IsImmutableCollection(INamedTypeSymbol type, Compilation compilation)
