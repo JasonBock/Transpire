@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added an analyzer and code fix to find null checks using operators to the "is" pattern syntax (issue [#37](https://github.com/JasonBock/Transpire/issues/37))
+- Added an analyzer that checks that return values on immutable collection method invocations are captures (issue [#45](https://github.com/JasonBock/Transpire/issues/45))
 
 ## [1.2.0] - 2026-04-11
 

@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System.Collections.Immutable;
 using System.Composition;
-using Transpire.Completions.Extensions;
 
 namespace Transpire.Completions;
 
