@@ -47,11 +47,19 @@ items.FindAll(value => ...);
 
 Now, `ImmutableList<>` implements `IImmutableList<>`, and the methods on `IImmutableList` are all mutation operations. There are a core set of interfaces:
 
-* `ImmutableArray<>` - struct
-* `ImmutableDictionary<,>` - class
-* `ImmutableList<>` - class
-* `ImmutableQueue<>` - class
-* `ImmutableSet<>` - ?
-* `ImmutableStack<>` - class
+* DONE - `ImmutableArray<>` - struct
+* DONE - `ImmutableDictionary<,>` - class
+* DONE - `ImmutableHashSet<>` - class
+* DONE - `ImmutableList<>` - class
+* DONE - `ImmutableQueue<>` - class
+* DONE - `ImmutableSortedSet<>` - class
+* DONE - `ImmutableStack<>` - class
 
 There is also [`CA1806`](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1806). If a method is marked with `[Pure]`, that would trip `CA1806`. Unfortunately, this would require work done with the immutable types, and that would be a non-trivial "lift". Funny, it seems like they were there, but they were removed: https://github.com/dotnet/runtime/pull/35118. Related: https://github.com/dotnet/runtime/issues/34098.
+
+So here's the order of operations:
+
+* Look for method invocations that are instance (not static).
+* Look for the containing type such that it's one of the immutable target types in the above list.
+* Look to see if there's a return value, and if there is, does it match the containing type.
+* If all is true, see if there's an ancestor that is of type `AssignmentExpressionSyntax`
